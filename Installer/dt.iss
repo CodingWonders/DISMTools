@@ -56,7 +56,7 @@ UsePreviousLanguage=no
 LanguageDetectionMethod=uilanguage
 
 ;Wizard setup
-WizardStyle=modern dynamic windows11
+WizardStyle=modern dark windows11
 WizardImageFile=mainImg.bmp
 WizardImageFileDynamicDark=mainImg_dark.bmp
 WizardSmallImageFile=logo.png
@@ -253,6 +253,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: dword; Val
 Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: dword; ValueName: "AnswerFileConflictResponse"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: dword; ValueName: "ScanBootImages"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: dword; ValueName: "ImageSelectorDefaultOption"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\PEPolicy"; ValueType: dword; ValueName: "FullyFormatOSVolume"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 
 ; Special - Set Internet Explorer browser emulation settings
 Root: HKCU; Subkey: "Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"; ValueType: dword; ValueName: "DISMTools.exe"; ValueData: 11001; Flags: uninsdeletevalue createvalueifdoesntexist

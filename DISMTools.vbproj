@@ -92,6 +92,10 @@
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Dism.6.1.0\lib\net472\Microsoft.Dism.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Office.Interop.Excel.16.0.18925.20022\lib\net40\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=8.0.15.2, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
       <HintPath>packages\WindowsAPICodePack.8.0.15.2\lib\net48\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
@@ -248,6 +252,12 @@
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSDomainControllerConnectionTestProgressForm.Designer.vb">
+      <DependentUpon>ADDSDomainControllerConnectionTestProgressForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSDomainControllerConnectionTestProgressForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.Designer.vb">
       <DependentUpon>ADDSJoinDialog.vb</DependentUpon>
     </Compile>
@@ -262,6 +272,7 @@
     </Compile>
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\DomainRole.vb" />
     <Compile Include="Elements\AutoUnattend\ActiveDirectory\DomainServicesModule.vb" />
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\ForestEntry.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Component.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Pass.vb" />
     <Compile Include="Elements\AutoUnattend\DiskConfig\DiskConfiguration.vb" />
@@ -288,12 +299,25 @@
     <Compile Include="Elements\Contemporaneus\ImageAppxPackage.vb" />
     <Compile Include="Elements\Contemporaneus\ImageCapability.vb" />
     <Compile Include="Elements\Contemporaneus\ImageDriver.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageDriverFile.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageEXProperties\ImageAppxPackageEX.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageEXProperties\ImageCapabilityEX.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageEXProperties\ImageDriverEX.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageEXProperties\ImageFeatureEX.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageEXProperties\ImagePackageEX.vb" />
     <Compile Include="Elements\Contemporaneus\ImageOperations\ImageOperation.vb" />
     <Compile Include="Elements\Contemporaneus\ImageOperations\MountImageIO.vb" />
+    <Compile Include="Elements\Contemporaneus\ImagePackageFile.vb" />
     <Compile Include="Elements\Contemporaneus\PSInterop\PSObjects.vb" />
     <Compile Include="Elements\Contemporaneus\ImageFeature.vb" />
     <Compile Include="Elements\Contemporaneus\WindowsImage.vb" />
     <Compile Include="Elements\Contemporaneus\ImagePackage.vb" />
+    <Compile Include="Elements\DriverPacks\Computer.vb" />
+    <Compile Include="Elements\DriverPacks\ComputerInfo.vb" />
+    <Compile Include="Elements\DriverPacks\Driver.vb" />
+    <Compile Include="Elements\DriverPacks\DriverPack.vb" />
+    <Compile Include="Elements\DriverPacks\DriverPackHelper.vb" />
+    <Compile Include="Elements\DriverPacks\ZipUtilities.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariable.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariableHelper.vb" />
     <Compile Include="Elements\InfinityHome\InfinityFact.vb" />
@@ -502,6 +526,7 @@
     <Compile Include="Panels\Get_Ops\InfoSave\InfoSaveResults.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Get_Ops\InfoSave\ObtainedImageInformation.vb" />
     <Compile Include="Panels\Get_Ops\Pkgs\GetPkgInfo.Designer.vb">
       <DependentUpon>GetPkgInfo.vb</DependentUpon>
     </Compile>
@@ -527,6 +552,12 @@
     <Compile Include="Panels\Img_Ops\ActiveInstAccessWarn.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\DriverPacks\SelectDriversFromDriverPack.Designer.vb">
+      <DependentUpon>SelectDriversFromDriverPack.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\DriverPacks\SelectDriversFromDriverPack.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\FFU\ApplicationDriveSpecifier.Designer.vb">
       <DependentUpon>ApplicationDriveSpecifier.vb</DependentUpon>
     </Compile>
@@ -549,12 +580,6 @@
       <DependentUpon>RemProvAppxPackage.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\AppxPkgs\RemProvAppxPackage.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcDetails.Designer.vb">
-      <DependentUpon>BGProcDetails.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcDetails.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcFailureDialog.Designer.vb">
@@ -1097,6 +1122,7 @@
     <Compile Include="Utilities\DynaLog.vb" />
     <Compile Include="Utilities\FileAssociations\FileAssociationHelper.vb" />
     <Compile Include="Utilities\GroupPolicy\ServicingGPOHelper.vb" />
+    <Compile Include="Utilities\ImageUtils.vb" />
     <Compile Include="Utilities\ImageWatcher.vb" />
     <Compile Include="Utilities\IsoFileUtilities\IsoHelper.vb" />
     <Compile Include="Utilities\Language\LanguageHelper.vb" />
@@ -1104,6 +1130,9 @@
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
     <Compile Include="Utilities\MarkdownHelper.vb" />
     <Compile Include="Utilities\NetworkUtilities\NetworkCostHelper.vb" />
+    <Compile Include="Utilities\OfficeUtilities\CellStyle.vb" />
+    <Compile Include="Utilities\OfficeUtilities\ChartOptions.vb" />
+    <Compile Include="Utilities\OfficeUtilities\ExcelHelper.vb" />
     <Compile Include="Utilities\PhysicalDiskUtilities\WMIDiskHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PowerManagement\PowerManagementHelper.vb" />
@@ -1126,6 +1155,9 @@
     <Compile Include="Videos\Video.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Elements\AutoUnattend\ActiveDirectory\ADDSDomainControllerConnectionTestProgressForm.resx">
+      <DependentUpon>ADDSDomainControllerConnectionTestProgressForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.resx">
       <DependentUpon>ADDSJoinDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -1234,6 +1266,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\ActiveInstAccessWarn.resx">
       <DependentUpon>ActiveInstAccessWarn.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Drivers\DriverPacks\SelectDriversFromDriverPack.resx">
+      <DependentUpon>SelectDriversFromDriverPack.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\FFU\ApplicationDriveSpecifier.resx">
       <DependentUpon>ApplicationDriveSpecifier.vb</DependentUpon>
     </EmbeddedResource>
@@ -1245,9 +1280,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\AppxPkgs\RemProvAppxPackage.resx">
       <DependentUpon>RemProvAppxPackage.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Img_Ops\Bg_Processes\BGProcDetails.resx">
-      <DependentUpon>BGProcDetails.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Bg_Processes\BGProcFailureDialog.resx">
       <DependentUpon>BGProcFailureDialog.vb</DependentUpon>
@@ -1962,6 +1994,7 @@
     <None Include="Resources\diagrams\diagram_save_mermaid_light.png" />
     <None Include="Resources\diagrams\diagram_navigate_to_svc_light.png" />
     <None Include="Resources\diagrams\diagram_navigate_to_svc_dark.png" />
+    <None Include="Resources\computers_on_network.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />
@@ -1977,6 +2010,8 @@
     <None Include="Resources\newsfeed_visitsite_light.png" />
     <None Include="Resources\newsfeed_visitsite_dark.png" />
     <None Include="Resources\website.png" />
+    <None Include="Resources\report_target_excel_dark.png" />
+    <None Include="Resources\report_target_excel_light.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
@@ -2457,6 +2492,12 @@ IF EXIST "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" (
 IF EXIST "$(SolutionDir)Tools\StarterScriptEditor\out\*.exe" (
 	xcopy "$(SolutionDir)Tools\StarterScriptEditor\out\*.*" "Tools\StarterScriptEditor" /cehyi
 	del "Tools\StarterScriptEditor\*.zip" /F /S /Q
+)
+
+:: Copy Driver Pack Creator
+IF EXIST "$(SolutionDir)Tools\DrvPakCreator\out\*.exe" (
+	xcopy "$(SolutionDir)Tools\DrvPakCreator\out\*.*" "Tools\DrvPakCreator" /cehyi
+	del "Tools\DrvPakCreator\*.zip" /F /S /Q
 )
 
 :: Copy PE Helper Main Menu

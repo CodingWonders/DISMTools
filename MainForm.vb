@@ -108,11 +108,35 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "dt_pre_discovery"
-    Public dt_codeName As String = "Discovery"
+    Public Shared dtBranch As String = "dt_pre_discovery"
+    Public Shared dt_codeName As String = "Discovery"
+    Public Const SongCode As String = "Nightvision"
 
     ' Arrays and other variables used on background processes
     Public areBackgroundProcessesDone As Boolean
+
+    Public Shared Current As MainForm
+
+    Public ReadOnly Property IsImageBackgroundProcessRunning As Boolean
+        Get
+            Return Not ImgBW.CompletionTask.IsCompleted
+        End Get
+    End Property
+
+    Public ReadOnly Property ImageBackgroundProcessTask As Task
+        Get
+            Return ImgBW.CompletionTask
+        End Get
+    End Property
+
+    Public Function StartImageBackgroundProcessesAsync() As Task
+        Return ImgBW.RunWorkerAsync()
+    End Function
+
+    Public Function CancelImageBackgroundProcessesAsync() As Task
+        ImgBW.CancelAsync()
+        Return ImgBW.CompletionTask
+    End Function
 
     Dim pbOpNums As Integer
     Dim progressMin As Integer = 0
@@ -120,8 +144,12 @@ Public Class MainForm
     Dim progressLabel As String
     Dim regJumps As Boolean
     Dim irregVal As Integer = 0
-
-    Public pinState As Integer
+    Private WithEvents StatusBarResetTimer As New System.Windows.Forms.Timer()
+    Private statusBarResetSourceText As String
+    Private statusBarText As String
+    Private activeStatusDescription As Integer
+    Private activeStatusDescriptionText As String
+    Private isUpdatingStatusBarText As Boolean
 
     ' Perform image unmount operations when pressing on buttons
     Public imgCommitOperation As Integer = -1 ' 0: commit; 1: discard
@@ -220,6 +248,9 @@ Public Class MainForm
     ' Contemporaneus Preview
     Public MountedImageList As New List(Of WindowsImage)
     Public CurrentImage As New WindowsImage()
+    Private WithEvents MountedImageDetectorTimer As New Windows.Forms.Timer()
+    Private MountedImageDetectionTask As Task
+    Private MountedImageDetectionInProgress As Boolean
 
     ' Default PE Policy settings
     Public ShowWatermark As Boolean = False
@@ -235,6 +266,7 @@ Public Class MainForm
     Public AnswerFileConflictResponse As Integer = 0
     Public ScanBootImages As Boolean = False
     Public ImageSelectorDefaultOption As Integer = 0
+    Public FullyFormatOSVolume As Boolean = False
 
     ' INFINITY settings
     Public PreventSystemFromSleeping As Boolean = True      ' Whether to call system APIs to prevent the machine from sleeping during image operations
@@ -278,7 +310,7 @@ Public Class MainForm
                         argProjPath = arg.Replace("/load=", "").Trim()
                     Else
                         DynaLog.LogMessage("Specified project does NOT satisfy all requirements (either projfile or dir doesn't exist). Cannot continue loading project")
-                                MsgBox(LocalizationService.ForSection("Main.GetArguments")("Project.Message"), vbOKOnly + vbCritical, Text)
+                        MsgBox(LocalizationService.ForSection("Main.GetArguments")("Project.Message"), vbOKOnly + vbCritical, Text)
                     End If
                 ElseIf arg.StartsWith("/online", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("Detecting if no projects had been passed by the /load flag...")
@@ -548,6 +580,7 @@ Public Class MainForm
     Sub InitDynaLog()
         DynaLog.CheckLogAge()
         DynaLog.LogMessage("DISMTools - Version " & My.Application.Info.Version.ToString() & " (" & dt_codeName & "), build timestamp: " & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"))
+        DynaLog.LogMessage("---------------- " & SongCode & " ----------------")
         ' Display copyright/author information for every component
         DynaLog.LogMessage("Components:")
         DynaLog.LogMessage("- Program: " & My.Application.Info.Copyright.Replace("©", "(c)"))
@@ -591,6 +624,8 @@ Public Class MainForm
     End Sub
 
     Private Async Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Current = Me
+        ImgBW.Work = AddressOf ImgBW_DoWorkAsync
         InitDynaLog()
 
         ' Prepare all user data
@@ -654,7 +689,7 @@ Public Class MainForm
         DynaLog.LogMessage("Detecting program arguments...")
         GetArguments()
         ' Detect mounted images
-        DetectMountedImages(True)
+        Await RefreshMountedImagesAsync(True)
         DynaLog.LogMessage("Finished detecting mounted images. Continuing program startup...")
         Control.CheckForIllegalCrossThreadCalls = False
         BranchTSMI.Text = dtBranch
@@ -663,7 +698,6 @@ Public Class MainForm
             BranchTSMI.Visible = True
             Text &= " (debug mode)"
         End If
-        ' Load theme files (EXPERIMENTS ONLY)
         ThemeHelper.LoadThemes()
         ' Read settings file
         If File.Exists(Application.StartupPath & "\settings.ini") Then
@@ -709,7 +743,7 @@ Public Class MainForm
             UpdatePanel.Visible = False
         End If
         DynaLog.LogMessage("Beginning to detect mounted images in the background. No logging will be performed here")
-        If Not MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.RunWorkerAsync()
+        StartMountedImageDetector()
         DynaLog.LogMessage("Enabling image status watchers...")
         WatcherTimer.Enabled = True
         If dtBranch.Contains("pre") And Not Debugger.IsAttached Then
@@ -1124,45 +1158,31 @@ Public Class MainForm
         Return Nothing
     End Function
 
-    ''' <summary>
-    ''' Detects all mounted images and their state. Calls the DISM API at program startup
-    ''' </summary>
-    ''' <param name="DebugLog">Check if the program should output debug information. This is always called at program startup, but never after</param>
-    ''' <remarks>This yields results for the MountedImageImgFiles, MountedImageMountDirs, MountedImageImgIndexes, MountedImageMountedRewr and MountedImageImgStatuses string arrays in code</remarks>
-    Sub DetectMountedImages(DebugLog As Boolean)
+    Public Async Function RefreshMountedImagesAsync(Optional DebugLog As Boolean = False) As Task(Of List(Of WindowsImage))
         If DebugLog Then DynaLog.LogMessage("Getting mounted images...")
-        If MountedImageList IsNot Nothing Then
-            If DebugLog Then DynaLog.LogMessage("Clearing lists...")
-            MountedImageList.Clear()
-        End If
         Try
-            If DebugLog Then DynaLog.LogMessage("Initializing API...")
-            DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
-            If DebugLog Then DynaLog.LogMessage("Calling API function to grab mounted images...")
-            Dim MountedImgs As DismMountedImageInfoCollection = DismApi.GetMountedImages()
-            If DebugLog Then DynaLog.LogMessage(MountedImgs.Count & " mounted image(s) have been detected on this system. Grabbing information...")
-            For Each imageInfo As DismMountedImageInfo In MountedImgs
-                If DebugLog Then DynaLog.LogMessage("Image information:")
-                If DebugLog Then DynaLog.LogMessage("- Image file : " & imageInfo.ImageFilePath)
-                If DebugLog Then DynaLog.LogMessage("- Image index : " & imageInfo.ImageIndex)
-                If DebugLog Then DynaLog.LogMessage("- Mount directory : " & imageInfo.MountPath)
-                If DebugLog Then DynaLog.LogMessage("- Mount status : " & imageInfo.MountStatus & If(imageInfo.MountStatus = DismMountStatus.Ok, " (OK)", If(imageInfo.MountStatus = DismMountStatus.NeedsRemount, " (Orphaned)", " (Invalid)")))
-                If DebugLog Then DynaLog.LogMessage("- Mount mode : " & imageInfo.MountMode & If(imageInfo.MountMode = DismMountMode.ReadWrite, " (Write permissions enabled)", "(Write permissions disabled)"))
-
-                MountedImageList.Add(New WindowsImage(imageInfo.ImageFilePath, imageInfo.ImageIndex, imageInfo.MountPath, imageInfo.MountStatus, imageInfo.MountMode))
-            Next
+            Dim mountedImages As List(Of WindowsImage) = Await ImageUtils.GetMountedImages()
+            If DebugLog Then
+                DynaLog.LogMessage("Initializing API and querying mounted images through ImageUtils...")
+                DynaLog.LogMessage(mountedImages.Count & " mounted image(s) have been detected on this system. Grabbing information...")
+                For Each mountedImage As WindowsImage In mountedImages
+                    DynaLog.LogMessage("Image information:")
+                    DynaLog.LogMessage("- Image file : " & mountedImage.ImageFile)
+                    DynaLog.LogMessage("- Image index : " & mountedImage.ImageIndex)
+                    DynaLog.LogMessage("- Mount directory : " & mountedImage.ImageMountDirectory)
+                    DynaLog.LogMessage("- Mount status : " & mountedImage.ImageMountStatus & If(mountedImage.ImageMountStatus = DismMountStatus.Ok, " (OK)", If(mountedImage.ImageMountStatus = DismMountStatus.NeedsRemount, " (Orphaned)", " (Invalid)")))
+                    DynaLog.LogMessage("- Mount mode : " & mountedImage.ImageMountMode & If(mountedImage.ImageMountMode = DismMountMode.ReadWrite, " (Write permissions enabled)", "(Write permissions disabled)"))
+                Next
+            End If
+            MountedImageList.Clear()
+            MountedImageList.AddRange(mountedImages)
             RaiseMountedImagesUpdated()
+            Return mountedImages
         Catch ex As Exception
             DynaLog.LogMessage("Could not detect mounted images. Error message: " & ex.Message)
-        Finally
-            Try
-                If DebugLog Then DynaLog.LogMessage("Shutting down API...")
-                DismApi.Shutdown()
-            Catch ex As Exception
-                ' ignore
-            End Try
+            Return New List(Of WindowsImage)
         End Try
-    End Sub
+    End Function
 
     ''' <summary>
     ''' Remounts orphaned images (images in need of a servicing session reload)
@@ -1637,11 +1657,13 @@ Public Class MainForm
                                                   "{1}KeyboardLayoutOverrideExistingLayout{1}=dword:0000000{11}{0}" &
                                                   "{1}AnswerFileConflictResponse{1}={1}{12}{1}{0}" &
                                                   "{1}ScanBootImages{1}=dword:0000000{13}{0}" &
-                                                  "{1}ImageSelectorDefaultOption{1}={1}{14}{1}{0}",
+                                                  "{1}ImageSelectorDefaultOption{1}={1}{14}{1}{0}" &
+                                                  "{1}FullyFormatOSVolume{1}=dword:0000000{15}{0}",
                                                   CrLf, Quote, If(ShowWatermark, 1, 0), UEFICA23PreferenceStr, PartTableOverridePreferenceStr,
                                                   Hex(WDSHCConnAttempts).PadLeft(8, "0"c).ToLowerInvariant(), If(WDSHCGraphoView, 1, 0), If(DTDimShowPnputilOut, 1, 0),
                                                   If(AutoUnattendCopytoSysprep, 1, 0), Hex(PXEServerPort).PadLeft(8, "0"c).ToLowerInvariant(), KeyboardLayoutCode,
-                                                  If(KeyboardLayoutOverrideExistingLayout, 1, 0), AnswerFileConflictResponseStr, If(ScanBootImages, 1, 0), ImageSelectorDefaultOptionStr)
+                                                  If(KeyboardLayoutOverrideExistingLayout, 1, 0), AnswerFileConflictResponseStr, If(ScanBootImages, 1, 0), ImageSelectorDefaultOptionStr,
+                                                  If(FullyFormatOSVolume, 1, 0))
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "DefaultPolicy.reg"), regContents)
         Catch ex As Exception
@@ -1728,7 +1750,8 @@ Public Class MainForm
                            "KeyboardLayoutOverrideExistingLayout=    " & KeyboardLayoutOverrideExistingLayout & CrLf &
                            "AnswerFileConflictResponse          =    " & AnswerFileConflictResponse & CrLf &
                            "ScanBootImages                      =    " & ScanBootImages & CrLf &
-                           "ImageSelectorDefaultOption          =    " & ImageSelectorDefaultOption)
+                           "ImageSelectorDefaultOption          =    " & ImageSelectorDefaultOption & CrLf &
+                           "FullyFormatOSVolume                 =    " & FullyFormatOSVolume)
     End Sub
 
 #Region "Background Processes"
@@ -1742,6 +1765,7 @@ Public Class MainForm
     ''' <param name="OnlineMode">(Optional) Detects properties of an active Windows installation if this value is True. Otherwise, if it is False or is not set, it won't pass this option</param>
     ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
     Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
+        ImgBW.CancellationToken.ThrowIfCancellationRequested()
         IsCompatible = True
         DynaLog.LogMessage("Preparing to run background processes...")
         BWFailPanel.Visible = False
@@ -1854,7 +1878,7 @@ Public Class MainForm
             If ImgBW.CancellationPending Then
                 'If session IsNot Nothing Then DismApi.CloseSession(session)
                 DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
-                Exit Sub
+                Throw New OperationCanceledException(ImgBW.CancellationToken)
             End If
             DynaLog.LogMessage("Detecting whether or not the Windows image is compatible with DISMTools/DISM...")
             DetectNTVersion(If(OnlineMode, Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe", MountDir & "\Windows\system32\ntoskrnl.exe"))
@@ -1866,6 +1890,7 @@ Public Class MainForm
                 progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("AdvancedImageInfo.Label")
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetAdvancedImageInfo(OnlineMode, OfflineMode)
+                ImgBW.CancellationToken.ThrowIfCancellationRequested()
             End If
         End If
         DynaLog.LogMessage("Creating temporary directory for information...")
@@ -1934,7 +1959,7 @@ Public Class MainForm
                 If ImgBW.CancellationPending Then
                     DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                     If session IsNot Nothing Then DismApi.CloseSession(session)
-                    Exit Sub
+                    Throw New OperationCanceledException(ImgBW.CancellationToken)
                 End If
                 progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Getting.Image.Features.Label")
                 ImgBW.ReportProgress(progressMin + progressDivs)
@@ -1942,7 +1967,7 @@ Public Class MainForm
                 If ImgBW.CancellationPending Then
                     DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                     If session IsNot Nothing Then DismApi.CloseSession(session)
-                    Exit Sub
+                    Throw New OperationCanceledException(ImgBW.CancellationToken)
                 End If
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
                     If Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) And Not (CurrentImage.ImageInstallationType.Contains("Nano") Or CurrentImage.ImageInstallationType.Contains("Core")) Then
@@ -1954,7 +1979,7 @@ Public Class MainForm
                         If ImgBW.CancellationPending Then
                             DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                             If session IsNot Nothing Then DismApi.CloseSession(session)
-                            Exit Sub
+                            Throw New OperationCanceledException(ImgBW.CancellationToken)
                         End If
                     Else
                         DynaLog.LogMessage("Not Windows 8 or later")
@@ -1972,7 +1997,7 @@ Public Class MainForm
                         If ImgBW.CancellationPending Then
                             DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                             If session IsNot Nothing Then DismApi.CloseSession(session)
-                            Exit Sub
+                            Throw New OperationCanceledException(ImgBW.CancellationToken)
                         End If
                     Else
                         DynaLog.LogMessage("Not Windows 10 or later")
@@ -1986,7 +2011,7 @@ Public Class MainForm
                 If ImgBW.CancellationPending Then
                     DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                     If session IsNot Nothing Then DismApi.CloseSession(session)
-                    Exit Sub
+                    Throw New OperationCanceledException(ImgBW.CancellationToken)
                 End If
             Case 1
                 DynaLog.LogMessage("Updating recorded OS package information...")
@@ -2028,14 +2053,17 @@ Public Class MainForm
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers(OnlineMode)
         End Select
+        ImgBW.CancellationToken.ThrowIfCancellationRequested()
         If bgProcOptn <> 0 And PendingTasks.Contains(True) Then
             DynaLog.LogMessage("Some tasks need to be finished before we're happy. Finishing them...")
             progressLabel = LocalizationService.ForSection("Main.Run.BgProcesses")("Running.Pending.Tasks.Label")
             ImgBW.ReportProgress(99)
             DynaLog.LogMessage("Determining whether or not OS package information processes remain. Do them if they do remain...")
             If PendingTasks(0) Then GetImagePackages(OnlineMode)
+            ImgBW.CancellationToken.ThrowIfCancellationRequested()
             DynaLog.LogMessage("Determining whether or not feature information processes remain. Do them if they do remain...")
             If PendingTasks(1) Then GetImageFeatures(OnlineMode)
+            ImgBW.CancellationToken.ThrowIfCancellationRequested()
             DynaLog.LogMessage("Determining whether or not AppX package information processes remain. Do them if they do remain...")
             If PendingTasks(2) Then
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
@@ -2044,6 +2072,7 @@ Public Class MainForm
                     End If
                 End If
             End If
+            ImgBW.CancellationToken.ThrowIfCancellationRequested()
             DynaLog.LogMessage("Determining whether or not capability information processes remain. Do them if they do remain...")
             If PendingTasks(3) Then
                 If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) Then
@@ -2052,8 +2081,10 @@ Public Class MainForm
                     End If
                 End If
             End If
+            ImgBW.CancellationToken.ThrowIfCancellationRequested()
             DynaLog.LogMessage("Determining whether or not driver information processes remain. Do them if they do remain...")
             If PendingTasks(4) Then GetImageDrivers(OnlineMode)
+            ImgBW.CancellationToken.ThrowIfCancellationRequested()
             DynaLog.LogMessage("Deleting temporary files...")
             DeleteTempFiles()
             If session IsNot Nothing Then
@@ -3426,7 +3457,7 @@ Public Class MainForm
     ''' Deletes temporary files created by the background processes
     ''' </summary>
     Sub DeleteTempFiles()
-        If MountedImageDetectorBW.IsBusy Then
+        If MountedImageDetectionInProgress Then
             DynaLog.LogMessage("The mounted image detector is busy and uses this folder. Skipping...")
             Exit Sub
         End If
@@ -3545,6 +3576,7 @@ Public Class MainForm
         settingsData("PEPolicy").AddKey("KeyboardLayoutOverrideExistingLayout", 0)
         settingsData("PEPolicy").AddKey("ScanBootImages", 0)
         settingsData("PEPolicy").AddKey("ImageSelectorDefaultOption", 0)
+        settingsData("PEPolicy").AddKey("FullyFormatOSVolume", 0)
         parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
@@ -3658,6 +3690,7 @@ Public Class MainForm
         PEPolicyKey.SetValue("KeyboardLayoutOverrideExistingLayout", 0, RegistryValueKind.DWord)
         PEPolicyKey.SetValue("ScanBootImages", 0, RegistryValueKind.DWord)
         PEPolicyKey.SetValue("ImageSelectorDefaultOption", 0, RegistryValueKind.DWord)
+        PEPolicyKey.SetValue("FullyFormatOSVolume", 0, RegistryValueKind.DWord)
         PEPolicyKey.Close()
         Key.Close()
     End Sub
@@ -3762,6 +3795,7 @@ Public Class MainForm
             settingsData("PEPolicy").AddKey("AnswerFileConflictResponse", AnswerFileConflictResponse)
             settingsData("PEPolicy").AddKey("ScanBootImages", If(ScanBootImages, 1, 0))
             settingsData("PEPolicy").AddKey("ImageSelectorDefaultOption", ImageSelectorDefaultOption)
+            settingsData("PEPolicy").AddKey("FullyFormatOSVolume", If(FullyFormatOSVolume, 1, 0))
             parser.WriteFile(Path.Combine(Application.StartupPath, "settings.ini"), settingsData, UTF8)
         Else
             DynaLog.LogMessage("Attempting to write to registry...")
@@ -3892,6 +3926,7 @@ Public Class MainForm
                 PEPolicyKey.SetValue("AnswerFileConflictResponse", AnswerFileConflictResponse, RegistryValueKind.DWord)
                 PEPolicyKey.SetValue("ScanBootImages", ScanBootImages, RegistryValueKind.DWord)
                 PEPolicyKey.SetValue("ImageSelectorDefaultOption", ImageSelectorDefaultOption, RegistryValueKind.DWord)
+                PEPolicyKey.SetValue("FullyFormatOSVolume", FullyFormatOSVolume, RegistryValueKind.DWord)
                 PEPolicyKey.Close()
                 Key.Close()
             Catch ex As Exception
@@ -4283,10 +4318,7 @@ Public Class MainForm
         CreateDiscImageWithThisFileToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Create.Disc.ImageFile.Button")
         OpenFileDialog1.Title = LocalizationService.ForSection("Main.Interface")("Project.File.Load.Title")
         LocalMountDirFBD.Description = LocalizationService.ForSection("Main.Interface")("MountDir.Description")
-        If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
-            BGProcDetails.Label2.Text = LocalizationService.ForSection("Main.Interface")("Image.Processes.Label")
-        End If
-        MenuDesc.Text = LocalizationService.ForSection("Main.Interface")("Ready.Label")
+        UpdateStatusBarText(LocalizationService.ForSection("Main.Interface")("Ready.Label"))
         AccessDirectoryToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("AccessDirectory.Label")
         UnloadProjectToolStripMenuItem1.Text = LocalizationService.ForSection("Main.Interface")("UnloadProject.Label")
         CopyDeploymentToolsToolStripMenuItem.Text = LocalizationService.ForSection("Main.Interface")("Copy.Deployment.Tools.Label")
@@ -5091,7 +5123,6 @@ Public Class MainForm
         isProjectLoaded = False
         SaveProjectToolStripMenuItem.Enabled = False
         SaveProjectasToolStripMenuItem.Enabled = False
-        BGProcDetails.Hide()
         DynaLog.LogMessage("Clearing completion state of background processes...")
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         PendingTasks = Enumerable.Repeat(True, PendingTasks.Length).ToArray()
@@ -5238,7 +5269,6 @@ Public Class MainForm
         Button28.Enabled = True
         Button29.Enabled = True
         Panel2.Visible = True
-        BGProcDetails.Hide()
         DynaLog.LogMessage("Clearing completion state of background processes...")
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         PendingTasks = Enumerable.Repeat(True, PendingTasks.Count).ToArray()
@@ -5296,7 +5326,6 @@ Public Class MainForm
         Button29.Enabled = True
         Panel2.Visible = True
         ManageOnlineInstallationToolStripMenuItem.Enabled = True
-        BGProcDetails.Hide()
         DynaLog.LogMessage("Clearing completion state of background processes...")
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         PendingTasks = Enumerable.Repeat(True, PendingTasks.Count).ToArray()
@@ -5407,18 +5436,12 @@ Public Class MainForm
 #Region "MenuStrip entries"
     Sub ShowParentDesc(ParentDescMode As Integer)
         Select Case ParentDescMode
-            Case 1
-                MenuDesc.Text = LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Related.Item")
-            Case 2
-                MenuDesc.Text = LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Project.Item")
-            Case 3
-                MenuDesc.Text = LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Image.Item")
-            Case 4
-                MenuDesc.Text = LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Additional.Item")
-            Case 5
-                MenuDesc.Text = LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Help.Item")
-            Case Else
-                ' Do not show anything
+            Case 1 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Related.Item"), IsMenuDescription:=True, DescriptionSource:=1)
+            Case 2 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Project.Item"), IsMenuDescription:=True, DescriptionSource:=1)
+            Case 3 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Image.Item"), IsMenuDescription:=True, DescriptionSource:=1)
+            Case 4 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Additional.Item"), IsMenuDescription:=True, DescriptionSource:=1)
+            Case 5 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowParentDesc")("View.Options.Help.Item"), IsMenuDescription:=True, DescriptionSource:=1)
+            Case Else  ' Do not show anything
         End Select
     End Sub
 
@@ -5427,254 +5450,196 @@ Public Class MainForm
             Dim CommandDescriptionInt As Integer = ChildDescMode
             ' ChildDescMode follows the same style as ProgressPanel.OperationNum
             Select Case CommandDescriptionInt
-                Case 1
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Adds.Additional.Item")
-                Case 2
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Full.Flash.Item")
-                Case 3
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Windows.Image.Item")
-                Case 4
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Captures.Incremen.File.Item")
-                Case 5
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Captures.Image.Drive.Item")
-                Case 6
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Captures.Image.New.Item")
-                Case 7
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Deletes.Resources.Item")
-                Case 8
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Changes.Made.Item")
-                Case 9
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Deletes.Volume.Image.Item")
-                Case 10
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Exports.Copy.Image.Item")
-                Case 11
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Images.Item")
-                Case 12
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.List.Wimffu.Item")
-                Case 13
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.WIM.Boot.Item")
-                Case 14
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.List.Files.Item")
-                Case 15
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Mounts.Image.Wimffu.Item")
-                Case 16
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Optimizes.Ffuimage.Item")
-                Case 17
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Optimizes.Image.Faster.Item")
-                Case 18
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Remounts.Mounted.Image.Item")
-                Case 19
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Splits.Full.Flash.Item")
-                Case 20
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Splits.Existing.WIM.Item")
-                Case 21
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Unmounts.Wimffuvhd.Item")
-                Case 22
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Updates.WIM.Boot.Item")
-                Case 23
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Siloed.Prov.Item")
-                Case 24
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Message")
-                Case 26
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Installs.Cabmsu.Package.Item")
-                Case 27
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Cabfile.Package.Item")
-                Case 28
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Installed.Item")
-                Case 30
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Enables.Updates.Feature.Item")
-                Case 31
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Disables.Feature.Image.Item")
-                Case 32
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Performs.Cleanup.Item")
-                Case 33
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Adds.Applicable.Item")
-                Case 34
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Gets.Infomation.Prov.Item")
-                Case 35
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Dehydrat.Files.Containe.Item")
-                Case 36
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.App.Item")
-                Case 37
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Addsone.App.Item")
-                Case 38
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Prov.App.Item")
-                Case 39
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Optimizes.Total.Size.Item")
-                Case 40
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Addscustom.Data.File.Item")
-                Case 41
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Msppatches.Item")
-                Case 42
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Command42.Item")
-                Case 43
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Item")
-                Case 44
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Specific.Item")
-                Case 45
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Command45.Item")
-                Case 46
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Exports.Default.Item")
-                Case 47
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.List.Item")
-                Case 48
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Imports.Set.DefaultApp.Item")
-                Case 49
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Default.Item")
-                Case 50
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Intl.Item")
-                Case 51
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Default.Uilanguage.Item")
-                Case 52
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Fallback.Default.Item")
-                Case 53
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.System.Preferred.Item")
-                Case 54
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Language.Non.Item")
-                Case 55
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Standards.Formats.Item")
-                Case 56
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Input.Locales.Item")
-                Case 57
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Default.System.Message")
-                Case 58
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Default.Time.Item")
-                Case 59
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Default.Message")
-                Case 60
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Specifies.Keyboard.Item")
-                Case 61
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Generates.Lang.Ini.Item")
-                Case 62
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Defines.Default.Item")
-                Case 63
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Addscapability.Image.Item")
-                Case 64
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Exports.Set.Caps.Item")
-                Case 65
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Gets.Installed.Item")
-                Case 67
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Capability.Item")
-                Case 68
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Edition.Image.Item")
-                Case 69
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Editions.Image.Item")
-                Case 70
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Changes.Image.Higher.Item")
-                Case 71
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Enters.ProductKey.Item")
-                Case 72
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Driver.Message")
-                Case 74
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Addsthird.Party.Driver.Item")
-                Case 75
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Removes.ThirdParty.Item")
-                Case 76
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Exports.ThirdParty.Item")
-                Case 77
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Imports.ThirdParty.Message")
-                Case 78
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Unattend.Item")
-                Case 79
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Displays.List.Windows.Item")
-                Case 80
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Retrieves.Configured.Item")
-                Case 81
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Retrieves.Target.Path.Item")
-                Case 82
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Available.Item")
-                Case 83
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Location.Win.Item")
-                Case 84
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Gets.Number.Days.Item")
-                Case 85
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Reverts.PC.Item")
-                Case 86
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Ability.Roll.Item")
-                Case 87
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Number.Days.Item")
-                Case 88
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Gets.State.Reserved.Item")
-                Case 89
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Sets.State.Reserved.Item")
-                Case 90             ' Edge can also be deployed
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Adds.Microsoft.Item")
-                Case 91
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Command91.Item")
-                Case 92
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Addsmicrosoft.Edge.Web.Item")
-                Case 93
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Saves.Complete.Image.Message")
-                Case Else
-                    ' Do not show anything
+                Case 1 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Adds.Additional.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 2 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Full.Flash.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 3 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Windows.Image.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 4 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Captures.Incremen.File.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 5 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Captures.Image.Drive.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 6 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Captures.Image.New.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 7 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Deletes.Resources.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 8 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Changes.Made.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 9 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Deletes.Volume.Image.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 10 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Exports.Copy.Image.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 11 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Images.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 12 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.List.Wimffu.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 13 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.WIM.Boot.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 14 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.List.Files.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 15 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Mounts.Image.Wimffu.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 16 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Optimizes.Ffuimage.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 17 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Optimizes.Image.Faster.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 18 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Remounts.Mounted.Image.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 19 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Splits.Full.Flash.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 20 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Splits.Existing.WIM.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 21 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Unmounts.Wimffuvhd.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 22 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Updates.WIM.Boot.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 23 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Siloed.Prov.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 24 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Message"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 26 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Installs.Cabmsu.Package.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 27 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Cabfile.Package.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 28 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Installed.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 30 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Enables.Updates.Feature.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 31 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Disables.Feature.Image.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 32 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Performs.Cleanup.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 33 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Adds.Applicable.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 34 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Gets.Infomation.Prov.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 35 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Dehydrat.Files.Containe.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 36 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.App.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 37 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Addsone.App.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 38 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Prov.App.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 39 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Optimizes.Total.Size.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 40 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Addscustom.Data.File.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 41 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Msppatches.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 42 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Command42.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 43 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 44 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Specific.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 45 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Command45.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 46 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Exports.Default.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 47 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.List.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 48 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Imports.Set.DefaultApp.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 49 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Default.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 50 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Intl.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 51 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Default.Uilanguage.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 52 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Fallback.Default.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 53 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Sets.System.Preferred.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 54 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Language.Non.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 55 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Standards.Formats.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 56 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Input.Locales.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 57 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Default.System.Message"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 58 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Default.Time.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 59 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Default.Message"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 60 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Specifies.Keyboard.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 61 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Generates.Lang.Ini.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 62 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Defines.Default.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 63 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Addscapability.Image.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 64 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Exports.Set.Caps.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 65 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Gets.Installed.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 67 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Capability.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 68 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Edition.Image.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 69 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Editions.Image.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 70 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Changes.Image.Higher.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 71 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Enters.ProductKey.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 72 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.Driver.Message"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 74 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Addsthird.Party.Driver.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 75 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Removes.ThirdParty.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 76 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Exports.ThirdParty.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 77 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Imports.ThirdParty.Message"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 78 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Applies.Unattend.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 79 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Displays.List.Windows.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 80 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Retrieves.Configured.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 81 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Retrieves.Target.Path.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 82 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Available.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 83 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Location.Win.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 84 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Gets.Number.Days.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 85 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Reverts.PC.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 86 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Removes.Ability.Roll.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 87 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Sets.Number.Days.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 88 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Gets.State.Reserved.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 89 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Sets.State.Reserved.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 90 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Adds.Microsoft.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 91 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Command91.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 92 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Addsmicrosoft.Edge.Web.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 93 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Saves.Complete.Image.Message"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case Else  ' Do not show anything
             End Select
         Else
             Select Case ChildDescMode
-                Case 1
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Creates.New.DISM.Item")
-                Case 2
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Existing.DISM.Item")
-                Case 3
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Enters.Online.Install.Item")
-                Case 4
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Saves.Changes.Project.Item")
-                Case 5
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Saves.Project.Another.Item")
-                Case 6
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Closes.Project.Message")
-                Case 7
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Opens.File.Explorer.Item")
-                Case 8
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Unloads.Project.Message")
-                Case 9
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Switches.Mounted.Image.Item")
-                Case 10
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Launches.Project.Item")
-                Case 11
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Launches.Image.Section.Item")
-                Case 12
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("ImageFormat.Item")
-                Case 13
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Merges.Two.SWM.Item")
-                Case 14
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Remounts.Image.Read.Item")
-                Case 15
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Command.Console.Item")
-                Case 16
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Lets.Manage.Item")
-                Case 17
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Lets.Manage.Project.Item")
-                Case 18
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Shows.Overview.Mounted.Item")
-                Case 19
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Configures.Settings.Item")
-                Case 20
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Help.Topics.Item")
-                Case 21
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Glossary.Don.Item")
-                Case 22
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Shows.Command.Help.Item")
-                Case 23
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Shows.Item")
-                Case 24
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Lets.Report.Feedback.Item")
-                Case 25
-                    MenuDesc.Text = LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Git.Hub.Message")
+                Case 1 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Creates.New.DISM.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 2 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Existing.DISM.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 3 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Enters.Online.Install.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 4 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Saves.Changes.Project.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 5 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Saves.Project.Another.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 6 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Closes.Project.Message"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 7 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Opens.File.Explorer.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 8 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Unloads.Project.Message"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 9 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Switches.Mounted.Image.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 10 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Launches.Project.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 11 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Launches.Image.Section.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 12 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("ImageFormat.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 13 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Merges.Two.SWM.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 14 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Remounts.Image.Read.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 15 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Command.Console.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 16 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Lets.Manage.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 17 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Lets.Manage.Project.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 18 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Shows.Overview.Mounted.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 19 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Configures.Settings.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 20 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Help.Topics.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 21 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Glossary.Don.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 22 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Shows.Command.Help.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 23 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Shows.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 24 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Lets.Report.Feedback.Item"), IsMenuDescription:=True, DescriptionSource:=2)
+                Case 25 : UpdateStatusBarText(LocalizationService.ForSection("Main.ShowChildDescs")("Opens.Git.Hub.Message"), IsMenuDescription:=True, DescriptionSource:=2)
             End Select
         End If
     End Sub
 
+    Public Sub UpdateStatusBarText(StatusText As String,
+                                   Optional ResetToReadyAfterMilliseconds As Integer = 0,
+                                   Optional IsMenuDescription As Boolean = False,
+                                   Optional DescriptionSource As Integer = 0)
+        If InvokeRequired Then
+            Invoke(Sub() UpdateStatusBarText(StatusText, ResetToReadyAfterMilliseconds, IsMenuDescription, DescriptionSource))
+            Return
+        End If
+        If Not IsMenuDescription Then
+            StatusBarResetTimer.Stop()
+            statusBarResetSourceText = Nothing
+            statusBarText = StatusText
+        Else
+            activeStatusDescription = DescriptionSource
+            activeStatusDescriptionText = StatusText
+        End If
+        If IsMenuDescription OrElse activeStatusDescription = 0 Then
+            SetStatusBarDisplayText(StatusText)
+        End If
+        If ResetToReadyAfterMilliseconds > 0 Then
+            statusBarResetSourceText = StatusText
+            StatusBarResetTimer.Interval = ResetToReadyAfterMilliseconds
+            StatusBarResetTimer.Start()
+        End If
+    End Sub
+
+    Private Sub SetStatusBarDisplayText(StatusText As String)
+        isUpdatingStatusBarText = True
+        MenuDesc.Text = StatusText
+        isUpdatingStatusBarText = False
+    End Sub
+
+    Private Sub MenuDesc_TextChanged(sender As Object, e As EventArgs) Handles MenuDesc.TextChanged
+        If isUpdatingStatusBarText Then Return
+        StatusBarResetTimer.Stop()
+        statusBarResetSourceText = Nothing
+        statusBarText = MenuDesc.Text
+        If activeStatusDescription <> 0 Then
+            SetStatusBarDisplayText(activeStatusDescriptionText)
+        End If
+    End Sub
+
+    Private Sub ReleaseStatusDescription(DescriptionSource As Integer)
+        If activeStatusDescription <> DescriptionSource Then Return
+        activeStatusDescription = 0
+        activeStatusDescriptionText = Nothing
+        SetStatusBarDisplayText(statusBarText)
+    End Sub
+
+    Private Sub StatusBarResetTimer_Tick(sender As Object, e As EventArgs) Handles StatusBarResetTimer.Tick
+        StatusBarResetTimer.Stop()
+        If statusBarText = statusBarResetSourceText Then
+            UpdateStatusBarText(LocalizationService.ForSection("Main.Interface")("Ready.Label"))
+        End If
+        statusBarResetSourceText = Nothing
+    End Sub
+
     Sub HideParentDesc()
-        MenuDesc.Text = LocalizationService.ForSection("Main.HideParentDesc")("Ready.Label")
+        ReleaseStatusDescription(1)
         If ImgBW.CancellationPending Then
-            MenuDesc.Text = LocalizationService.ForSection("Main.HideParentDesc")("Cancelling.Bg.Procs.Item")
+            UpdateStatusBarText(LocalizationService.ForSection("Main.HideParentDesc")("Cancelling.Bg.Procs.Item"))
         End If
     End Sub
 
     Sub HideChildDescs()
-        MenuDesc.Text = LocalizationService.ForSection("Main.HideChildDescs")("Ready.Label")
+        ReleaseStatusDescription(2)
         If ImgBW.CancellationPending Then
-            MenuDesc.Text = LocalizationService.ForSection("Main.HideChildDescs")("Cancelling.Bg.Procs.Item")
+            UpdateStatusBarText(LocalizationService.ForSection("Main.HideChildDescs")("Cancelling.Bg.Procs.Item"))
         End If
     End Sub
 
@@ -6322,7 +6287,7 @@ Public Class MainForm
                 UnloadDTProj(True, False)
             End If
         End If
-        If ImgBW.IsBusy Then
+        If IsImageBackgroundProcessRunning Then
             DynaLog.LogMessage("Background processes are still running. Cannot continue closure")
             e.Cancel = True
             Beep()
@@ -6571,16 +6536,23 @@ Public Class MainForm
         SaveDTProj()
     End Sub
 
-    Private Sub ImgBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ImgBW.DoWork
+    Private Async Function ImgBW_DoWorkAsync(cancellationToken As CancellationToken) As Task
+        Dim processAction As Integer = bwBackgroundProcessAction
+        Dim getImageInfo As Boolean = bwGetImageInfo
+        Dim getAdvancedImageInfo As Boolean = bwGetAdvImgInfo
+        Dim onlineMode As Boolean = OnlineManagement
+        Dim offlineMode As Boolean = OfflineManagement
+
         DynaLog.LogMessage("Preparing background processes...")
-        DynaLog.LogMessage("- Background process action: " & bwBackgroundProcessAction)
-        DynaLog.LogMessage("- Get basic image information? " & If(bwGetImageInfo, "Yes", "No"))
-        DynaLog.LogMessage("- Get advanced image information? " & If(bwGetAdvImgInfo, "Yes", "No"))
+        DynaLog.LogMessage("- Background process action: " & processAction)
+        DynaLog.LogMessage("- Get basic image information? " & If(getImageInfo, "Yes", "No"))
+        DynaLog.LogMessage("- Get advanced image information? " & If(getAdvancedImageInfo, "Yes", "No"))
         DynaLog.LogMessage("Stopping mounted image detector...")
-        StopMountedImageDetector()
+        Await StopMountedImageDetectorAsync()
+        cancellationToken.ThrowIfCancellationRequested()
         DynaLog.LogMessage("Starting background processes...")
-        RunBackgroundProcesses(bwBackgroundProcessAction, bwGetImageInfo, bwGetAdvImgInfo, OnlineManagement, OfflineManagement)
-    End Sub
+        Await Task.Run(Sub() RunBackgroundProcesses(processAction, getImageInfo, getAdvancedImageInfo, onlineMode, offlineMode), cancellationToken)
+    End Function
 
     Private Sub UnloadBtn_Click(sender As Object, e As EventArgs) Handles Button21.Click
         DynaLog.LogMessage("Unloading project/mode...")
@@ -6602,58 +6574,42 @@ Public Class MainForm
                     BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 7)
                 End If
             End If
-        ElseIf BGProcDetails.Visible And pinState = 0 Then
-            If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
-                BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
-            ElseIf Environment.OSVersion.Version.Major = 6 Then
-                If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
-                    BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
-                Else
-                    BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 75)
-                End If
-            End If
-        End If
-    End Sub
-
-    Private Sub BackgroundProcessesButton_Click(sender As Object, e As EventArgs) Handles BackgroundProcessesButton.Click
-        If BGProcDetails.Visible Then
-            BGProcDetails.Hide()
-        Else
-            BGProcDetails.Show()
         End If
     End Sub
 
     Private Sub ImgBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ImgBW.ProgressChanged
         DynaLog.LogMessage("Reporting new progress...")
         DynaLog.LogMessage("Progress message (translated): " & Quote & progressLabel & Quote)
-        BGProcDetails.Label2.Text = progressLabel
-        If bwBackgroundProcessAction <> 0 Then BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Marquee Else BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
+        UpdateStatusBarText(progressLabel)
         If regJumps Then
             DynaLog.LogMessage("Regular progress bar value jumps are being done")
-            BGProcDetails.ProgressBar1.Value = e.ProgressPercentage
+            progressMin = Math.Max(0, Math.Min(100, e.ProgressPercentage))
         Else
             DynaLog.LogMessage("Regular progress bar value jumps are not being done")
-            BGProcDetails.ProgressBar1.Value = irregVal
+            progressMin = Math.Max(0, Math.Min(100, irregVal))
         End If
-        progressMin = BGProcDetails.ProgressBar1.Value
     End Sub
 
     Private Sub ImgBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ImgBW.RunWorkerCompleted
         DynaLog.LogMessage("Background processes have finished")
+        If e.Error IsNot Nothing Then
+            DynaLog.LogMessage("Background process failed unexpectedly: " & e.Error.ToString())
+            FailedBGProcResultDic("Image background process") = e.Error
+        ElseIf e.Cancelled Then
+            DynaLog.LogMessage("Background processes were cancelled.")
+        End If
         If FailedBGProcResultDic.Count > 0 Then
             DynaLog.LogMessage("One or more background processes has failed.")
             BWFailPanel.Visible = True
             Beep()
         End If
-        CompletedTasks = Enumerable.Repeat(True, CompletedTasks.Length).ToArray()
-        BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
-        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
-        WatcherTimer.Enabled = True
-        areBackgroundProcessesDone = True
-        BackgroundProcessesButton.Image = GetGlyphResource("bg_ops_complete")
+        If e.Error Is Nothing AndAlso Not e.Cancelled Then
+            CompletedTasks = Enumerable.Repeat(True, CompletedTasks.Length).ToArray()
+        End If
+        areBackgroundProcessesDone = e.Error Is Nothing AndAlso Not e.Cancelled
+        BackgroundProcessesButton.Image = GetGlyphResource(If(areBackgroundProcessesDone, "bg_ops_complete", "bg_ops"))
         progressLabel = LocalizationService.ForSection("Main.BgProcesses")("ImageCompleted.Label")
-        BGProcDetails.Label2.Text = progressLabel
-        BGProcDetails.ProgressBar1.Value = BGProcDetails.ProgressBar1.Maximum
+        UpdateStatusBarText(If(e.Error IsNot Nothing, e.Error.Message, progressLabel), 5000)
         DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed And Not ProgressPanel.Visible Then ProgressPanel.Dispose()
         If isOrphaned Then
@@ -6665,9 +6621,6 @@ Public Class MainForm
                 Application.DoEvents()
                 Thread.Sleep(100)
             End While
-            If BGProcDetails.Visible Then
-                BGProcDetails.ProgressBar1.Value = 0
-            End If
             If Not OrphanedMountedImgDialog.IsDisposed Then OrphanedMountedImgDialog.Dispose()
             OrphanedMountedImgDialog.ShowDialog(Me)
             If OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.OK Then
@@ -6679,7 +6632,6 @@ Public Class MainForm
             ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                 DynaLog.LogMessage("User decided not to reload the servicing session. Unloading project...")
                 UnloadDTProj(False, False)
-                ImgBW.CancelAsync()
             End If
         End If
         If Not IsCompatible Then
@@ -6732,6 +6684,10 @@ Public Class MainForm
                         Button56.Enabled = False
                         Button57.Enabled = False
                         Button58.Enabled = False
+                        If e.Error Is Nothing Then
+                            StartMountedImageDetector()
+                            WatcherTimer.Enabled = True
+                        End If
                         Exit Sub
                     ElseIf ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                         DynaLog.LogMessage("User decided to unmount the image")
@@ -6780,6 +6736,10 @@ Public Class MainForm
                 ProgressPanel.ShowDialog(Me)
             End If
         End If
+        If e.Error Is Nothing Then
+            StartMountedImageDetector()
+            WatcherTimer.Enabled = True
+        End If
     End Sub
 
     Private Sub RemovePackage_Click(sender As Object, e As EventArgs) Handles RemovePackage.Click
@@ -6805,23 +6765,6 @@ Public Class MainForm
     Private Sub DeleteImage_Click(sender As Object, e As EventArgs) Handles DeleteImage.Click
         DynaLog.LogMessage("Opening image index removal dialog...")
         ImgIndexDelete.ShowDialog(Me)
-    End Sub
-
-    Private Sub MountedImageDetectorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles MountedImageDetectorBW.DoWork
-        DynaLog.LogMessage("Images will be detected in a loop with a 1s break. No logging will be performed here...")
-        Do
-            If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then Exit Do
-            Try
-                DetectMountedImages(False)
-            Catch ex As AccessViolationException
-                DynaLog.LogMessage("Procedure failed due to handled access violation.")
-            End Try
-            Thread.Sleep(1000)
-        Loop
-    End Sub
-
-    Private Sub MountedImageDetectorBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles MountedImageDetectorBW.RunWorkerCompleted
-        DynaLog.LogMessage("The mounted image detector is no longer busy.")
     End Sub
 
     Private Sub MountedImageManagerTSMI_Click(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.Click
@@ -7611,8 +7554,7 @@ Public Class MainForm
                 UpdateProjProperties(True, False, False)
             Else
                 DynaLog.LogMessage("Restarting mounted image detector and watcher...")
-                If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
-                WatcherTimer.Enabled = True
+                StartMountedImageDetector()
             End If
         End If
     End Sub
@@ -9275,16 +9217,6 @@ Public Class MainForm
                     BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 7)
                 End If
             End If
-        ElseIf BGProcDetails.Visible And pinState = 0 Then
-            If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
-                BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
-            ElseIf Environment.OSVersion.Version.Major = 6 Then
-                If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
-                    BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
-                Else
-                    BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 75)
-                End If
-            End If
         End If
         ' Toggle Menu button and side panel visibility
         MenuToggle.Visible = Width <= WindowHelper.ScaleLogical(1152)
@@ -9311,26 +9243,18 @@ Public Class MainForm
         End If
     End Sub
 
-    Sub RestartDetector()
-        Debug.WriteLine("Restarting mounted image detector...")
+    Private Async Sub MountedImageDetectorTimer_Tick(sender As Object, e As EventArgs) Handles MountedImageDetectorTimer.Tick
+        If ImgBW.IsBusy OrElse MountedImageDetectionInProgress Then Exit Sub
+        MountedImageDetectionInProgress = True
         Try
-            If Not MountedImageDetectorBW.IsBusy Then
-                Debug.WriteLine("The detector is not busy. Calling it...")
-                Call MountedImageDetectorBW.RunWorkerAsync()
-            Else
-                Debug.WriteLine("The detector is busy.")
-                Exit Sub
-            End If
-            Debug.WriteLine("Mounted Image Detector Restart Successful")
-            MountedImageDetectorBWRestarterTimer.Enabled = False
+            MountedImageDetectionTask = RefreshMountedImagesAsync()
+            Await MountedImageDetectionTask
         Catch ex As Exception
-            Debug.WriteLine("Mounted Image Detector Restart Not Successful")
+            DynaLog.LogMessage("Could not refresh mounted images. Error message: " & ex.Message)
+        Finally
+            MountedImageDetectionTask = Nothing
+            MountedImageDetectionInProgress = False
         End Try
-    End Sub
-
-    Private Sub MountedImageDetectorBWRestarterTimer_Tick(sender As Object, e As EventArgs) Handles MountedImageDetectorBWRestarterTimer.Tick
-        Debug.WriteLine("An event that requires the mounted image detector to be restarted has been triggered.")
-        RestartDetector()
     End Sub
 
     Private Sub LanguagesAndOptionalFeaturesISOToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LanguagesAndOptionalFeaturesISOToolStripMenuItem.Click
@@ -9404,7 +9328,7 @@ Public Class MainForm
         End Try
         MsgBox(msg, vbOKOnly + If(msgSuccess, vbInformation, vbExclamation), Text)
         DynaLog.LogMessage("Restarting mounted image detector...")
-        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        StartMountedImageDetector()
         WatcherTimer.Enabled = True
     End Sub
 
@@ -9445,11 +9369,10 @@ Public Class MainForm
 
     Sub StopMountedImageDetector()
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
+        MountedImageDetectorTimer.Enabled = False
+        While MountedImageDetectionInProgress
             Application.DoEvents()
-            Thread.Sleep(500)
+            Thread.Sleep(100)
         End While
         DynaLog.LogMessage("Stopping image status watchers...")
         WatcherTimer.Enabled = False
@@ -9460,9 +9383,24 @@ Public Class MainForm
         End While
     End Sub
 
+    Private Async Function StopMountedImageDetectorAsync() As Task
+        DynaLog.LogMessage("Stopping mounted image detector...")
+        MountedImageDetectorTimer.Enabled = False
+        Dim detectionTask As Task = MountedImageDetectionTask
+        If detectionTask IsNot Nothing Then Await detectionTask
+
+        DynaLog.LogMessage("Stopping image status watchers...")
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Await Task.Delay(50)
+        End While
+    End Function
+
     Sub StartMountedImageDetector()
         DynaLog.LogMessage("Restarting mounted image detector and watchers...")
-        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        MountedImageDetectorTimer.Interval = 1000
+        MountedImageDetectorTimer.Enabled = True
         WatcherTimer.Enabled = True
     End Sub
 
@@ -9784,6 +9722,13 @@ Public Class MainForm
         End If
     End Sub
 
+    Private Sub DrvPakCreator_TSMI_Click(sender As Object, e As EventArgs) Handles DrvPakCreator_TSMI.Click
+        Dim DrvPakCreatorPath As String = Path.Combine(Application.StartupPath, "tools", "DrvPakCreator", "DrvPakCreator.exe")
+        If File.Exists(DrvPakCreatorPath) Then
+            Process.Start(DrvPakCreatorPath)
+        End If
+    End Sub
+
     Private Sub SSETimer_Tick(sender As Object, e As EventArgs) Handles SSETimer.Tick
         If Not Process.GetProcessesByName("StarterScriptEditor").Any() Then
             UserDataManagerModule.CopyUserDataToProgramFiles("starter_scripts")
@@ -10056,4 +10001,119 @@ Public Class MainForm
     Private Sub VisitNewsItemSiteBtn_Click(sender As Object, e As EventArgs) Handles VisitNewsItemSiteBtn.Click
         Process.Start(SelectedNewsItemSite)
     End Sub
+End Class
+
+Public Class AsyncBackgroundWorker
+    Inherits System.ComponentModel.Component
+
+    Public Sub New(container As IContainer)
+        MyBase.New()
+        container.Add(Me)
+    End Sub
+
+    Private ReadOnly _syncLock As New Object()
+    Private _cancellationTokenSource As CancellationTokenSource
+    Private _isRunning As Boolean
+    Private _completionTask As Task = Task.CompletedTask
+    Private _progress As IProgress(Of Integer)
+
+    Public Property Work As Func(Of CancellationToken, Task)
+
+    Public Event ProgressChanged As ProgressChangedEventHandler
+    Public Event RunWorkerCompleted As RunWorkerCompletedEventHandler
+
+    Public ReadOnly Property IsBusy As Boolean
+        Get
+            SyncLock _syncLock
+                Return _isRunning
+            End SyncLock
+        End Get
+    End Property
+
+    Public ReadOnly Property CancellationPending As Boolean
+        Get
+            SyncLock _syncLock
+                Return _cancellationTokenSource IsNot Nothing AndAlso _cancellationTokenSource.IsCancellationRequested
+            End SyncLock
+        End Get
+    End Property
+
+    Public ReadOnly Property CancellationToken As CancellationToken
+        Get
+            SyncLock _syncLock
+                Return If(_cancellationTokenSource Is Nothing, System.Threading.CancellationToken.None, _cancellationTokenSource.Token)
+            End SyncLock
+        End Get
+    End Property
+
+    Public ReadOnly Property CompletionTask As Task
+        Get
+            SyncLock _syncLock
+                Return _completionTask
+            End SyncLock
+        End Get
+    End Property
+
+    Public Function RunWorkerAsync() As Task
+        SyncLock _syncLock
+            If _isRunning Then
+                DynaLog.LogMessage("Ignoring a duplicate image background process request because the current operation has not finished.")
+                Return _completionTask
+            End If
+            If Work Is Nothing Then Throw New InvalidOperationException("The image background process operation has not been configured.")
+
+            _cancellationTokenSource = New CancellationTokenSource()
+            _isRunning = True
+            _progress = New Progress(Of Integer)(Sub(value) RaiseEvent ProgressChanged(Me, New ProgressChangedEventArgs(value, Nothing)))
+            _completionTask = ExecuteAsync(_cancellationTokenSource.Token)
+            _completionTask.ContinueWith(
+                Sub(completedTask)
+                    Dim observedException As AggregateException = completedTask.Exception
+                End Sub,
+                CancellationToken.None,
+                TaskContinuationOptions.OnlyOnFaulted Or TaskContinuationOptions.ExecuteSynchronously,
+                TaskScheduler.Default)
+            Return _completionTask
+        End SyncLock
+    End Function
+
+    Public Sub CancelAsync()
+        SyncLock _syncLock
+            If _cancellationTokenSource IsNot Nothing AndAlso _isRunning Then _cancellationTokenSource.Cancel()
+        End SyncLock
+    End Sub
+
+    Public Sub ReportProgress(progressPercentage As Integer)
+        Dim currentProgress As IProgress(Of Integer)
+        SyncLock _syncLock
+            currentProgress = _progress
+        End SyncLock
+        If currentProgress Is Nothing Then Throw New InvalidOperationException("Progress can only be reported while image background processes are running.")
+        currentProgress.Report(progressPercentage)
+    End Sub
+
+    Private Async Function ExecuteAsync(cancellationToken As CancellationToken) As Task
+        Dim operationError As Exception = Nothing
+        Dim wasCancelled As Boolean
+        Try
+            Await Work(cancellationToken)
+        Catch ex As OperationCanceledException When cancellationToken.IsCancellationRequested
+            wasCancelled = True
+        Catch ex As Exception
+            operationError = ex
+        Finally
+            SyncLock _syncLock
+                _isRunning = False
+                If _cancellationTokenSource IsNot Nothing Then
+                    _cancellationTokenSource.Dispose()
+                    _cancellationTokenSource = Nothing
+                End If
+                _progress = Nothing
+            End SyncLock
+        End Try
+
+        RaiseEvent RunWorkerCompleted(Me, New RunWorkerCompletedEventArgs(wasCancelled, operationError, Nothing))
+        If wasCancelled Then Throw New OperationCanceledException(cancellationToken)
+        If operationError IsNot Nothing Then System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(operationError).Throw()
+    End Function
 End Class

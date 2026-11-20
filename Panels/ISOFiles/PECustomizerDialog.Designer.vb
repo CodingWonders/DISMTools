@@ -67,16 +67,17 @@ Partial Class PECustomizerDialog
         Me.Label12 = New System.Windows.Forms.Label()
         Me.ComboBox3 = New System.Windows.Forms.ComboBox()
         Me.TabPage5 = New System.Windows.Forms.TabPage()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.CheckBox7 = New System.Windows.Forms.CheckBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.Label15 = New System.Windows.Forms.Label()
-        Me.ComboBox4 = New System.Windows.Forms.ComboBox()
-        Me.Label16 = New System.Windows.Forms.Label()
         Me.ListView2 = New System.Windows.Forms.ListView()
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ComboBox4 = New System.Windows.Forms.ComboBox()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.CheckBox7 = New System.Windows.Forms.CheckBox()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.CheckBox8 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -437,6 +438,7 @@ Partial Class PECustomizerDialog
         'TabPage1
         '
         Me.TabPage1.AutoScroll = True
+        Me.TabPage1.Controls.Add(Me.CheckBox8)
         Me.TabPage1.Controls.Add(Me.CheckBox2)
         Me.TabPage1.Controls.Add(Me.CheckBox4)
         Me.TabPage1.Controls.Add(Me.Label3)
@@ -572,29 +574,6 @@ Partial Class PECustomizerDialog
         Me.TabPage5.Text = "Installation Media"
         Me.TabPage5.UseVisualStyleBackColor = True
         '
-        'Label14
-        '
-        Me.Label14.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label14.AutoEllipsis = True
-        Me.Label14.Location = New System.Drawing.Point(12, 12)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(508, 30)
-        Me.Label14.TabIndex = 6
-        Me.Label14.Text = "Configure the behavior of the operating system installer when scanning your ISO f" & _
-    "iles for available Windows images. These settings only take effect when performi" & _
-    "ng local installations."
-        '
-        'CheckBox7
-        '
-        Me.CheckBox7.AutoSize = True
-        Me.CheckBox7.Location = New System.Drawing.Point(12, 48)
-        Me.CheckBox7.Name = "CheckBox7"
-        Me.CheckBox7.Size = New System.Drawing.Size(383, 17)
-        Me.CheckBox7.TabIndex = 7
-        Me.CheckBox7.Text = "Include boot images when scanning ISO files for available Windows images"
-        Me.CheckBox7.UseVisualStyleBackColor = True
-        '
         'GroupBox2
         '
         Me.GroupBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -609,41 +588,6 @@ Partial Class PECustomizerDialog
         Me.GroupBox2.TabIndex = 8
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Image Selector Settings"
-        '
-        'Label15
-        '
-        Me.Label15.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label15.AutoEllipsis = True
-        Me.Label15.Location = New System.Drawing.Point(10, 24)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(488, 42)
-        Me.Label15.TabIndex = 6
-        Me.Label15.Text = resources.GetString("Label15.Text")
-        '
-        'ComboBox4
-        '
-        Me.ComboBox4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBox4.FormattingEnabled = True
-        Me.ComboBox4.Items.AddRange(New Object() {"Allow me to select the image file to deploy", "Automatically deploy the biggest image file", "Automatically deploy the most recent image file (based on file modification dates" & _
-                ")"})
-        Me.ComboBox4.Location = New System.Drawing.Point(13, 69)
-        Me.ComboBox4.Name = "ComboBox4"
-        Me.ComboBox4.Size = New System.Drawing.Size(485, 21)
-        Me.ComboBox4.TabIndex = 7
-        Me.ComboBox4.Text = "Allow me to select the image file to deploy"
-        '
-        'Label16
-        '
-        Me.Label16.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(10, 96)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(51, 13)
-        Me.Label16.TabIndex = 6
-        Me.Label16.Text = "Example:"
         '
         'ListView2
         '
@@ -675,6 +619,76 @@ Partial Class PECustomizerDialog
         '
         Me.ColumnHeader5.Text = "Last Modified"
         Me.ColumnHeader5.Width = 96
+        '
+        'ComboBox4
+        '
+        Me.ComboBox4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ComboBox4.FormattingEnabled = True
+        Me.ComboBox4.Items.AddRange(New Object() {"Allow me to select the image file to deploy", "Automatically deploy the biggest image file", "Automatically deploy the most recent image file (based on file modification dates" & _
+                ")"})
+        Me.ComboBox4.Location = New System.Drawing.Point(13, 69)
+        Me.ComboBox4.Name = "ComboBox4"
+        Me.ComboBox4.Size = New System.Drawing.Size(485, 21)
+        Me.ComboBox4.TabIndex = 7
+        Me.ComboBox4.Text = "Allow me to select the image file to deploy"
+        '
+        'Label16
+        '
+        Me.Label16.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(10, 96)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(51, 13)
+        Me.Label16.TabIndex = 6
+        Me.Label16.Text = "Example:"
+        '
+        'Label15
+        '
+        Me.Label15.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label15.AutoEllipsis = True
+        Me.Label15.Location = New System.Drawing.Point(10, 24)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(488, 42)
+        Me.Label15.TabIndex = 6
+        Me.Label15.Text = resources.GetString("Label15.Text")
+        '
+        'CheckBox7
+        '
+        Me.CheckBox7.AutoSize = True
+        Me.CheckBox7.Location = New System.Drawing.Point(12, 48)
+        Me.CheckBox7.Name = "CheckBox7"
+        Me.CheckBox7.Size = New System.Drawing.Size(383, 17)
+        Me.CheckBox7.TabIndex = 7
+        Me.CheckBox7.Text = "Include boot images when scanning ISO files for available Windows images"
+        Me.CheckBox7.UseVisualStyleBackColor = True
+        '
+        'Label14
+        '
+        Me.Label14.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label14.AutoEllipsis = True
+        Me.Label14.Location = New System.Drawing.Point(12, 12)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(508, 30)
+        Me.Label14.TabIndex = 6
+        Me.Label14.Text = "Configure the behavior of the operating system installer when scanning your ISO f" & _
+    "iles for available Windows images. These settings only take effect when performi" & _
+    "ng local installations."
+        '
+        'CheckBox8
+        '
+        Me.CheckBox8.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox8.AutoEllipsis = True
+        Me.CheckBox8.Location = New System.Drawing.Point(12, 219)
+        Me.CheckBox8.Name = "CheckBox8"
+        Me.CheckBox8.Size = New System.Drawing.Size(508, 17)
+        Me.CheckBox8.TabIndex = 3
+        Me.CheckBox8.Text = "Perform a full format of a system partition after selecting a disk"
+        Me.CheckBox8.UseVisualStyleBackColor = True
         '
         'PECustomizerDialog
         '
@@ -768,5 +782,6 @@ Partial Class PECustomizerDialog
     Friend WithEvents Label15 As System.Windows.Forms.Label
     Friend WithEvents CheckBox7 As System.Windows.Forms.CheckBox
     Friend WithEvents Label14 As System.Windows.Forms.Label
+    Friend WithEvents CheckBox8 As System.Windows.Forms.CheckBox
 
 End Class

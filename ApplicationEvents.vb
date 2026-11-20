@@ -126,51 +126,27 @@ Namespace My
 
         Private Sub SysEvts_UserPreferenceChanged(sender As Object, e As Microsoft.Win32.UserPreferenceChangedEventArgs)
             DynaLog.LogMessage("A user preference of type " & e.Category.ToString() & " has changed.")
+            If e.Category <> UserPreferenceCategory.General Then Exit Sub
 
-            ' Prevent the program from freezing. This is a fix for a very long-standing bug that was introduced with the mounted image detector,
-            ' where the program would randomly freeze and never come back. And, even while the program itself was still responding, its UI thread
-            ' wasn't.
-            '
-            ' This is a problem with Windows Forms that has been present since .NET Framework 2.0. More on that here: 
-            ' https://www.ikriv.com/dev/dotnet/MysteriousHang
-            '
-            ' Even though this bug took a year and a half to fix, a lot was gathered from previous attempts at fixing this problem:
-            ' 1. It's random
-            ' 2. It affects all versions of Windows supported by this program (Win8.1-Win11, incl. servers)
-            ' 3. It happens when the following conditions occur:
-            '    - The mounted image detector is running
-            '    - This event is triggered
-            '
-            ' This fixes the problem by temporarily stopping the mounted image detector, doing the event code, and restarting it afterward.
-            ' It causes a temporary freeze, but it always comes back.
-            DynaLog.LogMessage("Detecting if mounted image detector is busy...")
-            If DISMTools.MainForm.MountedImageDetectorBW.IsBusy Then
-                DynaLog.LogMessage("Mounted image detector is busy. Stopping to avoid a permanent freeze...")
-                DISMTools.MainForm.MountedImageDetectorBW.CancelAsync()
+            ' This runs on the SystemEvents thread. Never touch the default instance here:
+            ' use the real form and marshal the work to the UI thread.
+            Dim uiForm As DISMTools.MainForm = DISMTools.MainForm.Current
+            If uiForm Is Nothing OrElse uiForm.IsDisposed OrElse Not uiForm.IsHandleCreated Then Exit Sub
+
+            uiForm.BeginInvoke(New MethodInvoker(Sub() ApplySystemThemeChange(uiForm)))
+        End Sub
+
+        Private Sub ApplySystemThemeChange(uiForm As DISMTools.MainForm)
+            If uiForm.ColorMode <> 0 Then Exit Sub
+
+            DynaLog.LogMessage("Detecting if the system color theme changed...")
+            Dim currentTime As DateTime = DateTime.Now
+            DynaLog.LogMessage("Time difference in seconds: " & (currentTime - lastThemeChangeTime).TotalSeconds)
+            If currentTime - lastThemeChangeTime > debounceInterval Then
+                DynaLog.LogMessage("Time difference is over debounce interval. Changing color theme...")
+                uiForm.ChangePrgColors(0)
+                lastThemeChangeTime = currentTime
             End If
-            If e.Category = UserPreferenceCategory.General And DISMTools.MainForm.ColorMode = 0 Then
-                DynaLog.LogMessage("Detecting if the system color theme changed...")
-                Dim currentTime As DateTime = DateTime.Now
-                DynaLog.LogMessage("Current system time: " & currentTime.ToString())
-                DynaLog.LogMessage("Time theme last changed: " & lastThemeChangeTime.ToString())
-                DynaLog.LogMessage("Time difference in seconds: " & (currentTime - lastThemeChangeTime).TotalSeconds)
-                DynaLog.LogMessage("Debounce interval: " & debounceInterval.TotalSeconds)
-                If currentTime - lastThemeChangeTime > debounceInterval Then
-                    DynaLog.LogMessage("Time difference is over debounce interval. Changing color theme...")
-                    DISMTools.MainForm.ChangePrgColors(0)
-                    DynaLog.LogMessage("Setting the time the theme last changed...")
-                    lastThemeChangeTime = currentTime
-                End If
-            End If
-            Try
-                DynaLog.LogMessage("Restarting mounted image detector...")
-                Threading.Thread.Sleep(1000)
-                Call DISMTools.MainForm.MountedImageDetectorBW.RunWorkerAsync()
-                Threading.Thread.Sleep(250)
-            Catch ex As Exception
-                DynaLog.LogMessage("Could not restart mounted image detector. Error message: " & ex.Message)
-                DISMTools.MainForm.MountedImageDetectorBWRestarterTimer.Enabled = True
-            End Try
         End Sub
 
         Private Sub SysEvts_DisplaySettingsChanged(sender As Object, e As EventArgs)

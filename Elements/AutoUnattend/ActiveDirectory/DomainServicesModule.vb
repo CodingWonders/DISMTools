@@ -161,12 +161,110 @@ Module DomainServicesModule
     End Function
 
     ''' <summary>
-    ''' Gets a mapping between organizational units in a domain and the users in each OU
+    ''' Retrieves all available domains in an Active Directory forest.
     ''' </summary>
-    ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
+    ''' <returns>
+    ''' A collection of <see cref="ForestEntry"/> objects that contain information about domain DNS root names and
+    ''' NetBIOS names.
+    ''' </returns>
+    ''' <remarks></remarks>
+    Public Function DSGetDomainsInForest() As List(Of ForestEntry)
+        Dim domainsInForest As New List(Of ForestEntry)
+        Try
+            Dim rootDSE As New DirectoryEntry("LDAP://RootDSE")         ' Directory System Agent Specific Entry
+
+            ' Query the naming context of the DSE
+            Dim RootDSEProperties As PropertyValueCollection = rootDSE.Properties("configurationNamingContext")
+            If RootDSEProperties.Count = 0 Then Return domainsInForest
+
+            Dim MainDSEContext As String = rootDSE.Properties("configurationNamingContext")(0).ToString()
+
+            Dim partitions As New DirectoryEntry(String.Format("LDAP://CN=Partitions, {0}", MainDSEContext))
+            Dim searcher As New DirectorySearcher(partitions)
+
+            searcher.Filter = "(&(objectCategory=crossRef)(systemFlags:1.2.840.113556.1.4.803:=2))"
+            searcher.SearchScope = SearchScope.OneLevel
+            searcher.PropertiesToLoad.AddRange(New String() {"dnsRoot", "nETBIOSName"})
+
+            For Each result As SearchResult In searcher.FindAll()
+                domainsInForest.Add(New ForestEntry(result.Properties("dnsRoot")(0).ToString(),
+                                                    result.Properties("netbiosname")(0).ToString()))
+            Next
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not get domains in forest: " & ex.Message)
+        End Try
+        Return domainsInForest
+    End Function
+
+    ''' <summary>
+    ''' Tests the connection of a device in a domain to a domain controller given its DNS name.
+    ''' </summary>
+    ''' <param name="dsDomainDnsName">The name of the domain in DNS records (eg: dismtools.local)</param>
+    ''' <returns>
+    ''' A dictionary containing information about whether the connection test succeded via the value of the
+    ''' "connected" key. If a connection to a domain controller could not be established during the test
+    ''' process, details about the error in question can be obtained by casting the value of the
+    ''' "connectionFailureDetails" key to either a <see cref="Exception"/> or <see cref="DirectoryServicesCOMException"/>
+    ''' type. See remarks for details.
+    ''' </returns>
+    ''' <remarks>
+    ''' If a connection can't be established to a domain controller, the value of the "connectionFailureDetails"
+    ''' key will be of either <see cref="Exception"/> or <see cref="DirectoryServicesCOMException"/> types depending
+    ''' on whether or not the error has something to do with Active Directory Domain Services. If it has something
+    ''' to do with ADDS, an exception of the latter type is stored. An <see cref="ArgumentNullException"/> will be thrown
+    ''' if you don't provide a domain name. An <see cref="UnauthorizedAccessException"/> will be thrown if the device
+    ''' from which you're calling this function is not in a domain.
+    ''' </remarks>
+    Public Function DSTestDomainControllerConnection(dsDomainDnsName As String) As Dictionary(Of String, Object)
+        If dsDomainDnsName = "" Then Throw New ArgumentNullException(dsDomainDnsName)
+        If Not DSIsInDomain() Then Throw New UnauthorizedAccessException("Attempted to test connection to a DC on a standalone environment!!!")
+
+        Dim connectionDetails As New Dictionary(Of String, Object) From {
+            {"connected", False},
+            {"connectionFailureDetails", New Exception()}
+        }
+
+        Try
+            Dim ldapPath As String = GetLdapPathFromDnsName(dsDomainDnsName)
+
+            Dim startingPoint As DirectoryEntry = New DirectoryEntry(String.Format("LDAP://{0}", ldapPath))
+            Dim searcher As DirectorySearcher = New DirectorySearcher(startingPoint)
+            searcher.Filter = "(objectCategory=organizationalUnit)"
+            searcher.FindAll()
+            connectionDetails("connected") = True
+        Catch NotConnectedEx As DirectoryServicesCOMException
+            connectionDetails("connectionFailureDetails") = NotConnectedEx
+        Catch ex As Exception
+            connectionDetails("connectionFailureDetails") = ex
+        End Try
+
+        Return connectionDetails
+    End Function
+
+    ''' <summary>
+    ''' Gets a mapping between organizational units in a domain and the users in each OU.
+    ''' </summary>
+    ''' <param name="dsDomainEntry">A domain entry in a forest</param>
+    ''' <returns>The mapping between organizational units and users in each OU</returns>
+    ''' <remarks>
+    ''' To query information about domains in a forest, you must call DSGetDomainsInForest. If you
+    ''' don't need or want to query domains in a forest, you must call the second overload.
+    ''' </remarks>
+    Public Function DSMapOrganizationalUnitsAndUsers(dsDomainEntry As ForestEntry) As Dictionary(Of String, List(Of Principal))
+        If dsDomainEntry Is Nothing Then Throw New ArgumentNullException()
+        If dsDomainEntry.DnsPath = "" Then Throw New ArgumentNullException(dsDomainEntry.DnsPath)
+        If dsDomainEntry.NetBIOSName = "" Then Throw New ArgumentNullException(dsDomainEntry.NetBIOSName)
+
+        Return DSMapOrganizationalUnitsAndUsers(dsDomainEntry.DnsPath, dsDomainEntry.NetBIOSName)
+    End Function
+
+    ''' <summary>
+    ''' Gets a mapping between organizational units in a domain and the users in each OU.
+    ''' </summary>
+    ''' <param name="dsDomainDnsName">The name of the domain in DNS records (eg: dismtools.local)</param>
     ''' <param name="dsDomainControllerNetBios">The NetBIOS name of the domain controller (eg: DISMTOOLS-DC)</param>
     ''' <returns>The mapping between organizational units and users in each OU</returns>
-    ''' <remarks>The directory searcher needs to be disposed of because of quirks in .NET that cause memory leaks</remarks>
+    ''' <remarks></remarks>
     Public Function DSMapOrganizationalUnitsAndUsers(dsDomainDnsName As String, dsDomainControllerNetBios As String) As Dictionary(Of String, List(Of Principal))
         DynaLog.LogMessage("Preparing to map organizational units and users in organizational units...")
         DynaLog.LogMessage("- Domain Name (DNS/Windows 2000+): " & dsDomainDnsName)
@@ -249,7 +347,7 @@ Module DomainServicesModule
     ''' <summary>
     ''' Determines whether an account in a domain is enabled
     ''' </summary>
-    ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
+    ''' <param name="dsDomainDnsName">The name of the domain in DNS records (eg: dismtools.local)</param>
     ''' <param name="accName">The SAM (Windows NT) representation of the account</param>
     ''' <returns>Whether the account is enabled or disabled based on the value of its <see cref="ADS_UF_ACCOUNTDISABLE"/> property.</returns>
     ''' <remarks></remarks>
@@ -288,7 +386,7 @@ Module DomainServicesModule
     ''' <summary>
     ''' Determines whether an account in a domain requires a password
     ''' </summary>
-    ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
+    ''' <param name="dsDomainDnsName">The name of the domain in DNS records (eg: dismtools.local)</param>
     ''' <param name="accName">The SAM (Windows NT) representation of the account</param>
     ''' <returns>Whether the account requires a password or not based on the value of its <see cref="ADS_UF_PASSWD_NOTREQD"/> property.</returns>
     ''' <remarks>
@@ -331,7 +429,7 @@ Module DomainServicesModule
     ''' <summary>
     ''' Determines whether an account exists in a domain.
     ''' </summary>
-    ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
+    ''' <param name="dsDomainDnsName">The name of the domain in DNS records (eg: dismtools.local)</param>
     ''' <param name="accName">The SAM (Windows NT) representation of the account</param>
     ''' <returns>Whether the account exists in the domain</returns>
     ''' <remarks></remarks>
@@ -385,7 +483,7 @@ Module DomainServicesModule
     ''' <summary>
     ''' Gets the User Principal Name (UPN) of a user account given its Security Account Manager (SAM) account name
     ''' </summary>
-    ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
+    ''' <param name="dsDomainDnsName">The name of the domain in DNS records (eg: dismtools.local)</param>
     ''' <param name="samAccName">The SAM account name of a user</param>
     ''' <returns>The User Principal Name of the specified user account</returns>
     ''' <remarks>User Principal Names are used from Windows 2000 onwards.</remarks>

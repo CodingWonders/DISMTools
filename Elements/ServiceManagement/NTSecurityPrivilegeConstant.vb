@@ -31,4 +31,8 @@
         Me.ConstantDescription = description
     End Sub
 
+    Public Overrides Function ToString() As String
+        Return String.Format("{0}: {1} - {2}", ConstantNameText.ToUpperInvariant(), ConstantUserRight, ConstantDescription)
+    End Function
+
 End Class

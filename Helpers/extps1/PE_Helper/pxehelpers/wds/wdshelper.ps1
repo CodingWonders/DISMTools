@@ -301,12 +301,15 @@ function Get-Partitions
             The drive number
         .PARAMETER override
             The partition table override mode
+        .PARAMETER fullCleanDrive
+            Whether to perform a full format on the main system partition
         .EXAMPLE
             Get-Partitions 0
     #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [int]$driveNum,
-        [Parameter(Position = 1)] [PartitionTableOverride]$override = [PartitionTableOverride]::NoOverride
+        [Parameter(Position = 1)] [PartitionTableOverride]$override = [PartitionTableOverride]::NoOverride,
+        [Parameter(Position = 2)] [bool]$fullCleanDrive = $false
     )
     
     Show-SectionMessage -sectionTitle "Perform disk configuration" -sectionDescription "These are the partitions in disk $($driveNum)."
@@ -323,6 +326,12 @@ function Get-Partitions
     Write-Host ""
     Write-Host "- If the selected disk contains no partitions, press ENTER. Otherwise, type a partition number."
     Write-Host "- To reload results, press R"
+    if ($fullCleanDrive) {
+        Write-Host "`n    The main system partition on the drive you select will be formatted using a full format.`n"
+    } else {
+        Write-Host "`n    The main system partition on the drive you select will be formatted using a quick format.`n"
+    }
+    Write-Host "- To change the system partition format behavior, press F."
     switch ($override) {
         NoOverride {
             Write-Host "`n    No partition table overrides have been set. The selected disk will use MBR on BIOS systems and GPT on UEFI systems.`n"
@@ -343,11 +352,11 @@ function Get-Partitions
     $part = Read-Host -Prompt "Please choose the partition to apply the image to"
     if ($part -eq -1)
     {
-        return @{"partitionNumber" = $part; "selectedOverride" = $override}
+        return @{"partitionNumber" = $part; "selectedOverride" = $override; "fullClean" = $fullCleanDrive}
     }
     elseif ($part -eq "B")
     {
-        return @{"partitionNumber" = $part; "selectedOverride" = $override}
+        return @{"partitionNumber" = $part; "selectedOverride" = $override; "fullClean" = $fullCleanDrive}
     }
     elseif ($part -eq "O")
     {
@@ -404,23 +413,58 @@ function Get-Partitions
                 }
             }
         }
-        Get-Partitions $driveNum $override
+        Get-Partitions $driveNum $override $fullCleanDrive
+    }
+    elseif ($part -eq "F")
+    {
+        Write-Host ""
+        Write-Host "The system partition of the drive you select will be formatted using your preferred format method out of the"
+        Write-Host "following modes:"
+        Write-Host "- A quick format quickly deletes the contents of a partition by marking that space as ready to be written."
+        Write-Host "  While it saves time, there is the possibility that some data might be recoverable, which may be something"
+        Write-Host "  you may not want . . ."
+        Write-Host "- A full format deletes the contents of a partition by writing zeroes across the entire partition. This is"
+        Write-Host "  good if you want to begin with a fully clean drive, but the operation can take hours, depending on how"
+        Write-Host "  big and fast the selected drive is. It may take long enough for the rest of operations done by this installer"
+        Write-Host "  to fail as it exceeds the 72-hour usage limit imposed by the Windows Preinstallation Environment"
+        Write-Host ""
+        Write-Host "Currently, " -NoNewline
+        if ($fullCleanDrive) {
+            Write-Host "a full format will be performed."
+        } else {
+            Write-Host "a quick format will be performed."
+        }
+        Write-Host ""
+        Write-Host "Note that the options you set here will be reset if you switch drives."
+        Write-Host ""
+        Write-Host "- Press Q to perform a quick format on the system partition of the selected drive"
+        Write-Host "- Press F to perform a full format on the system partition of the selected drive"
+        Write-Host "- Press B to go back"
+        Write-Host ""
+
+        $formatOption = Read-Host -Prompt "Select the format option that you want to use and press ENTER"
+        switch ($formatOption) {
+            "Q" { $fullCleanDrive = $false }
+            "F" { $fullCleanDrive = $true }
+        }
+
+        Get-Partitions $driveNum $override $fullCleanDrive
     }
     elseif ($part -eq "R")
     {
-        Get-Partitions $driveNum $override
+        Get-Partitions $driveNum $override $fullCleanDrive
     }
     else
     {
         try
         {
             $partition = [int]$part
-            return @{"partitionNumber" = $partition; "selectedOverride" = $override}
+            return @{"partitionNumber" = $partition; "selectedOverride" = $override; "fullClean" = $fullCleanDrive}
         }
         catch
         {
             Write-Host "Please specify a number and try again.`n"
-            Get-Partitions $driveNum $override
+            Get-Partitions $driveNum $override $fullCleanDrive
         }
     }
 }
@@ -438,6 +482,8 @@ function Write-DiskConfiguration
             The partition number
         .PARAMETER override
             The partition table override mode
+        .PARAMETER fullOSPartFormat
+            Determine whether to perform a full format of the system partition
         .NOTES
             The partition ID is 0 if the user decides to clean a drive
         .EXAMPLE
@@ -449,12 +495,21 @@ function Write-DiskConfiguration
         [Parameter(Mandatory = $true, Position = 0)] [int]$diskid,
         [Parameter(Mandatory = $true, Position = 1)] [bool]$cleanDrive,
         [Parameter(Mandatory = $true, Position = 2)] [int]$partId,
-        [Parameter(Mandatory = $true, Position = 3)] [PartitionTableOverride]$override
+        [Parameter(Mandatory = $true, Position = 3)] [PartitionTableOverride]$override,
+        [Parameter(Position = 4)] [bool]$fullOSPartFormat = $false
     )
     
     Show-SectionMessage -sectionTitle "Performing disk configuration..." -sectionDescription "Please wait while changes made to disk configuration are saved to disk $($diskId)."
 
     Write-Host "Writing disk configuration. Please wait..."
+
+    $formatCommand = ""
+    if ($fullOSPartFormat) {
+        $formatCommand = "for"
+    } else {
+        $formatCommand = "for quick"
+    }
+    
     if ($cleanDrive)
     {
         $preFormatter = @"
@@ -534,7 +589,7 @@ function Write-DiskConfiguration
         sel dis #DISKID#
         #GPTPART#
         #MBRPART#
-        exit
+        exi
 '@
         $formatter_gpt = @"
         conv gpt
@@ -544,8 +599,8 @@ function Write-DiskConfiguration
         cre par msr size=16
         cre par pri
         REM Prevent updates from failing to update WinRE
-        shrink minimum=1024
-        for quick label="Windows"
+        shr minimum=1024
+        $formatCommand label="Windows"
         ass letter $bootLetter
         cre par pri
         for quick label="Recovery"
@@ -558,11 +613,11 @@ function Write-DiskConfiguration
         for quick label="System"
         ass letter $espLetter
         REM Important for MBR configurations
-        active
+        act
         cre par pri
         REM Prevent updates from failing to update WinRE
-        shrink minimum=1024
-        for quick label="Windows"
+        shr minimum=1024
+        $formatCommand label="Windows"
         ass letter $bootLetter
         cre par pri
         for quick label="Recovery"
@@ -603,7 +658,7 @@ function Write-DiskConfiguration
         $formatter = @'
         sel dis #DISKID#
         sel par #PARTID#
-        for quick label="Windows"
+        $formatCommand label="Windows"
         exit
 '@
         $formatter = $formatter.Replace("#DISKID#", $diskId).Trim()
@@ -700,6 +755,7 @@ function Start-OSApplication {
         "AlwaysMBR" { $global:override = [PartitionTableOverride]::AlwaysMBR }
         "AlwaysGPT" { $global:override = [PartitionTableOverride]::AlwaysGPT }
     }
+    $fullFormat = (Get-PolicyValue -PolicyName "FullyFormatOSVolume" -DefaultPolicyValue 0 -ValidOptions @(0, 1)) -eq 1
     $diskGetterOpScript | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_listdisk.dp" -Force -Encoding utf8
     $drive = Get-Disks
     if ($drive -eq "ERROR")
@@ -708,7 +764,7 @@ function Start-OSApplication {
         return
     }
     Write-Host "Selected disk: disk $($drive)"
-    $partitionOptions = Get-Partitions $drive $override
+    $partitionOptions = Get-Partitions $drive $override $fullFormat
     if ($partitionOptions["partitionNumber"] -eq "B")
     {
         do {
@@ -719,7 +775,7 @@ function Start-OSApplication {
                 return
             }
             Write-Host "Selected disk: disk $($drive)"
-            $partitionOptions = Get-Partitions $drive $override
+            $partitionOptions = Get-Partitions $drive $override $fullFormat
         } until ($partitionOptions["partitionNumber"] -ne "B")
     }
     if ($partitionOptions["partitionNumber"] -eq 0)
@@ -739,7 +795,7 @@ function Start-OSApplication {
     {
         do
         {
-            $partitionOptions = Get-Partitions $drive $override
+            $partitionOptions = Get-Partitions $drive $override $fullFormat
             if ($partitionOptions["partitionNumber"] -eq "B")
             {
                 do {
@@ -750,7 +806,7 @@ function Start-OSApplication {
                         return
                     }
                     Write-Host "Selected disk: disk $($drive)"
-                    $partitionOptions = Get-Partitions $drive $override
+                    $partitionOptions = Get-Partitions $drive $override $fullFormat
                 } until ($partitionOptions["partitionNumber"] -ne "B")
             }
             if ($partitionOptions["partitionNumber"] -eq 0)
@@ -774,11 +830,12 @@ function Start-OSApplication {
     # Get-Partitions returns a hashtable. First item is the number, second item is the override.
     $partNumber = $partitionOptions["partitionNumber"]
     $global:override = $partitionOptions["selectedOverride"]
+    $sysPartFullFormat = $partitionOptions["fullClean"]
     
     if ($partNumber -eq 0)
     {
         # Proceed with default disk configuration
-        $diskLayout = Write-DiskConfiguration $drive $true $partNumber $global:override
+        $diskLayout = Write-DiskConfiguration $drive $true $partNumber $global:override $sysPartFullFormat
         if ($diskLayout -ne $null) {
             # Get the volume letter that was stored in the function
             $driveLetter = $diskLayout.bootVolume
@@ -792,7 +849,7 @@ function Start-OSApplication {
     else
     {
         # Proceed with custom disk configuration
-        Write-DiskConfiguration $drive $false $partNumber [PartitionTableOverride]::NoOverride
+        Write-DiskConfiguration $drive $false $partNumber [PartitionTableOverride]::NoOverride $sysPartFullFormat
         $volLister = @'
         lis vol
         exit
@@ -883,6 +940,7 @@ function Start-OSApplication {
     }
 
     Show-SectionMessage -sectionTitle "Collecting information and copying files needed for Setup" -sectionDescription "Please wait while Setup applies the Windows image. This can take some time, depending on the speed of your computer's disks."
+    Write-Host "`n`n"
     if ((Start-DismCommand -Verb Apply -ImagePath "$($driveLetter):\" -WimFile "$($wimFile.wimPath)" -WimIndex $wimFile.index) -eq $true)
     {
         Write-Host "The Windows image has been applied successfully."
@@ -1054,6 +1112,96 @@ function Start-OSApplication {
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partNumber -eq 0) -espLetter $bootLetter -bootEx $usebootex -override $global:override
 }
 
+function Invoke-DismWithProgressBar
+{
+    <#
+        .SYNOPSIS
+            Runs DISM and shows its progress using the setup-style progress bar instead of the DISM console output
+        .PARAMETER Arguments
+            The command-line arguments to pass to dism.exe
+        .OUTPUTS
+            $true if DISM exited with code 0, $false otherwise
+        .NOTES
+            DISM draws its own progress bar ("[=====   25.0%   ]") and updates it by rewriting the same console line with
+            carriage returns. We redirect its output so that it never reaches the screen, and read it one "line" at a time:
+            StreamReader.ReadLine() treats a lone carriage return as a line terminator, so every progress update arrives as
+            its own line, and we only have to extract the percentage from it. Any other output (errors, for example) is kept
+            and printed after the progress screen is closed, so that failures are still visible.
+        .EXAMPLE
+            Invoke-DismWithProgressBar -Arguments "/apply-image /imagefile=`"X:\install.wim`" /index=1 /applydir=C:\"
+    #>
+    param (
+        [Parameter(Mandatory = $true, Position = 0)] $Arguments
+    )
+
+    $startInfo = New-Object System.Diagnostics.ProcessStartInfo
+    $startInfo.FileName = "$env:SYSTEMROOT\system32\dism.exe"
+    $startInfo.Arguments = $Arguments
+    $startInfo.UseShellExecute = $false
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    $startInfo.CreateNoWindow = $true
+
+    $outputLines = New-Object 'System.Collections.Generic.List[string]'
+    $errorText = ""
+    $exitCode = -1
+
+    try
+    {
+        # Draw the whole screen at 0% before DISM has had time to print anything
+        Show-SetupProgressBar -Percent 0 -Redraw -Activity "Setup is applying the Windows image..."
+
+        $process = [System.Diagnostics.Process]::Start($startInfo)
+
+        while ($null -ne ($line = $process.StandardOutput.ReadLine()))
+        {
+            # Matches "25.0%" as well as "25,0%" (some locales use a comma as the decimal separator)
+            $match = [regex]::Match($line, '(\d{1,3}(?:[.,]\d+)?)\s*%')
+            if ($match.Success)
+            {
+                $value = [double]::Parse($match.Groups[1].Value.Replace(",", "."), [System.Globalization.CultureInfo]::InvariantCulture)
+                Show-SetupProgressBar -Percent $value -Activity "Setup is applying the Windows image..."
+            }
+            elseif ($line.Trim() -ne "")
+            {
+                $outputLines.Add($line.Trim())
+            }
+        }
+
+        $process.WaitForExit()
+        $errorText = $process.StandardError.ReadToEnd()
+        $exitCode = $process.ExitCode
+
+        if ($exitCode -eq 0)
+        {
+            # DISM sometimes ends without printing the final 100.0%, so make sure the bar ends full
+            Show-SetupProgressBar -Percent 100
+            Start-Sleep -Milliseconds 400
+        }
+    }
+    finally
+    {
+        # Always restore the console, even if DISM could not be started
+        Hide-SetupProgressBar
+    }
+
+    if ($exitCode -ne 0)
+    {
+        Write-Host "DISM exited with code $exitCode."
+        foreach ($outputLine in ($outputLines | Select-Object -Last 10))
+        {
+            Write-Host "  $outputLine"
+        }
+        if ($errorText.Trim() -ne "")
+        {
+            Write-Host "  $($errorText.Trim())"
+        }
+        Write-Host "More information may be available in `"$env:SYSTEMROOT\Logs\DISM\dism.log`".`n"
+    }
+
+    return ($exitCode -eq 0)
+}
+
 function Start-DismCommand
 {
     <#
@@ -1167,8 +1315,8 @@ function Start-DismCommand
                 }
             }
             "Apply" {
-                $dismProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\dism.exe" -ArgumentList "/apply-image /imagefile=`"$WimFile`" /index=$WimIndex /applydir=$ImagePath" -Wait -PassThru -NoNewWindow
-                return ($($dismProc.ExitCode) -eq 0)
+                # DISM output is redirected to the setup-style progress bar instead of being shown in the console
+                return (Invoke-DismWithProgressBar -Arguments "/apply-image /imagefile=`"$WimFile`" /index=$WimIndex /applydir=$ImagePath")
             }
             "Add-Package" {
                 Add-WindowsPackage -Path "$ImagePath" -PackagePath "$PackagePath" -NoRestart | Out-Null

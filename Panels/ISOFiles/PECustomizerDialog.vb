@@ -61,11 +61,13 @@ Public Class PECustomizerDialog
                                                   "{1}KeyboardLayoutOverrideExistingLayout{1}=dword:0000000{11}{0}" &
                                                   "{1}AnswerFileConflictResponse{1}={1}{12}{1}{0}" &
                                                   "{1}ScanBootImages{1}=dword:0000000{13}{0}" &
-                                                  "{1}ImageSelectorDefaultOption{1}={1}{14}{1}{0}",
+                                                  "{1}ImageSelectorDefaultOption{1}={1}{14}{1}{0}" &
+                                                  "{1}FullyFormatOSVolume{1}=dword:0000000{15}{0}",
                                                   CrLf, Quote, If(CheckBox2.Checked, 1, 0), UEFICA23Preference, PartTableOverridePreference,
                                                   Hex(NumericUpDown1.Value).PadLeft(8, "0"c).ToLowerInvariant(), If(CheckBox3.Checked, 1, 0), If(CheckBox4.Checked, 1, 0),
                                                   If(CheckBox5.Checked, 1, 0), Hex(NumericUpDown2.Value).PadLeft(8, "0"c).ToLowerInvariant(), SelectedKeyboardLayoutCode,
-                                                  If(CheckBox6.Checked, 1, 0), AnswerFileConflictResponse, If(CheckBox7.Checked, 1, 0), ImageSelectorDefaultOptionStr)
+                                                  If(CheckBox6.Checked, 1, 0), AnswerFileConflictResponse, If(CheckBox7.Checked, 1, 0), ImageSelectorDefaultOptionStr,
+                                                  If(CheckBox8.Checked, 1, 0))
         Try
             File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "files", "CustomPolicy.reg"), regContents)
         Catch ex As Exception
@@ -128,6 +130,7 @@ Public Class PECustomizerDialog
             MainForm.AnswerFileConflictResponse = ComboBox3.SelectedIndex
             MainForm.ScanBootImages = CheckBox7.Checked
             MainForm.ImageSelectorDefaultOption = ComboBox4.SelectedIndex
+            MainForm.FullyFormatOSVolume = CheckBox8.Checked
             Return True
         Catch ex As Exception
             Return False

@@ -9,6 +9,13 @@ Namespace Elements.Contemporaneus
         Public Property PackageInstallTime As DateTime
         Public Property PackageReleaseType As DismReleaseType
 
+        Public Sub New()
+            PackageName = ""
+            PackageState = DismPackageFeatureState.NotPresent
+            PackageInstallTime = DateTime.MinValue
+            PackageReleaseType = DismReleaseType.Update
+        End Sub
+
         Public Sub New(name As String, state As DismPackageFeatureState, installTime As DateTime, releaseType As DismReleaseType)
             PackageName = name
             PackageState = state

@@ -337,6 +337,25 @@
 
     Public Property SafeModeOptions As New ServiceSafeModeOptions()
 
+    Public Sub New()
+        Me.Name = ""
+        Me.DisplayName = ""
+        Me.Description = ""
+        Me.ObjectName = ""
+        Me.ImagePath = ""
+        Me.Group = ""
+        Me.StartType = ServiceStartType.Unknown
+        Me.DelayedStart = False
+        Me.Type = ServiceType.Unknown
+        Me.ErrorControl = ServiceErrorControl.Unknown
+        Me.RequiredPrivileges = New List(Of NTSecurityPrivilegeConstant)()
+        Me.Dependencies = New String() {}
+        Me.FailureActions = New ServiceFailureActions()
+        Me.UserServiceFlags = 0
+        Me.SafeModeOptions.AvailableInMinimalSafeBoot = False
+        Me.SafeModeOptions.AvailableInNetworkSafeBoot = False
+    End Sub
+
     ''' <summary>
     ''' Initializes an object of the Windows Service class with specified values
     ''' </summary>
@@ -388,18 +407,12 @@
     ''' <remarks></remarks>
     Public Function StartTypeToString() As String
         Select Case StartType
-            Case WindowsService.ServiceStartType.BootLoader
-                Return "Boot Loader"
-            Case WindowsService.ServiceStartType.IOSystem
-                Return "I/O System"
-            Case WindowsService.ServiceStartType.Automatic
-                Return "Automatic" & If(DelayedStart, " (Delayed Start)", "")
-            Case WindowsService.ServiceStartType.Manual
-                Return "Manual"
-            Case WindowsService.ServiceStartType.Disabled
-                Return "Disabled"
-            Case Else
-                Return String.Format("Unknown (Type {0})", StartType)
+            Case WindowsService.ServiceStartType.BootLoader : Return "Boot Loader"
+            Case WindowsService.ServiceStartType.IOSystem : Return "I/O System"
+            Case WindowsService.ServiceStartType.Automatic : Return "Automatic" & If(DelayedStart, " (Delayed Start)", "")
+            Case WindowsService.ServiceStartType.Manual : Return "Manual"
+            Case WindowsService.ServiceStartType.Disabled : Return "Disabled"
+            Case Else : Return "Unknown"
         End Select
     End Function
 

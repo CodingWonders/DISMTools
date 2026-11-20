@@ -858,7 +858,7 @@ function Start-PECustomization
         }
         try
         {
-            $policyVersion = "0.8.1.26082"
+            $policyVersion = "0.9.0.26112"
 
             Write-Host "CUSTOMIZATION STEP - Initialize Policy System" -BackgroundColor DarkGreen
             Write-Host "Initializing default Preinstallation Environment policy..."
@@ -878,6 +878,7 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment\Policies" /f /v AnswerFileConflictResponse /t REG_SZ /d "AskUser"
             reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment\Policies" /f /v ScanBootImages /t REG_DWORD /d 0
             reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment\Policies" /f /v ImageSelectorDefaultOption /t REG_SZ /d "AskUser"
+            reg add "HKLM\WINPESOFT_$imageID\DISMTools\Preinstallation Environment\Policies" /f /v FullyFormatOSVolume /t REG_DWORD /d 0
 
             # Adapt the policy files to point to the image's unique registry hives
             $nobomEnc = New-Object System.Text.UTF8Encoding $false
@@ -1032,13 +1033,23 @@ function Get-LocalizedUsers
     param (
         [Parameter(Mandatory = $true, Position = 0)] [bool]$admins
     )
-    if ($admins)
-    {
-        return (Get-LocalGroup | Where-Object { $_.SID.Value -like "S-1-5-32-544" }).Name
+
+    $domainRole = Get-CimInstance -Query "SELECT DomainRole FROM Win32_ComputerSystem" | Select-Object -ExpandProperty DomainRole
+    $targetSid = ""
+
+    if ($admins) {
+        $targetSid = "S-1-5-32-544"
+    } else {
+        $targetSid = "S-1-5-32-545"
     }
-    else
-    {
-        return (Get-LocalGroup | Where-Object { $_.SID.Value -like "S-1-5-32-545" }).Name
+
+    # DomainRole 4 -- Backup Domain Controller
+    # DomainRole 5 -- Primary Domain Controller
+    if (@(4, 5).Contains([int]$domainRole)) {
+        # The built-in groups are not present in a DC setting and we have to query ADDS.
+        return (Get-ADGroup -Filter "objectSid -eq '$($targetSid)'").Name
+    } else {
+        return (Get-LocalGroup | Where-Object { $_.SID.Value -like "$targetSid" }).Name
     }
 }
 
@@ -1195,7 +1206,8 @@ function Start-OSApplication
         return
     }
     . "$env:SYSTEMDRIVE\DTPE.PolicyHelper.ps1"
-    if ((Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim").Count -lt 1)
+    $installImageFiles = Get-ChildItem -Path "$((Get-Location).Path)sources" -Exclude "boot.wim" | Where-Object { @(".wim", ".esd") -contains $_.Extension }
+    if ($installImageFiles.Count -lt 1)
     {
         Write-Host "No Windows image has been found on this drive. An installation image is required. Exiting..."
         exit 1
@@ -1212,6 +1224,7 @@ function Start-OSApplication
         "AlwaysMBR" { $override = [PartitionTableOverride]::AlwaysMBR }
         "AlwaysGPT" { $override = [PartitionTableOverride]::AlwaysGPT }
     }
+    $fullFormat = (Get-PolicyValue -PolicyName "FullyFormatOSVolume" -DefaultPolicyValue 0 -ValidOptions @(0, 1)) -eq 1
     $diskGetterDpScript | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_listdisk.dp" -Force -Encoding utf8
     $drive = Get-Disks
     if ($drive -eq "ERROR")
@@ -1220,7 +1233,7 @@ function Start-OSApplication
         return
     }
     Write-Host "Selected disk: disk $($drive)"
-    $partitionOptions = Get-Partitions $drive $override
+    $partitionOptions = Get-Partitions $drive $override $fullFormat
     if ($partitionOptions["partitionNumber"] -eq "B")
     {
         do {
@@ -1231,7 +1244,7 @@ function Start-OSApplication
                 return
             }
             Write-Host "Selected disk: disk $($drive)"
-            $partitionOptions = Get-Partitions $drive $override
+            $partitionOptions = Get-Partitions $drive $override $fullFormat
         } until ($partitionOptions["partitionNumber"] -ne "B")
     }
     if ($partitionOptions["partitionNumber"] -eq 0)
@@ -1251,7 +1264,7 @@ function Start-OSApplication
     {
         do
         {
-            $partitionOptions = Get-Partitions $drive $override
+            $partitionOptions = Get-Partitions $drive $override $fullFormat
             if ($partitionOptions["partitionNumber"] -eq "B")
             {
                 do {
@@ -1262,7 +1275,7 @@ function Start-OSApplication
                         return
                     }
                     Write-Host "Selected disk: disk $($drive)"
-                    $partitionOptions = Get-Partitions $drive $override
+                    $partitionOptions = Get-Partitions $drive $override $fullFormat
                 } until ($partitionOptions["partitionNumber"] -ne "B")
             }
             if ($partitionOptions["partitionNumber"] -eq 0)
@@ -1286,11 +1299,12 @@ function Start-OSApplication
     # Get-Partitions returns a hashtable. First item is the number, second item is the override.
     $partNumber = $partitionOptions["partitionNumber"]
     $partOverride = $partitionOptions["selectedOverride"]
+    $sysPartFullFormat = $partitionOptions["fullClean"]
 
     if ($partNumber -eq 0)
     {
         # Proceed with default disk configuration
-        $diskLayout = Write-DiskConfiguration $drive $true $partNumber $partOverride
+        $diskLayout = Write-DiskConfiguration $drive $true $partNumber $partOverride $sysPartFullFormat
         if ($diskLayout -ne $null) {
             # Get the volume letter that was stored in the function
             $driveLetter = $diskLayout.bootVolume
@@ -1304,7 +1318,7 @@ function Start-OSApplication
     else
     {
         # Proceed with custom disk configuration
-        Write-DiskConfiguration $drive $false $partNumber [PartitionTableOverride]::NoOverride
+        Write-DiskConfiguration $drive $false $partNumber [PartitionTableOverride]::NoOverride $sysPartFullFormat
         $volLister = @'
         lis vol
         exit
@@ -1704,12 +1718,15 @@ function Get-Partitions
             The drive number
         .PARAMETER override
             The partition table override mode
+        .PARAMETER fullCleanDrive
+            Whether to perform a full format on the main system partition
         .EXAMPLE
             Get-Partitions 0
     #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [int]$driveNum,
-        [Parameter(Position = 1)] [PartitionTableOverride]$override = [PartitionTableOverride]::NoOverride
+        [Parameter(Position = 1)] [PartitionTableOverride]$override = [PartitionTableOverride]::NoOverride,
+        [Parameter(Position = 2)] [bool]$fullCleanDrive = $false
     )
 
     $partLister = @'
@@ -1722,8 +1739,15 @@ function Get-Partitions
     $part = -1
     diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_listpart.dp" | Out-Host
     Write-Host ""
-    Write-Host "- If the selected disk contains no partitions, press ENTER. Otherwise, type a partition number."
-    Write-Host "- To reload results, press R"
+    Write-Host "- If the selected disk contains no partitions, or if you want to use the entire drive, press ENTER."
+    Write-Host "  Otherwise, type a partition number."
+    Write-Host "- To reload results, press R."
+    if ($fullCleanDrive) {
+        Write-Host "`n    The main system partition on the drive you select will be formatted using a full format.`n"
+    } else {
+        Write-Host "`n    The main system partition on the drive you select will be formatted using a quick format.`n"
+    }
+    Write-Host "- To change the system partition format behavior, press F."
     if (-not (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall")) {
         switch ($override) {
             NoOverride {
@@ -1746,11 +1770,11 @@ function Get-Partitions
     $part = Read-Host -Prompt "Please choose the partition to apply the image to"
     if ($part -eq -1)
     {
-        return @{"partitionNumber" = $part; "selectedOverride" = $override}
+        return @{"partitionNumber" = $part; "selectedOverride" = $override; "fullClean" = $fullCleanDrive}
     }
     elseif ($part -eq "B")
     {
-        return @{"partitionNumber" = $part; "selectedOverride" = $override}
+        return @{"partitionNumber" = $part; "selectedOverride" = $override; "fullClean" = $fullCleanDrive}
     }
     elseif ($part -eq "O")
     {
@@ -1783,6 +1807,7 @@ function Get-Partitions
             if ($override -ne [PartitionTableOverride]::AlwaysMBR) { Write-Host "- Press M to set a MBR partition table override" }
             if ($override -ne [PartitionTableOverride]::AlwaysGPT) { Write-Host "- Press G to set a GPT partition table override" }
             Write-Host "- Press B to go back"
+            Write-Host ""
             $overrideOption = Read-Host -Prompt "Select the option that you want to use and press ENTER"
             switch ($overrideOption) {
                 "C" { $override = [PartitionTableOverride]::NoOverride }
@@ -1808,23 +1833,58 @@ function Get-Partitions
                 }
             }
         }
-        Get-Partitions $driveNum $override
+        Get-Partitions $driveNum $override $fullCleanDrive
+    }
+    elseif ($part -eq "F")
+    {
+        Write-Host ""
+        Write-Host "The system partition of the drive you select will be formatted using your preferred format method out of the"
+        Write-Host "following modes:"
+        Write-Host "- A quick format quickly deletes the contents of a partition by marking that space as ready to be written."
+        Write-Host "  While it saves time, there is the possibility that some data might be recoverable, which may be something"
+        Write-Host "  you may not want . . ."
+        Write-Host "- A full format deletes the contents of a partition by writing zeroes across the entire partition. This is"
+        Write-Host "  good if you want to begin with a fully clean drive, but the operation can take hours, depending on how"
+        Write-Host "  big and fast the selected drive is. It may take long enough for the rest of operations done by this installer"
+        Write-Host "  to fail as it exceeds the 72-hour usage limit imposed by the Windows Preinstallation Environment"
+        Write-Host ""
+        Write-Host "Currently, " -NoNewline
+        if ($fullCleanDrive) {
+            Write-Host "a full format will be performed."
+        } else {
+            Write-Host "a quick format will be performed."
+        }
+        Write-Host ""
+        Write-Host "Note that the options you set here will be reset if you switch drives."
+        Write-Host ""
+        Write-Host "- Press Q to perform a quick format on the system partition of the selected drive"
+        Write-Host "- Press F to perform a full format on the system partition of the selected drive"
+        Write-Host "- Press B to go back"
+        Write-Host ""
+
+        $formatOption = Read-Host -Prompt "Select the format option that you want to use and press ENTER"
+        switch ($formatOption) {
+            "Q" { $fullCleanDrive = $false }
+            "F" { $fullCleanDrive = $true }
+        }
+
+        Get-Partitions $driveNum $override $fullCleanDrive
     }
     elseif ($part -eq "R")
     {
-        Get-Partitions $driveNum $override
+        Get-Partitions $driveNum $override $fullCleanDrive
     }
     else
     {
         try
         {
             $partition = [int]$part
-            return @{"partitionNumber" = $partition; "selectedOverride" = $override}
+            return @{"partitionNumber" = $partition; "selectedOverride" = $override; "fullClean" = $fullCleanDrive}
         }
         catch
         {
             Write-Host "Please specify a number and try again.`n"
-            Get-Partitions $driveNum $override
+            Get-Partitions $driveNum $override $fullCleanDrive
         }
     }
 }
@@ -1842,6 +1902,8 @@ function Write-DiskConfiguration
             The partition number
         .PARAMETER override
             The partition table override mode
+        .PARAMETER fullOSPartFormat
+            Determine whether to perform a full format of the system partition
         .NOTES
             The partition ID is 0 if the user decides to clean a drive
         .EXAMPLE
@@ -1853,16 +1915,25 @@ function Write-DiskConfiguration
         [Parameter(Mandatory = $true, Position = 0)] [int]$diskid,
         [Parameter(Mandatory = $true, Position = 1)] [bool]$cleanDrive,
         [Parameter(Mandatory = $true, Position = 2)] [int]$partId,
-        [Parameter(Mandatory = $true, Position = 3)] [PartitionTableOverride]$override
+        [Parameter(Mandatory = $true, Position = 3)] [PartitionTableOverride]$override,
+        [Parameter(Position = 4)] [bool]$fullOSPartFormat = $false
     )
 
     Write-Host "Writing disk configuration. Please wait..."
+
+    $formatCommand = ""
+    if ($fullOSPartFormat) {
+        $formatCommand = "for"
+    } else {
+        $formatCommand = "for quick"
+    }
+
     if ($cleanDrive)
     {
         $preFormatter = @"
         sel dis #DISKID#
         cle
-        exit
+        exi
 "@
         $preFormatter = $preFormatter.Replace("#DISKID#", $diskId).Trim()
         $preFormatter | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_preformat.dp" -Force -Encoding utf8
@@ -1903,7 +1974,7 @@ function Write-DiskConfiguration
 
         if ($usedLetters -gt 0) {
             Write-Host "After clearing the partitions of disk $diskId, some of the drive letters are still in use by, possibly, external disks. This may cause undesired behavior."
-            Write-Host "You will now be shown a list of disks, and you will be given the opportunity to reassign disk letters."
+            Write-Host "You will now be shown a list of disks, and you will be given the opportunity to reassign disk letters. You should choose disk letters that are not already in use by the operating system."
             Write-Host "These settings only apply to the disk changes in the Preinstallation Environment."
 
             Get-Volume | Out-Host        # let's make sure we are outputting this info
@@ -1939,7 +2010,7 @@ function Write-DiskConfiguration
         sel dis #DISKID#
         #GPTPART#
         #MBRPART#
-        exit
+        exi
 '@
         $formatter_gpt = @"
         conv gpt
@@ -1949,8 +2020,8 @@ function Write-DiskConfiguration
         cre par msr size=16
         cre par pri
         REM Prevent updates from failing to update WinRE
-        shrink minimum=1024
-        for quick label="Windows"
+        shr minimum=1024
+        $formatCommand label="Windows"
         ass letter $bootLetter
         cre par pri
         for quick label="Recovery"
@@ -1963,11 +2034,11 @@ function Write-DiskConfiguration
         for quick label="System"
         ass letter $espLetter
         REM Important for MBR configurations
-        active
+        act
         cre par pri
         REM Prevent updates from failing to update WinRE
-        shrink minimum=1024
-        for quick label="Windows"
+        shr minimum=1024
+        $formatCommand label="Windows"
         ass letter $bootLetter
         cre par pri
         for quick label="Recovery"
@@ -2007,7 +2078,7 @@ function Write-DiskConfiguration
         $formatter = @'
         sel dis #DISKID#
         sel par #PARTID#
-        for quick label="Windows"
+        $formatCommand label="Windows"
         exit
 '@
         $formatter = $formatter.Replace("#DISKID#", $diskId).Trim()

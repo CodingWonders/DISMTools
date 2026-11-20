@@ -276,12 +276,7 @@ Public Class ISOCreator
 
     Private Function GetImageInfo(ImageFile As String) As DismImageInfoCollection
         DynaLog.LogMessage("Image file to get information about: " & Quote & ImageFile & Quote)
-        DynaLog.LogMessage("Checking if mounted image detector is busy...")
         Dim obtainedImageInfo As DismImageInfoCollection = Nothing
-        Do Until Not MainForm.MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        Loop
         Do Until Not MainForm.WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)

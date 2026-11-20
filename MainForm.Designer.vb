@@ -439,10 +439,9 @@ Partial Class MainForm
         Me.PkgInfoCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.PkgBasicInfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.PkgDetailedInfo = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ImgBW = New System.ComponentModel.BackgroundWorker()
+        Me.ImgBW = New DISMTools.AsyncBackgroundWorker(Me.components)
         Me.ImgProcesses = New System.Diagnostics.Process()
         Me.LocalMountDirFBD = New System.Windows.Forms.FolderBrowserDialog()
-        Me.MountedImageDetectorBW = New System.ComponentModel.BackgroundWorker()
         Me.ImgUMountPopupCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CommitAndUnmountTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.DiscardAndUnmountTSMI = New System.Windows.Forms.ToolStripMenuItem()
@@ -511,7 +510,6 @@ Partial Class MainForm
         Me.UploadThisImageToMyWDSServerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
-        Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
         Me.ImgApplyModeCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ApplyWimTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ApplyFfuTSMI = New System.Windows.Forms.ToolStripMenuItem()
@@ -521,6 +519,7 @@ Partial Class MainForm
         Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
         Me.ThemeDesignerTimer = New System.Windows.Forms.Timer(Me.components)
         Me.UnattendSFD = New System.Windows.Forms.SaveFileDialog()
+        Me.DrvPakCreator_TSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1523,7 +1522,7 @@ Partial Class MainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator45, Me.PxeHelperServersTSMI, Me.ToolStripSeparator41, Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem, Me.ToolStripSeparator47, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator49, Me.SSE_TSMI, Me.ThemeDesigner_TSMI, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator45, Me.PxeHelperServersTSMI, Me.ToolStripSeparator41, Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem, Me.ToolStripSeparator47, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator49, Me.SSE_TSMI, Me.ThemeDesigner_TSMI, Me.DrvPakCreator_TSMI, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
@@ -2153,6 +2152,7 @@ Partial Class MainForm
         Me.ListView2.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader4})
         Me.ListView2.FullRowSelect = True
         Me.ListView2.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
+        Me.ListView2.HideSelection = False
         Me.ListView2.Location = New System.Drawing.Point(20, 140)
         Me.ListView2.MultiSelect = False
         Me.ListView2.Name = "ListView2"
@@ -2626,6 +2626,7 @@ Partial Class MainForm
         Me.RecentsLV.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader3})
         Me.RecentsLV.ForeColor = System.Drawing.Color.DodgerBlue
         Me.RecentsLV.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
+        Me.RecentsLV.HideSelection = False
         Me.RecentsLV.Location = New System.Drawing.Point(28, 222)
         Me.RecentsLV.MultiSelect = False
         Me.RecentsLV.Name = "RecentsLV"
@@ -4324,7 +4325,7 @@ Partial Class MainForm
         Me.BackgroundProcessesButton.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BackgroundProcessesButton.Name = "BackgroundProcessesButton"
         Me.BackgroundProcessesButton.Size = New System.Drawing.Size(25, 24)
-        Me.BackgroundProcessesButton.ToolTipText = "View background processes"
+        Me.BackgroundProcessesButton.ToolTipText = "Show current background process status"
         '
         'MenuDesc
         '
@@ -4362,8 +4363,7 @@ Partial Class MainForm
         '
         'ImgBW
         '
-        Me.ImgBW.WorkerReportsProgress = True
-        Me.ImgBW.WorkerSupportsCancellation = True
+        Me.ImgBW.Work = Nothing
         '
         'ImgProcesses
         '
@@ -4380,10 +4380,6 @@ Partial Class MainForm
         Me.LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
         Me.LocalMountDirFBD.RootFolder = System.Environment.SpecialFolder.MyComputer
         Me.LocalMountDirFBD.ShowNewFolderButton = False
-        '
-        'MountedImageDetectorBW
-        '
-        Me.MountedImageDetectorBW.WorkerSupportsCancellation = True
         '
         'ImgUMountPopupCMS
         '
@@ -4767,10 +4763,6 @@ Partial Class MainForm
         Me.VideoGetterBW.WorkerReportsProgress = True
         Me.VideoGetterBW.WorkerSupportsCancellation = True
         '
-        'MountedImageDetectorBWRestarterTimer
-        '
-        Me.MountedImageDetectorBWRestarterTimer.Interval = 2000
-        '
         'ImgApplyModeCMS
         '
         Me.ImgApplyModeCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyWimTSMI, Me.ApplyFfuTSMI})
@@ -4818,6 +4810,12 @@ Partial Class MainForm
         'UnattendSFD
         '
         Me.UnattendSFD.Filter = "Unattended answer files|*.xml"
+        '
+        'DrvPakCreator_TSMI
+        '
+        Me.DrvPakCreator_TSMI.Name = "DrvPakCreator_TSMI"
+        Me.DrvPakCreator_TSMI.Size = New System.Drawing.Size(373, 22)
+        Me.DrvPakCreator_TSMI.Text = "Create a Driver Pack"
         '
         'MainForm
         '
@@ -5105,11 +5103,10 @@ Partial Class MainForm
     Friend WithEvents ToolStripSeparator19 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ISHelp As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BranchTSMI As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ImgBW As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ImgBW As AsyncBackgroundWorker
     Friend WithEvents ImgProcesses As Process
     Friend WithEvents BackgroundProcessesButton As System.Windows.Forms.ToolStripSplitButton
     Friend WithEvents LocalMountDirFBD As System.Windows.Forms.FolderBrowserDialog
-    Friend WithEvents MountedImageDetectorBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents MountedImageManagerTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ImgUMountPopupCMS As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents CommitAndUnmountTSMI As System.Windows.Forms.ToolStripMenuItem
@@ -5323,7 +5320,6 @@ Partial Class MainForm
     Friend WithEvents VideoGetterBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents ToolStripSeparator42 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents RegCplToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents MountedImageDetectorBWRestarterTimer As System.Windows.Forms.Timer
     Friend WithEvents ToolStripSeparator43 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents WebResourcesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LanguagesAndOptionalFeaturesISOToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -5425,4 +5421,5 @@ Partial Class MainForm
     Friend WithEvents UnattendSFD As System.Windows.Forms.SaveFileDialog
     Friend WithEvents CWSSiteTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents VisitNewsItemSiteBtn As System.Windows.Forms.Button
+    Friend WithEvents DrvPakCreator_TSMI As System.Windows.Forms.ToolStripMenuItem
 End Class
