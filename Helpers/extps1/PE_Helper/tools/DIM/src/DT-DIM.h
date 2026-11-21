@@ -14,9 +14,11 @@
 #include <codecvt>
 #include "resource.h"
 // ReSharper restore CppUnusedIncludeDirective
+#include <SetupAPI.h>
 
 #pragma comment(lib, "comctl32.lib")
 #pragma comment(lib, "Shcore.lib")
+#pragma comment(lib, "setupapi.lib")
 #pragma warning(disable: 4312)
 
 #define IDC_DRIVER_LIST   101
@@ -30,8 +32,8 @@
 #define IDC_ADD_DRV_FOLDER 109
 
 // Version Constant
-const auto DIM_VERSION = L"0.7.3_msvcv145";
-const auto DIM_ABOUT_MESSAGE = L"Driver Installation Module version %s \n(c) 2024-2026 CodingWonders Software.";
+const auto DIM_VERSION = L"0.9_msvcv145 (Discovery)";
+const auto DIM_ABOUT_MESSAGE = L"Driver Installation Module version %s \n(c) 2024-2027 CodingWonders Software.";
 
 // Instruction Message Constants
 
@@ -89,6 +91,18 @@ void RemoveDriver(HWND hwndList, HWND hEditButton, HWND hRemoveButton, HWND hIns
 /// <param name="mainHwnd">Handle to the main application window.</param>
 /// <param name="instructionHwnd">Handle to the instruction label to update messages.</param>
 void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd);
+
+/// <summary>
+/// Installs a driver package using SetupAPI. The package is first staged in the driver store and published
+/// to the INF directory, and then it is installed on every present device for which it is the best match.
+/// </summary>
+/// <param name="ownerHwnd">Handle to the window that owns any UI shown by SetupAPI.</param>
+/// <param name="infPath">Path to the INF file of the driver package.</param>
+/// <param name="publishedInfPath">Receives the path of the published INF file (for example, %WINDIR%\INF\oem0.inf).</param>
+/// <param name="devicesUpdated">Receives the number of devices the driver was installed on.</param>
+/// <returns>ERROR_SUCCESS if the package was installed; otherwise, a Win32 or SetupAPI error code.
+/// ERROR_SUCCESS_REBOOT_REQUIRED is returned when a device needs a restart to use the driver, which is not possible on Windows PE.</returns>
+DWORD InstallDriverPackage(HWND ownerHwnd, const std::wstring& infPath, std::wstring& publishedInfPath, int& devicesUpdated);
 
 /// <summary>
 /// Updates the states of the buttons based on the current selection in the list.
