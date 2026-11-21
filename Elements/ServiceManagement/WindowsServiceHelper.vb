@@ -750,7 +750,7 @@ Module WindowsServiceHelper
             If Not ExportCurrentServiceInformation() Then
                 ' Current service information could not be backed up. We'll ask the user
                 ' if we can continue or not given the backup.
-                If MsgBox(LocalizationService.ForSection("WindowsServices.Helper")("Service.Backed.Message"), vbYesNo + vbExclamation, LocalizationService.ForSection("WindowsServices.Helper")("Service.Backed.Up.Title")) = MsgBoxResult.No Then
+                If UiThread.MsgBoxOnUi(MainForm.Current, LocalizationService.ForSection("WindowsServices.Helper")("Service.Backed.Message"), vbYesNo + vbExclamation, LocalizationService.ForSection("WindowsServices.Helper")("Service.Backed.Up.Title")) = MsgBoxResult.No Then
                     Return False
                 End If
             End If

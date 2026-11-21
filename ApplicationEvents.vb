@@ -15,15 +15,32 @@ Namespace My
     ' NetworkAvailabilityChanged: se desencadena cuando la conexión de red está conectada o desconectada.
     Partial Friend Class MyApplication
 
-        Private lastThemeChangeTime As DateTime = DateTime.Now
-        Private debounceInterval As TimeSpan = TimeSpan.FromSeconds(2)
+        ' Windows can send several user preference notifications in a row (for example, when switching between light and dark
+        ' modes). This timer, which lives on the UI thread, makes the program apply the color theme only once, after they stop
+        Private themeChangeTimer As System.Windows.Forms.Timer
+        Private Const ThemeChangeDelayMs As Integer = 500
+        ' Last value of AppsUseLightTheme that was applied (-1: unknown)
+        Private lastAppliedLightTheme As Integer = -1
 
         Private Sub Start(sender As Object, e As EventArgs) Handles Me.Startup
             LocalizationService.Initialize()
+            lastAppliedLightTheme = GetAppsUseLightTheme()
             DynaLog.LogMessage("Adding startup event handlers...")
             AddHandler Microsoft.Win32.SystemEvents.UserPreferenceChanged, AddressOf SysEvts_UserPreferenceChanged
             AddHandler Microsoft.Win32.SystemEvents.DisplaySettingsChanging, AddressOf SysEvts_DisplaySettingsChanging
             AddHandler Microsoft.Win32.SystemEvents.DisplaySettingsChanged, AddressOf SysEvts_DisplaySettingsChanged
+        End Sub
+
+        Private Sub ShutdownApp(sender As Object, e As EventArgs) Handles Me.Shutdown
+            ' SystemEvents handlers are static. Remove them so that nothing is called on forms that no longer exist
+            RemoveHandler Microsoft.Win32.SystemEvents.UserPreferenceChanged, AddressOf SysEvts_UserPreferenceChanged
+            RemoveHandler Microsoft.Win32.SystemEvents.DisplaySettingsChanging, AddressOf SysEvts_DisplaySettingsChanging
+            RemoveHandler Microsoft.Win32.SystemEvents.DisplaySettingsChanged, AddressOf SysEvts_DisplaySettingsChanged
+            If themeChangeTimer IsNot Nothing Then
+                themeChangeTimer.Stop()
+                themeChangeTimer.Dispose()
+                themeChangeTimer = Nothing
+            End If
         End Sub
 
         Private Sub CatchEmAll(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs) Handles Me.UnhandledException
@@ -128,26 +145,60 @@ Namespace My
             DynaLog.LogMessage("A user preference of type " & e.Category.ToString() & " has changed.")
             If e.Category <> UserPreferenceCategory.General Then Exit Sub
 
-            ' This runs on the SystemEvents thread. Never touch the default instance here:
-            ' use the real form and marshal the work to the UI thread.
+            ' This may run on the SystemEvents thread. Never touch the default instance here and never block:
+            ' use the real form and queue the work on the UI thread.
             Dim uiForm As DISMTools.MainForm = DISMTools.MainForm.Current
             If uiForm Is Nothing OrElse uiForm.IsDisposed OrElse Not uiForm.IsHandleCreated Then Exit Sub
 
-            uiForm.BeginInvoke(New MethodInvoker(Sub() ApplySystemThemeChange(uiForm)))
+            Try
+                uiForm.BeginInvoke(New MethodInvoker(Sub() ScheduleSystemThemeChange(uiForm)))
+            Catch ex As InvalidOperationException
+                ' The window handle was destroyed in the meantime (the program is closing)
+            End Try
         End Sub
 
-        Private Sub ApplySystemThemeChange(uiForm As DISMTools.MainForm)
-            If uiForm.ColorMode <> 0 Then Exit Sub
+        Private Sub ScheduleSystemThemeChange(uiForm As DISMTools.MainForm)
+            ' Runs on the UI thread
+            If uiForm.IsDisposed OrElse uiForm.ColorMode <> 0 Then Exit Sub
+
+            If themeChangeTimer Is Nothing Then
+                themeChangeTimer = New System.Windows.Forms.Timer() With {.Interval = ThemeChangeDelayMs}
+                AddHandler themeChangeTimer.Tick, AddressOf ThemeChangeTimer_Tick
+            End If
+            ' Restart the timer, so that a burst of notifications applies the theme only once
+            themeChangeTimer.Stop()
+            themeChangeTimer.Start()
+        End Sub
+
+        Private Sub ThemeChangeTimer_Tick(sender As Object, e As EventArgs)
+            themeChangeTimer.Stop()
+            Dim uiForm As DISMTools.MainForm = DISMTools.MainForm.Current
+            If uiForm Is Nothing OrElse uiForm.IsDisposed OrElse uiForm.ColorMode <> 0 Then Exit Sub
 
             DynaLog.LogMessage("Detecting if the system color theme changed...")
-            Dim currentTime As DateTime = DateTime.Now
-            DynaLog.LogMessage("Time difference in seconds: " & (currentTime - lastThemeChangeTime).TotalSeconds)
-            If currentTime - lastThemeChangeTime > debounceInterval Then
-                DynaLog.LogMessage("Time difference is over debounce interval. Changing color theme...")
-                uiForm.ChangePrgColors(0)
-                lastThemeChangeTime = currentTime
+            Dim appsUseLightTheme As Integer = GetAppsUseLightTheme()
+            If appsUseLightTheme >= 0 AndAlso appsUseLightTheme = lastAppliedLightTheme Then
+                DynaLog.LogMessage("The system color theme did not change.")
+                Exit Sub
             End If
+            DynaLog.LogMessage("Changing color theme...")
+            uiForm.ChangePrgColors(0)
+            lastAppliedLightTheme = appsUseLightTheme
         End Sub
+
+        ' Gets the value of AppsUseLightTheme, or -1 if it can't be read
+        Private Function GetAppsUseLightTheme() As Integer
+            Try
+                Using personalizeKey As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
+                    If personalizeKey Is Nothing Then Return -1
+                    Dim value As Object = personalizeKey.GetValue("AppsUseLightTheme")
+                    If value Is Nothing Then Return -1
+                    Return CInt(value)
+                End Using
+            Catch ex As Exception
+                Return -1
+            End Try
+        End Function
 
         Private Sub SysEvts_DisplaySettingsChanged(sender As Object, e As EventArgs)
             ' Do nothing

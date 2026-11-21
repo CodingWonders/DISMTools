@@ -8,14 +8,19 @@ Public Class MigrationForm
         DynaLog.LogMessage("Loading old settings file...")
         msg = LocalizationService.ForSection("Migration.Background")("Loading.Old.Settings.Message")
         BackgroundWorker1.ReportProgress(33.299999999999997)
-        MainForm.LoadDTSettings(1)
+        ' This runs on a background thread. Work with the real main form on the UI thread: accessing the
+        ' "MainForm" default instance here would create a new, hidden MainForm on this thread
+        Dim uiForm As MainForm = MainForm.Current
+        UiThread.RunOnUi(uiForm, Sub() uiForm.LoadDTSettings(1))
         Threading.Thread.Sleep(72)
         DynaLog.LogMessage("Saving new settings...")
-        MainForm.Width = WindowHelper.ScaleLogical(1280)
-        MainForm.Height = WindowHelper.ScaleLogical(720)
+        UiThread.RunOnUi(uiForm, Sub()
+                                     uiForm.Width = WindowHelper.ScaleLogical(1280)
+                                     uiForm.Height = WindowHelper.ScaleLogical(720)
+                                 End Sub)
         msg = LocalizationService.ForSection("Migration.Background")("Saving.New.Settings.Message")
         BackgroundWorker1.ReportProgress(66.599999999999994)
-        MainForm.SaveDTSettings()
+        UiThread.RunOnUi(uiForm, Sub() uiForm.SaveDTSettings())
         Threading.Thread.Sleep(72)
         msg = LocalizationService.ForSection("Migration.Background")("Done.Message")
         BackgroundWorker1.ReportProgress(100)

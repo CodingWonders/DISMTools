@@ -2065,6 +2065,9 @@ Public Class NewUnattendWiz
     End Function
 
     Private Sub UnattendGeneratorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UnattendGeneratorBW.DoWork
+        ' This runs in the background. Read the options that come from controls on the UI thread
+        Dim useComputerName As Boolean = UiThread.RunOnUi(Of Boolean)(Me, Function() RadioButton28.Checked)
+        Dim selectedGenericEdition As String = UiThread.RunOnUi(Of String)(Me, Function() CStr(ComboBox6.SelectedItem))
         DynaLog.LogMessage("Preparing file generation...")
         ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Preparing.Generate.Label"), 0)
         DynaLog.LogMessage("Checking save target...")
@@ -2149,7 +2152,7 @@ Public Class NewUnattendWiz
             End If
             ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Saving.User.Settings.Label"), 8)
             DynaLog.LogMessage("Saving computer settings...")
-            If RadioButton28.Checked Then
+            If useComputerName Then
                 If Not PCName.DefaultName Then
                     UnattendGen.StartInfo.Arguments &= " --computername=" & PCName.Name
                 End If
@@ -2192,7 +2195,7 @@ Public Class NewUnattendWiz
                 UnattendGen.StartInfo.Arguments &= " --generic"
                 Dim genericEditionContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                     "<root>" & CrLf &
-                    "   <Edition Id=" & Quote & EditionIDFromDisplayName(ComboBox6.SelectedItem) & Quote & " DisplayName=" & Quote & ComboBox6.SelectedItem & Quote & " Key=" & Quote & SelectedKey.Key & Quote & " />" & CrLf &
+                    "   <Edition Id=" & Quote & EditionIDFromDisplayName(selectedGenericEdition) & Quote & " DisplayName=" & Quote & selectedGenericEdition & Quote & " Key=" & Quote & SelectedKey.Key & Quote & " />" & CrLf &
                     "</root>"
                 File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "edition.xml"), genericEditionContents, UTF8)
             Else
@@ -2390,14 +2393,14 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Deleting temporary scripts...")
             Directory.Delete(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts"), True)
             If UnattendGen.ExitCode <> 0 Then
-                MessageBox.Show(LocalizationService.ForSection("Unattend.Messages").Format("GeneratorExit.Message", Hex(UnattendGen.ExitCode)))
+                UiThread.RunOnUi(Of DialogResult)(Me, Function() MessageBox.Show(LocalizationService.ForSection("Unattend.Messages").Format("GeneratorExit.Message", Hex(UnattendGen.ExitCode))))
                 e.Cancel = True
             End If
             ReportMessage(LocalizationService.ForSection("Unattend.Progress")("Generation.Completed.Label"), 100)
         Catch ex As Exception
             DynaLog.LogMessage("Could not generate the answer file. Error message: " & ex.Message)
             If UnattendGen.ExitCode <> 0 Then
-                MessageBox.Show(LocalizationService.ForSection("Unattend.Messages").Format("Generator.Message", ex.Message))
+                UiThread.RunOnUi(Of DialogResult)(Me, Function() MessageBox.Show(LocalizationService.ForSection("Unattend.Messages").Format("Generator.Message", ex.Message)))
                 e.Cancel = True
             End If
         End Try
@@ -2503,7 +2506,7 @@ Public Class NewUnattendWiz
             End If
             If NetworkCostHelper.IsNetworkConnectionMetered() Then
 
-                If MeteredConnectionWarningDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Throw New OperationCanceledException("To avoid additional charges, the download has been canceled.")
+                If UiThread.RunOnUi(Of DialogResult)(Me, Function() MeteredConnectionWarningDialog.ShowDialog(Me)) <> Windows.Forms.DialogResult.OK Then Throw New OperationCanceledException("To avoid additional charges, the download has been canceled.")
             End If
             Using UnattClient As New WebClient()
                 DynaLog.LogMessage("Downloading UnattendGen installer from the UnattendGen repository...")

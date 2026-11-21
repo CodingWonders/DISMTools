@@ -18,8 +18,6 @@ Public Class AutoReloadForm
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         DynaLog.LogMessage("Preparing to remount any orphaned Windows images...")
-        DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
-        MainForm.StopMountedImageDetector()
         DynaLog.LogMessage("Initializing API...")
         DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
         Dim MountedImages As DismMountedImageInfoCollection = DismApi.GetMountedImages()
@@ -122,6 +120,9 @@ Public Class AutoReloadForm
         GroupBox1.Text = LocalizationService.ForSection("AutoReload")("ImageInfo.Group")
         TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.Indeterminate, Handle)
         Thread.Sleep(2000)
+        ' Stop the mounted image detector here, on the UI thread. Doing it from the background worker would create a new MainForm there
+        DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
+        If MainForm.Current IsNot Nothing Then MainForm.Current.StopMountedImageDetector()
         BackgroundWorker1.RunWorkerAsync()
     End Sub
 

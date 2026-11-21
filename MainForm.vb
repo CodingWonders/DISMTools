@@ -116,6 +116,55 @@ Public Class MainForm
 
     Public Shared Current As MainForm
 
+#Region "Splash screen helpers"
+
+    ' The splash screen runs on its own thread (application framework). Control it on that thread, and use the instance the
+    ' application framework created, so that the "SplashScreen" default instance is never rebuilt after it has been closed
+
+    Private Sub InvokeOnSplashScreen(splashAction As Action(Of Form))
+        Dim splash As Form = My.Application.SplashScreen
+        If splash Is Nothing OrElse splash.IsDisposed OrElse Not splash.IsHandleCreated Then Exit Sub
+        Try
+            If splash.InvokeRequired Then
+                splash.Invoke(New MethodInvoker(Sub() splashAction(splash)))
+            Else
+                splashAction(splash)
+            End If
+        Catch ex As ObjectDisposedException
+            ' The splash screen was closed in the meantime
+        Catch ex As InvalidOperationException
+            ' The splash screen's handle was destroyed in the meantime
+        End Try
+    End Sub
+
+    Private Sub ShowSplashScreen()
+        InvokeOnSplashScreen(Sub(splash) splash.Show())
+    End Sub
+
+    Private Sub HideSplashScreen()
+        InvokeOnSplashScreen(Sub(splash) splash.Hide())
+    End Sub
+
+    Private Sub CloseSplashScreen()
+        InvokeOnSplashScreen(Sub(splash) splash.Close())
+    End Sub
+
+#End Region
+
+    Public Sub New()
+        ' Safety net: VB default instances are per-thread, so accessing "MainForm" from a background thread
+        ' silently builds a second, hidden main form there. Such forms make the program freeze when Windows
+        ' broadcasts a user preference change. Log any occurrence so that it can be fixed.
+        If Current IsNot Nothing AndAlso Not UiThread.IsUiThread Then
+            Try
+                DynaLog.LogMessage("WARNING: MainForm constructed off the UI thread (thread " & Thread.CurrentThread.ManagedThreadId & "). Use MainForm.Current instead. Stack trace: " & Environment.StackTrace, False)
+            Catch ex As Exception
+                Debug.WriteLine("MainForm constructed off the UI thread")
+            End Try
+        End If
+        InitializeComponent()
+    End Sub
+
     Public ReadOnly Property IsImageBackgroundProcessRunning As Boolean
         Get
             Return Not ImgBW.CompletionTask.IsCompleted
@@ -299,7 +348,7 @@ Public Class MainForm
                 DynaLog.LogMessage("Command-line argument: " & arg)
                 If arg.StartsWith("/setup", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("Setting reconfiguration has been requested by the user. Showing initial setup wizard (ISW)...")
-                    SplashScreen.Hide()
+                    HideSplashScreen()
                     PrgSetup.ShowDialog()
                 ElseIf arg.StartsWith("/load", StringComparison.OrdinalIgnoreCase) Then
                     DynaLog.LogMessage("Determining if specified project can be loaded...")
@@ -622,6 +671,7 @@ Public Class MainForm
 
     Private Async Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Current = Me
+        UiThread.RegisterUiThread()
         ImgBW.Work = AddressOf ImgBW_DoWorkAsync
         InitDynaLog()
 
@@ -633,7 +683,7 @@ Public Class MainForm
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
         If Environment.OSVersion.Version.Major = 6 And Environment.OSVersion.Version.Minor < 2 Then
             DynaLog.LogMessage("Windows 7 or an earlier version has been detected on this system. Program incompatible -- aborting any future procedures!")
-            SplashScreen.Hide()
+            HideSplashScreen()
             MsgBox(LocalizationService.ForSection("Main.Messages")("Incompatible.Win7.Message"), vbOKOnly + vbCritical, "DISMTools")
             Environment.Exit(1)
         End If
@@ -647,7 +697,7 @@ Public Class MainForm
             ' Detect .NET Framework 4.8
             If NDPReleaseInt < 528040 Then
                 DynaLog.LogMessage(NDPReleaseInt & " < 528040 - Incompatible .NET Framework Release -- aborting any future procedures!")
-                SplashScreen.Hide()
+                HideSplashScreen()
                 MsgBox(LocalizationService.ForSection("Main.Messages")("Requires.NET.Message"), vbOKOnly + vbCritical, "DISMTools")
                 Environment.Exit(1)
             End If
@@ -674,11 +724,11 @@ Public Class MainForm
                 ' don't create such a folder then
             End Try
         End If
-        If Not Debugger.IsAttached Then SplashScreen.Show()
+        If Not Debugger.IsAttached Then ShowSplashScreen()
         ' I once tested this on a computer which didn't require me to ask for admin privileges. This is a requirement of DISM. Check this
         If Not My.User.IsInRole(ApplicationServices.BuiltInRole.Administrator) Then
             DynaLog.LogMessage("This user is not part of the Administrators group/role -- aborting any future procedures!")
-            SplashScreen.Hide()
+            HideSplashScreen()
             MsgBox(LocalizationService.ForSection("Main.Messages")("Run.Admin.Message"), vbOKOnly + vbCritical, "DISMTools")
             Environment.Exit(1)
         End If
@@ -688,7 +738,6 @@ Public Class MainForm
         ' Detect mounted images
         Await RefreshMountedImagesAsync(True)
         DynaLog.LogMessage("Finished detecting mounted images. Continuing program startup...")
-        Control.CheckForIllegalCrossThreadCalls = False
         BranchTSMI.Text = dtBranch
         If Debugger.IsAttached Then
             DynaLog.LogMessage("Debugger attached. Showing information...")
@@ -711,7 +760,7 @@ Public Class MainForm
             End If
         Else
             DynaLog.LogMessage("No settings file has been found. Launching Initial Setup Wizard (ISW)...")
-            SplashScreen.Hide()
+            HideSplashScreen()
             PrgSetup.ShowDialog()
             LoadDTSettings(1)
         End If
@@ -749,7 +798,7 @@ Public Class MainForm
         Else
             VersionTSMI.Visible = False
         End If
-        If Not Debugger.IsAttached Then SplashScreen.Close()
+        If Not Debugger.IsAttached Then CloseSplashScreen()
         DynaLog.LogMessage("Repositioning window according to window parameters...")
         WndWidth = Width
         WndHeight = Height
@@ -1027,7 +1076,7 @@ Public Class MainForm
                     WallpaperPath = WallpaperRk.GetValue("WallPaper", "")
                     WallpaperRk.Close()
                 End Try
-                ComputerWallpaperPB.Image = Image.FromFile(WallpaperPath)
+                UiThread.RunOnUi(Me, Sub() ComputerWallpaperPB.Image = Image.FromFile(WallpaperPath))
             Catch ex As Exception
 
             End Try
@@ -1056,16 +1105,18 @@ Public Class MainForm
             DHCPStr = LocalizationService.ForSection("Main.ComputerInfo")("Automatic.Assigned.Label")
 
             ' Computer Information
-            ComputerOSLabel.Text = String.Format("{0} ({1} {2})", My.Computer.Info.OSFullName, BuildStr, Environment.OSVersion.Version.Build)
+            UiThread.RunOnUi(Me, Sub() ComputerOSLabel.Text = String.Format("{0} ({1} {2})", My.Computer.Info.OSFullName, BuildStr, Environment.OSVersion.Version.Build))
             Dim ComputerSystemMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Manufacturer, Model, DNSHostName, TotalPhysicalMemory, Domain, DomainRole FROM Win32_ComputerSystem")
             Dim ComputerProcMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT Name FROM Win32_Processor")
             Dim ComputerCurrentVolMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Label, FreeSpace, Capacity FROM Win32_Volume WHERE Name = {0}{1}{0}", Quote, WMIHelper.GetEscapedValue(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\")))
             Dim ComputerSystemProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerSystemMOC(0), "Manufacturer", "Model", "DNSHostName", "TotalPhysicalMemory", "Domain", "DomainRole")
-            ComputerNameLabel.Text = ComputerSystemProps("DNSHostName")
-            ComputerModelLabel.Text = ComputerSystemProps("Model")
-            ComputerProcessorLabel.Text = WMIHelper.GetObjectValue(ComputerProcMOC(0), "Name")
-            ComputerMemoryLabel.Text = String.Format("{0} {1}", Converters.BytesToReadableSize(ComputerSystemProps("TotalPhysicalMemory"),
-                                                                                               LanguageCode.Equals("fr-FR", StringComparison.OrdinalIgnoreCase)), SysMemStr)
+            UiThread.RunOnUi(Me, Sub()
+                                     ComputerNameLabel.Text = ComputerSystemProps("DNSHostName")
+                                     ComputerModelLabel.Text = ComputerSystemProps("Model")
+                                     ComputerProcessorLabel.Text = WMIHelper.GetObjectValue(ComputerProcMOC(0), "Name")
+                                 End Sub)
+            UiThread.RunOnUi(Me, Sub() ComputerMemoryLabel.Text = String.Format("{0} {1}", Converters.BytesToReadableSize(ComputerSystemProps("TotalPhysicalMemory"),
+                                                                                               LanguageCode.Equals("fr-FR", StringComparison.OrdinalIgnoreCase)), SysMemStr))
             Try
                 Dim CurrentVolProps As Dictionary(Of String, Object) = WMIHelper.GetObjectValues(ComputerCurrentVolMOC(0), "Capacity", "FreeSpace", "Label"),
                     DiskCapacity As Long = CurrentVolProps("Capacity"),
@@ -1073,33 +1124,33 @@ Public Class MainForm
                     DiskUsedSpace As Long = DiskCapacity - DiskFreeSpace,
                     DiskVolumeLetter As String = Environment.GetEnvironmentVariable("SYSTEMDRIVE"),
                     DiskLabel As String = CurrentVolProps("Label")
-                ComputerStorageLabel.Text = String.Format("{0}\{1}: {2} {3} {4} ({5}%)", DiskVolumeLetter, If(DiskLabel <> "", String.Format(" ({0})", DiskLabel), ""),
+                UiThread.RunOnUi(Me, Sub() ComputerStorageLabel.Text = String.Format("{0}\{1}: {2} {3} {4} ({5}%)", DiskVolumeLetter, If(DiskLabel <> "", String.Format(" ({0})", DiskLabel), ""),
                                                                                             Converters.BytesToReadableSize(DiskUsedSpace, LanguageCode.Equals("fr-FR", StringComparison.OrdinalIgnoreCase)),
                                                                                             CurDiskStr,
                                                                                             Converters.BytesToReadableSize(DiskCapacity, LanguageCode.Equals("fr-FR", StringComparison.OrdinalIgnoreCase)),
-                                                                                            Math.Round((DiskUsedSpace / DiskCapacity) * 100, 2))
+                                                                                            Math.Round((DiskUsedSpace / DiskCapacity) * 100, 2)))
             Catch ex As Exception
                 DynaLog.LogMessage("Could not display disk information: " & ex.Message)
             End Try
             Select Case ComputerSystemProps("DomainRole")
                 Case DomainRole.StandaloneWorkstation, DomainRole.StandaloneServer
-                    ComputerDomainStatusLabel.Text = NoDomStr
+                    UiThread.RunOnUi(Me, Sub() ComputerDomainStatusLabel.Text = NoDomStr)
                 Case DomainRole.MemberWorkstation, DomainRole.MemberServer
-                    ComputerDomainStatusLabel.Text = DomainStr
+                    UiThread.RunOnUi(Me, Sub() ComputerDomainStatusLabel.Text = DomainStr)
                 Case DomainRole.BackupDomainController
-                    ComputerDomainStatusLabel.Text = BDCStr
+                    UiThread.RunOnUi(Me, Sub() ComputerDomainStatusLabel.Text = BDCStr)
                 Case DomainRole.PrimaryDomainController
-                    ComputerDomainStatusLabel.Text = PDCStr
+                    UiThread.RunOnUi(Me, Sub() ComputerDomainStatusLabel.Text = PDCStr)
             End Select
-            ComputerDomainWorkgroupLabel.Text = ComputerSystemProps("Domain")
+            UiThread.RunOnUi(Me, Sub() ComputerDomainWorkgroupLabel.Text = ComputerSystemProps("Domain"))
             Try
                 Dim RouteTableMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery("SELECT InterfaceIndex FROM Win32_IP4RouteTable WHERE Destination = '0.0.0.0'")
                 Dim currentNetAdapterIndex As UInteger = WMIHelper.GetObjectValue(RouteTableMOC(0), "InterfaceIndex")
                 Dim ComputerNetworkMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT DHCPEnabled FROM Win32_NetworkAdapterConfiguration WHERE InterfaceIndex = {0}", currentNetAdapterIndex))
                 Dim DhcpEnabled As Boolean = WMIHelper.GetObjectValue(ComputerNetworkMOC(0), "DHCPEnabled")
-                ComputerDhcpStatusLabel.Text = If(DhcpEnabled, DHCPStr, ManualIPStr)
+                UiThread.RunOnUi(Me, Sub() ComputerDhcpStatusLabel.Text = If(DhcpEnabled, DHCPStr, ManualIPStr))
             Catch ex As Exception
-                ComputerDhcpStatusLabel.Text = NoIPStr
+                UiThread.RunOnUi(Me, Sub() ComputerDhcpStatusLabel.Text = NoIPStr)
             End Try
         Catch ex As Exception
             DynaLog.LogMessage("Could not display computer info: " & ex.Message)
@@ -1197,8 +1248,8 @@ Public Class MainForm
 
     Sub CheckForUpdates(branch As String)
         DynaLog.LogMessage("Checking for program updates...")
-        UpdateLink.LinkArea = New LinkArea(0, 0)
-        UpdateLink.Text = LocalizationService.ForSection("Main.CheckForUpdates")("CheckingUpdates.Link")
+        UiThread.RunOnUi(Me, Sub() UpdateLink.LinkArea = New LinkArea(0, 0))
+        UiThread.RunOnUi(Me, Sub() UpdateLink.Text = LocalizationService.ForSection("Main.CheckForUpdates")("CheckingUpdates.Link"))
         Dim latestVer As String = ""
         Using client As New WebClient()
             DynaLog.LogMessage("Downloading update information from DISMTools repository...")
@@ -1208,7 +1259,7 @@ Public Class MainForm
             Catch ex As WebException
                 DynaLog.LogMessage("Could not grab update info. Well, I guess that we can't update!")
                 Debug.WriteLine("We couldn't fetch the necessary update information. Reason:" & CrLf & ex.Status.ToString())
-                UpdatePanel.Visible = False
+                UiThread.RunOnUi(Me, Sub() UpdatePanel.Visible = False)
                 Exit Sub
             End Try
             DynaLog.LogMessage("Reading update information...")
@@ -1225,12 +1276,14 @@ Public Class MainForm
                 Dim fv As String = My.Application.Info.Version.ToString()
                 If fv = latestVer Or New Version(fv) > New Version(latestVer) Then
                     DynaLog.LogMessage("The program is up to date or is a newer build that can't be updated.")
-                    UpdatePanel.Visible = False
+                    UiThread.RunOnUi(Me, Sub() UpdatePanel.Visible = False)
                 Else
                     DynaLog.LogMessage("The program is outdated. Recommending the user to update in a subtle way...")
-                    UpdateLink.Text = LocalizationService.ForSection("Main.CheckForUpdates")("NewVersion.Available.Link")
-                    UpdateLink.LinkArea = LocalizationService.GetLinkArea(UpdateLink.Text, LocalizationService.ForSection("Main.CheckForUpdates")("Learn.Link"))
-                    UpdatePanel.Visible = True
+                    UiThread.RunOnUi(Me, Sub()
+                                             UpdateLink.Text = LocalizationService.ForSection("Main.CheckForUpdates")("NewVersion.Available.Link")
+                                             UpdateLink.LinkArea = LocalizationService.GetLinkArea(UpdateLink.Text, LocalizationService.ForSection("Main.CheckForUpdates")("Learn.Link"))
+                                             UpdatePanel.Visible = True
+                                         End Sub)
                 End If
             End If
         End Using
@@ -1763,53 +1816,57 @@ Public Class MainForm
         ImgBW.CancellationToken.ThrowIfCancellationRequested()
         IsCompatible = True
         DynaLog.LogMessage("Preparing to run background processes...")
-        BWFailPanel.Visible = False
+        UiThread.RunOnUi(Me, Sub() BWFailPanel.Visible = False)
         FailedBGProcResultDic.Clear()
         If Not IsImageMounted Then
-            Button26.Enabled = True
-            Button27.Enabled = False
-            Button28.Enabled = False
-            Button29.Enabled = False
-            Button24.Enabled = False
-            Button25.Enabled = False
-            Button30.Enabled = False
-            Button31.Enabled = False
-            Button32.Enabled = False
-            Button33.Enabled = False
-            Button34.Enabled = False
-            Button35.Enabled = False
-            Button36.Enabled = False
-            Button37.Enabled = False
-            Button38.Enabled = False
-            Button39.Enabled = False
-            Button40.Enabled = False
-            Button41.Enabled = False
-            Button42.Enabled = False
-            Button43.Enabled = False
-            Button44.Enabled = False
-            Button45.Enabled = False
-            Button46.Enabled = False
-            Button47.Enabled = False
-            Button48.Enabled = False
-            Button49.Enabled = False
-            Button50.Enabled = False
-            Button51.Enabled = False
-            Button52.Enabled = False
-            Button53.Enabled = False
-            Button54.Enabled = False
-            Button55.Enabled = False
-            Button56.Enabled = False
-            Button57.Enabled = False
-            Button58.Enabled = False
+            UiThread.RunOnUi(Me, Sub()
+                                     Button26.Enabled = True
+                                     Button27.Enabled = False
+                                     Button28.Enabled = False
+                                     Button29.Enabled = False
+                                     Button24.Enabled = False
+                                     Button25.Enabled = False
+                                     Button30.Enabled = False
+                                     Button31.Enabled = False
+                                     Button32.Enabled = False
+                                     Button33.Enabled = False
+                                     Button34.Enabled = False
+                                     Button35.Enabled = False
+                                     Button36.Enabled = False
+                                     Button37.Enabled = False
+                                     Button38.Enabled = False
+                                     Button39.Enabled = False
+                                     Button40.Enabled = False
+                                     Button41.Enabled = False
+                                     Button42.Enabled = False
+                                     Button43.Enabled = False
+                                     Button44.Enabled = False
+                                     Button45.Enabled = False
+                                     Button46.Enabled = False
+                                     Button47.Enabled = False
+                                     Button48.Enabled = False
+                                     Button49.Enabled = False
+                                     Button50.Enabled = False
+                                     Button51.Enabled = False
+                                     Button52.Enabled = False
+                                     Button53.Enabled = False
+                                     Button54.Enabled = False
+                                     Button55.Enabled = False
+                                     Button56.Enabled = False
+                                     Button57.Enabled = False
+                                     Button58.Enabled = False
+                                 End Sub)
             DynaLog.LogMessage("Background processes have stopped because no images have been mounted. Exiting...")
             Exit Sub
         End If
         DynaLog.LogMessage("Clearing completion state...")
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         ' Let user know things are working
-        BackgroundProcessesButton.Visible = False
-        BackgroundProcessesButton.Image = GetGlyphResource("bg_ops")
-        BackgroundProcessesButton.Visible = True
+        UiThread.RunOnUi(Me, Sub()
+                                 BackgroundProcessesButton.Visible = False
+                                 BackgroundProcessesButton.Image = GetGlyphResource("bg_ops")
+                                 BackgroundProcessesButton.Visible = True
+                             End Sub)
         DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
         areBackgroundProcessesDone = False
         regJumps = False
@@ -2095,14 +2152,18 @@ Public Class MainForm
     ''' <remarks>Depending on the GatherBasicInfo flag in RunBackgroundProcesses, this function will run or not</remarks>
     Sub GetBasicImageInfo(Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         ' Set image properties
-        Label41.Text = ProgressPanel.ImgIndex
-        Label44.Text = ProgressPanel.MountDir
-        ' Loading the project directly with an image already mounted makes the two labels above be wrong.
-        ' Check them and use local vars
-        If Label41.Text = "0" Or Label41.Text = "" Then     ' Label41 (index preview label) returns 0 and Label44 (mount dir preview) returns blank
-            Label41.Text = ImgIndex
-            Label44.Text = MountDir
-        End If
+        ' This runs in the background. Use the values that were captured from the progress panel on the UI thread:
+        ' accessing the ProgressPanel default instance here would create a new, hidden form on this thread
+        UiThread.RunOnUi(Me, Sub()
+                                 Label41.Text = bwProgressPanelImgIndex
+                                 Label44.Text = bwProgressPanelMountDir
+                                 ' Loading the project directly with an image already mounted makes the two labels above be wrong.
+                                 ' Check them and use local vars
+                                 If Label41.Text = "0" Or Label41.Text = "" Then     ' Label41 (index preview label) returns 0 and Label44 (mount dir preview) returns blank
+                                     Label41.Text = ImgIndex
+                                     Label44.Text = MountDir
+                                 End If
+                             End Sub)
         If OnlineMode Then
             DynaLog.LogMessage("Getting information about the active installation...")
             ' Revision number may not be the one that we're actually on when getting info about ntoskrnl; use UBR if we can
@@ -2115,49 +2176,59 @@ Public Class MainForm
                 revisionNumber = FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
             End Try
 
-            Label48.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & revisionNumber
+            UiThread.RunOnUi(Me, Sub() Label48.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & revisionNumber)
             CurrentImage.ImageVersion = Environment.OSVersion.Version
-            Label41.Text = LocalizationService.ForSection("Main.Get.Basic")("Online.Install.Label")
-            Label47.Text = LocalizationService.ForSection("Main.Get.Basic")("Online.Install.Label")
-            Label49.Text = LocalizationService.ForSection("Main.Get.Basic")("Online.Install.Label")
-            Label46.Text = My.Computer.Info.OSFullName
-            Label44.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
-            Label52.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
-            Label49.Text = Label49.Text
+            UiThread.RunOnUi(Me, Sub()
+                                     Label41.Text = LocalizationService.ForSection("Main.Get.Basic")("Online.Install.Label")
+                                     Label47.Text = LocalizationService.ForSection("Main.Get.Basic")("Online.Install.Label")
+                                     Label49.Text = LocalizationService.ForSection("Main.Get.Basic")("Online.Install.Label")
+                                     Label46.Text = My.Computer.Info.OSFullName
+                                     Label44.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
+                                     Label52.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
+                                     Label49.Text = Label49.Text
+                                 End Sub)
             ' Disable tasks in the new design accordingly
-            Button24.Enabled = False
-            Button25.Enabled = False
-            Button26.Enabled = False
-            Button27.Enabled = False
-            Button28.Enabled = False
-            Button29.Enabled = False
+            UiThread.RunOnUi(Me, Sub()
+                                     Button24.Enabled = False
+                                     Button25.Enabled = False
+                                     Button26.Enabled = False
+                                     Button27.Enabled = False
+                                     Button28.Enabled = False
+                                     Button29.Enabled = False
+                                 End Sub)
             DynaLog.LogMessage("Online installation information:")
-            DynaLog.LogMessage("- Mount point: " & Label52.Text)
-            DynaLog.LogMessage("- Image name: " & Label46.Text)
-            DynaLog.LogMessage("- Image version: " & Label48.Text)
+            UiThread.RunOnUi(Me, Sub()
+                                     DynaLog.LogMessage("- Mount point: " & Label52.Text)
+                                     DynaLog.LogMessage("- Image name: " & Label46.Text)
+                                     DynaLog.LogMessage("- Image version: " & Label48.Text)
+                                 End Sub)
         ElseIf OfflineMode Then
             DynaLog.LogMessage("Getting information about the offline installation...")
-            Label48.Text = FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion
+            UiThread.RunOnUi(Me, Sub() Label48.Text = FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion)
             CurrentImage.ImageVersion = New Version(FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion)
-            Label41.Text = LocalizationService.ForSection("Main.Get.Basic")("Offline.Install.Item")
-            Label46.Text = LocalizationService.ForSection("Main.Get.Basic")("Offline.Install.Label")
-            Label47.Text = LocalizationService.ForSection("Main.Get.Basic")("Offline.Install.Item")
-            Label49.Text = LocalizationService.ForSection("Main.Get.Basic")("Offline.Install.Item")
-            Label41.Text = MountDir
-            Label44.Text = MountDir
-            Label52.Text = MountDir
+            UiThread.RunOnUi(Me, Sub()
+                                     Label41.Text = LocalizationService.ForSection("Main.Get.Basic")("Offline.Install.Item")
+                                     Label46.Text = LocalizationService.ForSection("Main.Get.Basic")("Offline.Install.Label")
+                                     Label47.Text = LocalizationService.ForSection("Main.Get.Basic")("Offline.Install.Item")
+                                     Label49.Text = LocalizationService.ForSection("Main.Get.Basic")("Offline.Install.Item")
+                                     Label41.Text = MountDir
+                                     Label44.Text = MountDir
+                                     Label52.Text = MountDir
+                                 End Sub)
             ' Disable tasks in the new design accordingly
-            Button24.Enabled = False
-            Button25.Enabled = False
-            Button26.Enabled = False
-            Button27.Enabled = False
-            Button28.Enabled = False
-            Button29.Enabled = False
+            UiThread.RunOnUi(Me, Sub()
+                                     Button24.Enabled = False
+                                     Button25.Enabled = False
+                                     Button26.Enabled = False
+                                     Button27.Enabled = False
+                                     Button28.Enabled = False
+                                     Button29.Enabled = False
+                                 End Sub)
             DynaLog.LogMessage("Getting Edition ID and installation type...")
             GetOfflineEditionAndInstIdFromRegistry()
             DynaLog.LogMessage("Offline installation information:")
-            DynaLog.LogMessage("- Mount point: " & Label52.Text)
-            DynaLog.LogMessage("- Image version: " & Label48.Text)
+            UiThread.RunOnUi(Me, Sub() DynaLog.LogMessage("- Mount point: " & Label52.Text))
+            UiThread.RunOnUi(Me, Sub() DynaLog.LogMessage("- Image version: " & Label48.Text))
         Else
             Try
                 If ReinitializeCurImage Then
@@ -2165,8 +2236,8 @@ Public Class MainForm
                 End If
                 ReinitializeCurImage = True
                 If CurrentImage IsNot Nothing Then
-                    Label41.Text = CurrentImage.ImageIndex
-                    Label44.Text = CurrentImage.ImageMountDirectory
+                    UiThread.RunOnUi(Me, Sub() Label41.Text = CurrentImage.ImageIndex)
+                    UiThread.RunOnUi(Me, Sub() Label44.Text = CurrentImage.ImageMountDirectory)
                     isOrphaned = (CurrentImage.ImageMountStatus = DismMountStatus.NeedsRemount)
                     Dim ImageInformation As DismImageInfo = DismApi.GetImageInfo(CurrentImage.ImageFile).ElementAtOrDefault(CurrentImage.ImageIndex - 1)
                     If ImageInformation IsNot Nothing Then
@@ -2175,14 +2246,18 @@ Public Class MainForm
                         CurrentImage.ImageName = ImageInformation.ImageName
                         CurrentImage.ImageDescription = ImageInformation.ImageDescription
 
-                        Label48.Text = ImageInformation.ProductVersion.ToString()
-                        Label46.Text = ImageInformation.ImageName
-                        Label47.Text = ImageInformation.ImageDescription
+                        UiThread.RunOnUi(Me, Sub()
+                                                 Label48.Text = ImageInformation.ProductVersion.ToString()
+                                                 Label46.Text = ImageInformation.ImageName
+                                                 Label47.Text = ImageInformation.ImageDescription
+                                             End Sub)
                     End If
-                    RemountImageWithWritePermissionsToolStripMenuItem.Enabled = (CurrentImage.ImageMountMode = DismMountMode.ReadOnly)
-                    Button27.Enabled = (CurrentImage.ImageMountMode = DismMountMode.ReadWrite)
-                    Button28.Enabled = (CurrentImage.ImageMountMode = DismMountMode.ReadWrite)
-                    Button29.Enabled = True
+                    UiThread.RunOnUi(Me, Sub()
+                                             RemountImageWithWritePermissionsToolStripMenuItem.Enabled = (CurrentImage.ImageMountMode = DismMountMode.ReadOnly)
+                                             Button27.Enabled = (CurrentImage.ImageMountMode = DismMountMode.ReadWrite)
+                                             Button28.Enabled = (CurrentImage.ImageMountMode = DismMountMode.ReadWrite)
+                                             Button29.Enabled = True
+                                         End Sub)
                     DynaLog.LogMessage("Basic image information:")
                     DynaLog.LogMessage("- Image Index: " & CurrentImage.ImageIndex)
                     DynaLog.LogMessage("- Image Mount Point: " & CurrentImage.ImageMountDirectory)
@@ -2305,31 +2380,37 @@ Public Class MainForm
     ''' </summary>
     ''' <remarks>This is called when bgGetAdvImgInfo is True</remarks>
     Sub GetAdvancedImageInfo(Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
-        LinkLabel20.Enabled = True
-        LinkLabel19.Enabled = True
-        LinkLabel15.Enabled = True
-        LinkLabel16.Enabled = True
+        UiThread.RunOnUi(Me, Sub()
+                                 LinkLabel20.Enabled = True
+                                 LinkLabel19.Enabled = True
+                                 LinkLabel15.Enabled = True
+                                 LinkLabel16.Enabled = True
+                             End Sub)
 
         If CurrentImage Is Nothing Then CurrentImage = New WindowsImage()
 
         If OnlineMode Then
             DynaLog.LogMessage("Getting information about the active installation...")
-            LinkLabel20.Enabled = False
-            LinkLabel19.Enabled = False
-            LinkLabel15.Enabled = False
-            LinkLabel16.Enabled = False
+            UiThread.RunOnUi(Me, Sub()
+                                     LinkLabel20.Enabled = False
+                                     LinkLabel19.Enabled = False
+                                     LinkLabel15.Enabled = False
+                                     LinkLabel16.Enabled = False
+                                 End Sub)
             ' Set edition variable according to the EditionID registry value
             CurrentImage.ImageEditionId = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("EditionID")
 
             ' Set installation type variable according to the InstallationType registry value
             CurrentImage.ImageInstallationType = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("InstallationType")
 
-            Button24.Enabled = False
-            Button25.Enabled = False
-            Button26.Enabled = False
-            Button27.Enabled = False
-            Button28.Enabled = False
-            Button29.Enabled = False
+            UiThread.RunOnUi(Me, Sub()
+                                     Button24.Enabled = False
+                                     Button25.Enabled = False
+                                     Button26.Enabled = False
+                                     Button27.Enabled = False
+                                     Button28.Enabled = False
+                                     Button29.Enabled = False
+                                 End Sub)
 
             DynaLog.LogMessage("- Edition ID: " & CurrentImage.ImageEditionId)
             DynaLog.LogMessage("- Installation type: " & CurrentImage.ImageInstallationType)
@@ -2339,16 +2420,18 @@ Public Class MainForm
             Exit Sub
         ElseIf OfflineMode Then
             DynaLog.LogMessage("Getting information about the offline installation...")
-            LinkLabel20.Enabled = False
-            LinkLabel19.Enabled = False
-            LinkLabel15.Enabled = False
-            LinkLabel16.Enabled = False
-            Button24.Enabled = False
-            Button25.Enabled = False
-            Button26.Enabled = False
-            Button27.Enabled = False
-            Button28.Enabled = False
-            Button29.Enabled = False
+            UiThread.RunOnUi(Me, Sub()
+                                     LinkLabel20.Enabled = False
+                                     LinkLabel19.Enabled = False
+                                     LinkLabel15.Enabled = False
+                                     LinkLabel16.Enabled = False
+                                     Button24.Enabled = False
+                                     Button25.Enabled = False
+                                     Button26.Enabled = False
+                                     Button27.Enabled = False
+                                     Button28.Enabled = False
+                                     Button29.Enabled = False
+                                 End Sub)
 
             DynaLog.LogMessage("Comparing versions to determine the tasks you can do...")
             DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), CurrentImage.ImageVersion)
@@ -2433,88 +2516,97 @@ Public Class MainForm
                 End Try
                 DynaLog.LogMessage("Updating buttons...")
                 ' Update the buttons in the new design accordingly
-                Button26.Enabled = False
+                UiThread.RunOnUi(Me, Sub() Button26.Enabled = False)
                 'Button27.Enabled = True
                 'Button28.Enabled = True
                 'Button29.Enabled = True
-                Button24.Enabled = True
-                Button25.Enabled = True
-                Button30.Enabled = True
-                Button31.Enabled = True
-                Button32.Enabled = True
-                Button33.Enabled = True
-                Button34.Enabled = True
-                Button35.Enabled = True
-                Button36.Enabled = True
-                Button37.Enabled = True
-                Button38.Enabled = True
-                Button39.Enabled = True
-                Button40.Enabled = True
-                Button41.Enabled = True
-                Button42.Enabled = True
-                Button43.Enabled = True
-                Button44.Enabled = True
-                Button45.Enabled = True
-                Button46.Enabled = True
-                Button47.Enabled = True
-                Button48.Enabled = True
-                Button49.Enabled = True
-                Button50.Enabled = True
-                Button51.Enabled = True
-                Button52.Enabled = True
-                Button53.Enabled = True
-                Button54.Enabled = True
-                Button55.Enabled = True
-                Button56.Enabled = True
-                Button57.Enabled = True
-                Button58.Enabled = True
-                MountImageToolStripMenuItem.Enabled = False
-                UnmountImageToolStripMenuItem.Enabled = True
+                UiThread.RunOnUi(Me, Sub()
+                                         Button24.Enabled = True
+                                         Button25.Enabled = True
+                                         Button30.Enabled = True
+                                         Button31.Enabled = True
+                                         Button32.Enabled = True
+                                         Button33.Enabled = True
+                                         Button34.Enabled = True
+                                         Button35.Enabled = True
+                                         Button36.Enabled = True
+                                         Button37.Enabled = True
+                                         Button38.Enabled = True
+                                         Button39.Enabled = True
+                                         Button40.Enabled = True
+                                         Button41.Enabled = True
+                                         Button42.Enabled = True
+                                         Button43.Enabled = True
+                                         Button44.Enabled = True
+                                         Button45.Enabled = True
+                                         Button46.Enabled = True
+                                         Button47.Enabled = True
+                                         Button48.Enabled = True
+                                         Button49.Enabled = True
+                                         Button50.Enabled = True
+                                         Button51.Enabled = True
+                                         Button52.Enabled = True
+                                         Button53.Enabled = True
+                                         Button54.Enabled = True
+                                         Button55.Enabled = True
+                                         Button56.Enabled = True
+                                         Button57.Enabled = True
+                                         Button58.Enabled = True
+                                         MountImageToolStripMenuItem.Enabled = False
+                                         UnmountImageToolStripMenuItem.Enabled = True
+                                     End Sub)
             Else
                 DynaLog.LogMessage("Updating buttons...")
                 ' Update the buttons in the new design accordingly
-                Button26.Enabled = True
-                Button27.Enabled = False
-                Button28.Enabled = False
-                Button29.Enabled = False
-                Button24.Enabled = False
-                Button25.Enabled = False
-                Button30.Enabled = False
-                Button31.Enabled = False
-                Button32.Enabled = False
-                Button33.Enabled = False
-                Button34.Enabled = False
-                Button35.Enabled = False
-                Button36.Enabled = False
-                Button37.Enabled = False
-                Button38.Enabled = False
-                Button39.Enabled = False
-                Button40.Enabled = False
-                Button41.Enabled = False
-                Button42.Enabled = False
-                Button43.Enabled = False
-                Button44.Enabled = False
-                Button45.Enabled = False
-                Button46.Enabled = False
-                Button47.Enabled = False
-                Button48.Enabled = False
-                Button49.Enabled = False
-                Button50.Enabled = False
-                Button51.Enabled = False
-                Button52.Enabled = False
-                Button53.Enabled = False
-                Button54.Enabled = False
-                Button55.Enabled = False
-                Button56.Enabled = False
-                Button57.Enabled = False
-                Button58.Enabled = False
-                MountImageToolStripMenuItem.Enabled = True
-                UnmountImageToolStripMenuItem.Enabled = False
+                UiThread.RunOnUi(Me, Sub()
+                                         Button26.Enabled = True
+                                         Button27.Enabled = False
+                                         Button28.Enabled = False
+                                         Button29.Enabled = False
+                                         Button24.Enabled = False
+                                         Button25.Enabled = False
+                                         Button30.Enabled = False
+                                         Button31.Enabled = False
+                                         Button32.Enabled = False
+                                         Button33.Enabled = False
+                                         Button34.Enabled = False
+                                         Button35.Enabled = False
+                                         Button36.Enabled = False
+                                         Button37.Enabled = False
+                                         Button38.Enabled = False
+                                         Button39.Enabled = False
+                                         Button40.Enabled = False
+                                         Button41.Enabled = False
+                                         Button42.Enabled = False
+                                         Button43.Enabled = False
+                                         Button44.Enabled = False
+                                         Button45.Enabled = False
+                                         Button46.Enabled = False
+                                         Button47.Enabled = False
+                                         Button48.Enabled = False
+                                         Button49.Enabled = False
+                                         Button50.Enabled = False
+                                         Button51.Enabled = False
+                                         Button52.Enabled = False
+                                         Button53.Enabled = False
+                                         Button54.Enabled = False
+                                         Button55.Enabled = False
+                                         Button56.Enabled = False
+                                         Button57.Enabled = False
+                                         Button58.Enabled = False
+                                         MountImageToolStripMenuItem.Enabled = True
+                                         UnmountImageToolStripMenuItem.Enabled = False
+                                     End Sub)
             End If
         End If
     End Sub
 
     Sub DetectVersions(DismVer As FileVersionInfo, NTVer As Version)
+        ' This only updates menu items and groups. When called from the background processes, do it on the UI thread
+        If InvokeRequired Then
+            UiThread.RunOnUi(Me, Sub() DetectVersions(DismVer, NTVer))
+            Exit Sub
+        End If
         Try
             ' Restore enabled properties of each menu item and group in the new design
             DynaLog.LogMessage("Restoring state of items...")
@@ -2748,41 +2840,43 @@ Public Class MainForm
             If IsImageMounted Then IsCompatible = False
         End Try
         ' Update the buttons in the new design accordingly
-        Button26.Enabled = False
+        UiThread.RunOnUi(Me, Sub() Button26.Enabled = False)
         'Button27.Enabled = True
         'Button28.Enabled = True
         'Button29.Enabled = True
-        Button24.Enabled = True
-        Button25.Enabled = True
-        Button30.Enabled = True
-        Button31.Enabled = True
-        Button32.Enabled = True
-        Button33.Enabled = True
-        Button34.Enabled = True
-        Button35.Enabled = True
-        Button36.Enabled = True
-        Button37.Enabled = True
-        Button38.Enabled = True
-        Button39.Enabled = True
-        Button40.Enabled = True
-        Button41.Enabled = True
-        Button42.Enabled = True
-        Button43.Enabled = True
-        Button44.Enabled = True
-        Button45.Enabled = True
-        Button46.Enabled = True
-        Button47.Enabled = True
-        Button48.Enabled = True
-        Button49.Enabled = True
-        Button50.Enabled = True
-        Button51.Enabled = True
-        Button52.Enabled = True
-        Button53.Enabled = True
-        Button54.Enabled = True
-        Button55.Enabled = True
-        Button56.Enabled = True
-        Button57.Enabled = True
-        Button58.Enabled = True
+        UiThread.RunOnUi(Me, Sub()
+                                 Button24.Enabled = True
+                                 Button25.Enabled = True
+                                 Button30.Enabled = True
+                                 Button31.Enabled = True
+                                 Button32.Enabled = True
+                                 Button33.Enabled = True
+                                 Button34.Enabled = True
+                                 Button35.Enabled = True
+                                 Button36.Enabled = True
+                                 Button37.Enabled = True
+                                 Button38.Enabled = True
+                                 Button39.Enabled = True
+                                 Button40.Enabled = True
+                                 Button41.Enabled = True
+                                 Button42.Enabled = True
+                                 Button43.Enabled = True
+                                 Button44.Enabled = True
+                                 Button45.Enabled = True
+                                 Button46.Enabled = True
+                                 Button47.Enabled = True
+                                 Button48.Enabled = True
+                                 Button49.Enabled = True
+                                 Button50.Enabled = True
+                                 Button51.Enabled = True
+                                 Button52.Enabled = True
+                                 Button53.Enabled = True
+                                 Button54.Enabled = True
+                                 Button55.Enabled = True
+                                 Button56.Enabled = True
+                                 Button57.Enabled = True
+                                 Button58.Enabled = True
+                             End Sub)
     End Sub
 
     ''' <summary>
@@ -3957,7 +4051,7 @@ Public Class MainForm
         Else
             DynaLog.LogMessage("Settings file not found. Launching Initial Setup Wizard (ISW)...")
             ' Show setup window
-            SplashScreen.Hide()
+            HideSplashScreen()
             PrgSetup.ShowDialog()
         End If
     End Sub
@@ -6527,12 +6621,18 @@ Public Class MainForm
         SaveDTProj()
     End Sub
 
+    Private bwProgressPanelImgIndex As Integer
+    Private bwProgressPanelMountDir As String = ""
+
     Private Async Function ImgBW_DoWorkAsync(cancellationToken As CancellationToken) As Task
         Dim processAction As Integer = bwBackgroundProcessAction
         Dim getImageInfo As Boolean = bwGetImageInfo
         Dim getAdvancedImageInfo As Boolean = bwGetAdvImgInfo
         Dim onlineMode As Boolean = OnlineManagement
         Dim offlineMode As Boolean = OfflineManagement
+        ' Capture the values of the progress panel here, on the UI thread
+        bwProgressPanelImgIndex = ProgressPanel.ImgIndex
+        bwProgressPanelMountDir = ProgressPanel.MountDir
 
         DynaLog.LogMessage("Preparing background processes...")
         DynaLog.LogMessage("- Background process action: " & processAction)
@@ -7137,7 +7237,7 @@ Public Class MainForm
             Exit Sub
         End Try
         If NetworkCostHelper.IsNetworkConnectionMetered() Then
-            If MeteredConnectionWarningDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Exit Sub
+            If UiThread.RunOnUi(Of DialogResult)(Me, Function() MeteredConnectionWarningDialog.ShowDialog(Me)) <> Windows.Forms.DialogResult.OK Then Exit Sub
         End If
         Try
             DynaLog.LogMessage("Downloading " & Quote & "update.exe" & Quote & " from DISMTools repository...")
@@ -7206,8 +7306,11 @@ Public Class MainForm
 
     Private Sub ADKCopierBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ADKCopierBW.DoWork
         DynaLog.LogMessage("Preparing to copy ADK files...")
-        DynaLog.LogMessage("Path of selected node: " & prjTreeView.SelectedNode.FullPath)
-        If prjTreeView.SelectedNode.Name.StartsWith("dandi") Then
+        ' Read the selected node on the UI thread
+        Dim selectedNodePath As String = UiThread.RunOnUi(Of String)(Me, Function() prjTreeView.SelectedNode.FullPath)
+        Dim selectedNodeName As String = UiThread.RunOnUi(Of String)(Me, Function() prjTreeView.SelectedNode.Name)
+        DynaLog.LogMessage("Path of selected node: " & selectedNodePath)
+        If selectedNodeName.StartsWith("dandi") Then
             DynaLog.LogMessage("ADK nodes are selected. Continuing...")
             Try
                 If DetectPossibleADKs() = 2 Then
@@ -7226,7 +7329,7 @@ Public Class MainForm
                                     ' Count files
                                     fileCount = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), FileIO.SearchOption.SearchAllSubDirectories).Count
                                     DynaLog.LogMessage("Count of ADK files for " & currentArch & ": " & fileCount)
-                                    MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), ""))
+                                    UiThread.RunOnUi(Me, Sub() MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), "")))
                                     CurrentFileInt = 0
                                     For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), FileIO.SearchOption.SearchAllSubDirectories)
                                         Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), projPath & "\DandI\" & arches(x)))
@@ -7243,7 +7346,7 @@ Public Class MainForm
                             ' Count files
                             DynaLog.LogMessage("Copying ADK files for x86...")
                             Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", FileIO.SearchOption.SearchAllSubDirectories).Count
-                            MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), ""))
+                            UiThread.RunOnUi(Me, Sub() MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), "")))
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", FileIO.SearchOption.SearchAllSubDirectories)
                                 Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", projPath & "\DandI\x86"))
@@ -7258,7 +7361,7 @@ Public Class MainForm
                             ' Count files
                             DynaLog.LogMessage("Copying ADK files for AMD64...")
                             Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", FileIO.SearchOption.SearchAllSubDirectories).Count
-                            MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), ""))
+                            UiThread.RunOnUi(Me, Sub() MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), "")))
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", FileIO.SearchOption.SearchAllSubDirectories)
                                 Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", projPath & "\DandI\amd64"))
@@ -7273,7 +7376,7 @@ Public Class MainForm
                             ' Count files
                             DynaLog.LogMessage("Copying ADK files for ARM...")
                             Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", FileIO.SearchOption.SearchAllSubDirectories).Count
-                            MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), ""))
+                            UiThread.RunOnUi(Me, Sub() MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), "")))
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", FileIO.SearchOption.SearchAllSubDirectories)
                                 Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", projPath & "\DandI\arm"))
@@ -7288,7 +7391,7 @@ Public Class MainForm
                             ' Count files
                             DynaLog.LogMessage("Copying ADK files for ARM64...")
                             Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", FileIO.SearchOption.SearchAllSubDirectories).Count
-                            MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), ""))
+                            UiThread.RunOnUi(Me, Sub() MenuDesc.Text = LocalizationService.ForSection("Main.ADKCopy").Format("Prepare.Deploy.Tools.Label", If(adkCopyArg = 0, LocalizationService.ForSection("Main.ADKCopy").Format("Architecture.Label", archIntg), "")))
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", FileIO.SearchOption.SearchAllSubDirectories)
                                 Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", projPath & "\DandI\arm64"))
@@ -9051,7 +9154,7 @@ Public Class MainForm
                 Directory.CreateDirectory(Application.StartupPath & "\bin\utils\WIM-Explorer")
             End If
             If NetworkCostHelper.IsNetworkConnectionMetered() Then
-                If MeteredConnectionWarningDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Exit Sub
+                If UiThread.RunOnUi(Of DialogResult)(Me, Function() MeteredConnectionWarningDialog.ShowDialog(Me)) <> Windows.Forms.DialogResult.OK Then Exit Sub
             End If
             DynaLog.LogMessage("Downloading WIM Explorer installer script from GitHub repository...")
             Using WIMExpClient As New WebClient()
@@ -9061,7 +9164,7 @@ Public Class MainForm
                     contents = WIMExpClient.DownloadString("https://raw.githubusercontent.com/CodingWonders/WIM-Explorer/main/DISMTools-Install.ps1")
                 Catch ex As WebException
                     DynaLog.LogMessage("Could not download WIM Explorer Setup. Error message: " & ex.Status.ToString())
-                    MessageBox.Show(LocalizationService.ForSection("Main.Messages").Format("DownloadFailed.Label", ex.Status.ToString()))
+                    UiThread.RunOnUi(Of DialogResult)(Me, Function() MessageBox.Show(LocalizationService.ForSection("Main.Messages").Format("DownloadFailed.Label", ex.Status.ToString())))
                     Exit Sub
                 End Try
                 If contents <> "" Then
@@ -9098,7 +9201,7 @@ Public Class MainForm
                 WimExplorer.Start()
             End If
         Catch ex As Exception
-            MessageBox.Show(LocalizationService.ForSection("Main.Messages").Format("PrepareFailed.Label", ex.Message))
+            UiThread.RunOnUi(Of DialogResult)(Me, Function() MessageBox.Show(LocalizationService.ForSection("Main.Messages").Format("PrepareFailed.Label", ex.Message)))
             Exit Sub
         End Try
     End Sub
@@ -9158,7 +9261,7 @@ Public Class MainForm
                         Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
                         If thumbnail IsNot Nothing Then
                             Dim newThumb As Image = CombineImages(thumbnail)
-                            thumbnailList.Images.Add(newThumb)
+                            UiThread.RunOnUi(Me, Sub() thumbnailList.Images.Add(newThumb))
                         End If
                     Next
                 Else
@@ -9167,7 +9270,7 @@ Public Class MainForm
             Else
                 Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
             End If
-            Panel9.Visible = Not VideoList.Any()
+            UiThread.RunOnUi(Me, Sub() Panel9.Visible = Not VideoList.Any())
         Catch ex As Exception
             Throw ex
         End Try
@@ -9853,7 +9956,7 @@ Public Class MainForm
                         Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
                         If thumbnail IsNot Nothing Then
                             Dim newThumb As Image = CombineImages(thumbnail)
-                            thumbnailList.Images.Add(newThumb)
+                            UiThread.RunOnUi(Me, Sub() thumbnailList.Images.Add(newThumb))
                         End If
                         Dim listItem As ListViewItem = New ListViewItem()
                         listItem.ImageIndex = VideoList.IndexOf(VideoLink)
