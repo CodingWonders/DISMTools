@@ -52,13 +52,18 @@ Public Class InfoSaveResults
         If Debugger.IsAttached Then
             Debugger.Break()
         End If
+        ' Only file and Markdown processing happens in the background. Controls (including the WebBrowser, which is
+        ' an STA COM control) are only touched on the UI thread
+        TextBox1.Clear()
         Await Task.Run(Sub()
-                           TextBox1.Clear()
                            DynaLog.LogMessage("Checking if the report exists...")
                            If File.Exists(FilePath) Then
                                DynaLog.LogMessage("The report exists. Reading and parsing to HTML...")
-                               TextBox1.Text = File.ReadAllText(FilePath)
-                               TextBox1.Font = New Font(LogFont, LogFontSize, FontStyle.Regular)
+                               Dim reportText As String = File.ReadAllText(FilePath)
+                               UiThread.RunOnUi(Me, Sub()
+                                                        TextBox1.Text = reportText
+                                                        TextBox1.Font = New Font(LogFont, LogFontSize, FontStyle.Regular)
+                                                    End Sub)
 
                                ' Convert Markdown report to HTML and add style tags to make the HTML report prettier.
                                Dim prettyHTML As String = "<html>" & CrLf &
@@ -206,24 +211,27 @@ Public Class InfoSaveResults
                                Try
                                    DynaLog.LogMessage("Parsing to HTML...")
                                    Dim pipeline As MarkdownPipeline = New MarkdownPipelineBuilder().UseAdvancedExtensions().Build()
-                                   Dim result As String = Markdown.ToHtml(TextBox1.Text, pipeline)
+                                   Dim result As String = Markdown.ToHtml(reportText, pipeline)
                                    DynaLog.LogMessage("Saving to prettier HTML report...")
                                    File.WriteAllText(Application.StartupPath & "\report.html", prettyHTML.Replace("<!-- Content Goes Here!!! -->", result))
-                                   If File.Exists(Application.StartupPath & "\report.html") Then
-                                       WebBrowser1.Navigate("file:///" & Application.StartupPath.Replace("\", "/").Trim() & "/report.html")
-                                   End If
-                                   BringToFront()
+                                   Dim reportExists As Boolean = File.Exists(Application.StartupPath & "\report.html")
+                                   UiThread.RunOnUi(Me, Sub()
+                                                            If reportExists Then
+                                                                WebBrowser1.Navigate("file:///" & Application.StartupPath.Replace("\", "/").Trim() & "/report.html")
+                                                            End If
+                                                            BringToFront()
+                                                        End Sub)
                                Catch ex As Exception
                                    DynaLog.LogMessage("Could not convert to HTML. Error message: " & ex.Message)
                                    DynaLog.LogMessage("This could be an issue with Markdig.")
-                                   If MsgBox(LocalizationService.ForSection("InfoSave.Results.Messages").Format("HtmlFailed.Message", ex.Message), vbYesNo + vbCritical, LocalizationService.ForSection("InfoSave.Results.Messages")("ConversionError.Label")) = MsgBoxResult.Yes Then
+                                   If UiThread.MsgBoxOnUi(Me, LocalizationService.ForSection("InfoSave.Results.Messages").Format("HtmlFailed.Message", ex.Message), vbYesNo + vbCritical, LocalizationService.ForSection("InfoSave.Results.Messages")("ConversionError.Label")) = MsgBoxResult.Yes Then
                                        Process.Start(FilePath)
                                    End If
-                                   Close()
+                                   UiThread.PostToUi(Me, Sub() Close())
                                    Exit Sub
                                End Try
                            Else
-                               Close()
+                               UiThread.PostToUi(Me, Sub() Close())
                                Exit Sub
                            End If
                        End Sub)

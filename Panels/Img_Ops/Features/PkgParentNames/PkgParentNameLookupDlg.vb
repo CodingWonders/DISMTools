@@ -54,7 +54,6 @@ Public Class PkgParentNameLookupDlg
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ListBox1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
-        Control.CheckForIllegalCrossThreadCalls = False
         Label3.Visible = True
         OK_Button.Enabled = False
         Cancel_Button.Enabled = False
@@ -80,26 +79,31 @@ Public Class PkgParentNameLookupDlg
         pkgProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         pkgProc.Start()
         pkgProc.WaitForExit()
-        If Decimal.ToInt32(pkgProc.ExitCode) = 0 Then
-            RemPackage.CheckedListBox1.Items.Clear()
-            RemPackage.CheckedListBox2.Items.Clear()
+        ' This runs on a background thread. Do not create controls or touch other forms here; parse the
+        ' output as plain text and update the controls on the UI thread
+        Dim packageNames As New List(Of String)
+        Dim gotPackages As Boolean = (Decimal.ToInt32(pkgProc.ExitCode) = 0)
+        If gotPackages Then
             Debug.WriteLine("[INFO] Package names were successfully gathered. The program should return to normal state")
-            Debug.WriteLine("Listing package names:" & CrLf & My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\pkgnames"))
-            Dim pkgNames As New RichTextBox
-            pkgNames.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\pkgnames")
-            For x = 0 To pkgNames.Lines.Count - 1
-                If pkgNames.Lines(x) = "" Then
-                    Continue For
-                End If
-                ListBox1.Items.Add(pkgNames.Lines(x).Replace("Package Identity : ", "").Trim())
+            Dim pkgNamesText As String = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\pkgnames")
+            Debug.WriteLine("Listing package names:" & CrLf & pkgNamesText)
+            For Each pkgNameLine As String In pkgNamesText.Split(New String() {CrLf, Lf, Cr}, StringSplitOptions.RemoveEmptyEntries)
+                packageNames.Add(pkgNameLine.Replace("Package Identity : ", "").Trim())
             Next
             File.Delete(Application.StartupPath & "\temp.bat")
             File.Delete(Application.StartupPath & "\pkgnames")
         Else
             Debug.WriteLine("[FAIL] Package names were not gathered. Please verify everything's working")
         End If
-        Label3.Visible = False
-        OK_Button.Enabled = True
-        Cancel_Button.Enabled = True
+        UiThread.RunOnUi(Me, Sub()
+                                 If gotPackages Then
+                                     RemPackage.CheckedListBox1.Items.Clear()
+                                     RemPackage.CheckedListBox2.Items.Clear()
+                                     ListBox1.Items.AddRange(packageNames.ToArray())
+                                 End If
+                                 Label3.Visible = False
+                                 OK_Button.Enabled = True
+                                 Cancel_Button.Enabled = True
+                             End Sub)
     End Sub
 End Class

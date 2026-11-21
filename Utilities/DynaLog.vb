@@ -110,7 +110,10 @@ Public Class DynaLog
     End Sub
 
     Public Shared Sub EnableLogging()
-        If MainForm.EnableDynaLog Then
+        ' Use the real main form instance. Reading "MainForm.EnableDynaLog" from a background thread would create
+        ' a new, hidden MainForm on that thread (VB default instances are per-thread), which can freeze the program
+        Dim uiForm As MainForm = MainForm.Current
+        If uiForm Is Nothing OrElse uiForm.EnableDynaLog Then
             LoggerEnabled = True
             LogMessage("Logger has been enabled again by caller " & New StackFrame(1).GetMethod().Name, False)
         Else

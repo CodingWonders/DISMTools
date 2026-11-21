@@ -66,9 +66,14 @@ Public Class ImgInfoSaveDlg
     Private ReportedInformation As New ObtainedImageInformation()
 
     Private Sub ReportChanges(Message As String, ProgressPercentage As Double)
-        Label2.Text = Message
-        ProgressBar1.Value = ProgressPercentage
-        TaskbarHelper.SetIndicatorState(ProgressPercentage, Windows.Shell.TaskbarItemProgressState.Normal, MainForm.Handle)
+        ' This is called from background threads. Update the controls on the UI thread
+        UiThread.PostToUi(Me, Sub()
+                                  Label2.Text = Message
+                                  ProgressBar1.Value = ProgressPercentage
+                                  If MainForm.Current IsNot Nothing Then
+                                      TaskbarHelper.SetIndicatorState(ProgressPercentage, Windows.Shell.TaskbarItemProgressState.Normal, MainForm.Current.Handle)
+                                  End If
+                              End Sub)
     End Sub
 
     Private Sub WriteExceptionInfo(ex As Exception)
@@ -690,7 +695,7 @@ Public Class ImgInfoSaveDlg
             ImageToGetInfoFrom.ImageEditionId = " "
         End If
         ' Detect if the image is Windows 8 or later. If not, skip this task
-        If (Not OnlineMode And (Not MainForm.IsWindows8OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or ImageToGetInfoFrom.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows8OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
+        If (Not OnlineMode And (Not MainForm.Current.IsWindows8OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or ImageToGetInfoFrom.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.Current.IsWindows8OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
             Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("Task.Supported.Win.Message"), ParagraphStyle.Bold) & CrLf
             Exit Sub
         Else
@@ -729,8 +734,8 @@ Public Class ImgInfoSaveDlg
                         Else
                             registrationStatus = LocalizationService.ForSection("ImageInfoSave.Report")("No.Button")
                         End If
-                        Dim installationLocation As String = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName).Replace("\\", "\").Trim()
-                        Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", AppxPackage.PackageFullName & "*", SearchOption.TopDirectoryOnly)
+                        Dim installationLocation As String = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.Current.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName).Replace("\\", "\").Trim()
+                        Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.Current.MountDir) & "\Program Files\WindowsApps", AppxPackage.PackageFullName & "*", SearchOption.TopDirectoryOnly)
                         Dim instDir As String = ""
                         For Each folder In pkgDirs
                             If Not folder.Contains("neutral") Then
@@ -754,7 +759,7 @@ Public Class ImgInfoSaveDlg
                         Dim logoAssetDir As String = ""                         ' Use to pass final result to Markdown report
                         Dim assetDir As String = ""
                         Try
-                            assetDir = MainForm.GetSuitablePackageFolder(AppxPackage.PackageName)
+                            assetDir = MainForm.Current.GetSuitablePackageFolder(AppxPackage.PackageName)
                         Catch ex As Exception
                             ' Continue
                         End Try
@@ -773,15 +778,15 @@ Public Class ImgInfoSaveDlg
                                 Next
                             End If
                         Else
-                            If File.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml") Then
-                                Dim ManFileLines As String() = File.ReadAllLines(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml")
+                            If File.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.Current.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml") Then
+                                Dim ManFileLines As String() = File.ReadAllLines(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.Current.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml")
                                 For Each line In ManFileLines
                                     If line.Contains("<Logo>") Then
                                         Dim SplitPaths As New List(Of String)
                                         SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
                                         SplitPaths.RemoveAt(SplitPaths.Count - 1)
                                         Dim newPath As String = String.Join("\", SplitPaths)
-                                        logoAssetDir = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\" & newPath).Replace("\\", "\").Trim()
+                                        logoAssetDir = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.Current.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\" & newPath).Replace("\\", "\").Trim()
                                         Exit For
                                     End If
                                 Next
@@ -789,7 +794,7 @@ Public Class ImgInfoSaveDlg
                         End If
                         ' Since store logo assets can't be saved on plain text files, output their locations
                         Dim mainLogo As String = ""                         ' Use to pass final result to Markdown report
-                        Dim mainAsset As String = MainForm.GetStoreAppMainLogo(AppxPackage.PackageFullName)
+                        Dim mainAsset As String = MainForm.Current.GetStoreAppMainLogo(AppxPackage.PackageFullName)
                         If mainAsset <> "" And File.Exists(mainAsset) Then
                             mainLogo = mainAsset.Replace("\\", "\").Trim()
                         Else
@@ -864,8 +869,8 @@ Public Class ImgInfoSaveDlg
                                     Else
                                         registrationStatus = LocalizationService.ForSection("ImageInfoSave.Report")("No.Button")
                                     End If
-                                    Dim installationLocation As String = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName).Replace("\\", "\").Trim()
-                                    Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", AppxPackage.PackageFullName & "*", SearchOption.TopDirectoryOnly)
+                                    Dim installationLocation As String = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.Current.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName).Replace("\\", "\").Trim()
+                                    Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.Current.MountDir) & "\Program Files\WindowsApps", AppxPackage.PackageFullName & "*", SearchOption.TopDirectoryOnly)
                                     Dim instDir As String = ""
                                     For Each folder In pkgDirs
                                         If Not folder.Contains("neutral") Then
@@ -889,7 +894,7 @@ Public Class ImgInfoSaveDlg
                                     Dim logoAssetDir As String = ""                         ' Use to pass final result to Markdown report
                                     Dim assetDir As String = ""
                                     Try
-                                        assetDir = MainForm.GetSuitablePackageFolder(AppxPackage.PackageName)
+                                        assetDir = MainForm.Current.GetSuitablePackageFolder(AppxPackage.PackageName)
                                     Catch ex As Exception
                                         ' Continue
                                     End Try
@@ -908,15 +913,15 @@ Public Class ImgInfoSaveDlg
                                             Next
                                         End If
                                     Else
-                                        If File.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml") Then
-                                            Dim ManFileLines As String() = File.ReadAllLines(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml")
+                                        If File.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.Current.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml") Then
+                                            Dim ManFileLines As String() = File.ReadAllLines(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.Current.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\AppxManifest.xml")
                                             For Each line In ManFileLines
                                                 If line.Contains("<Logo>") Then
                                                     Dim SplitPaths As New List(Of String)
                                                     SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
                                                     SplitPaths.RemoveAt(SplitPaths.Count - 1)
                                                     Dim newPath As String = String.Join("\", SplitPaths)
-                                                    logoAssetDir = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\" & newPath).Replace("\\", "\").Trim()
+                                                    logoAssetDir = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.Current.MountDir) & "\Program Files\WindowsApps\" & AppxPackage.PackageFullName & "\" & newPath).Replace("\\", "\").Trim()
                                                     Exit For
                                                 End If
                                             Next
@@ -924,7 +929,7 @@ Public Class ImgInfoSaveDlg
                                     End If
                                     ' Since store logo assets can't be saved on plain text files, output their locations
                                     Dim mainLogo As String = ""                         ' Use to pass final result to Markdown report
-                                    Dim mainAsset As String = MainForm.GetStoreAppMainLogo(AppxPackage.PackageFullName)
+                                    Dim mainAsset As String = MainForm.Current.GetStoreAppMainLogo(AppxPackage.PackageFullName)
                                     If mainAsset <> "" And File.Exists(mainAsset) Then
                                         mainLogo = mainAsset.Replace("\\", "\").Trim()
                                     Else
@@ -989,7 +994,7 @@ Public Class ImgInfoSaveDlg
                                     Dim logoAssetDir As String = ""                         ' Use to pass final result to Markdown report
                                     Dim assetDir As String = ""
                                     Try
-                                        assetDir = MainForm.GetSuitablePackageFolder(appxPkg.DisplayName)
+                                        assetDir = MainForm.Current.GetSuitablePackageFolder(appxPkg.DisplayName)
                                     Catch ex As Exception
                                         ' Continue
                                     End Try
@@ -1008,15 +1013,15 @@ Public Class ImgInfoSaveDlg
                                             Next
                                         End If
                                     Else
-                                        If File.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml") Then
-                                            Dim ManFileLines As String() = File.ReadAllLines(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml")
+                                        If File.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.Current.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml") Then
+                                            Dim ManFileLines As String() = File.ReadAllLines(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.Current.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml")
                                             For Each line In ManFileLines
                                                 If line.Contains("<Logo>") Then
                                                     Dim SplitPaths As New List(Of String)
                                                     SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
                                                     SplitPaths.RemoveAt(SplitPaths.Count - 1)
                                                     Dim newPath As String = String.Join("\", SplitPaths)
-                                                    logoAssetDir = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\" & newPath).Replace("\\", "\").Trim()
+                                                    logoAssetDir = (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.Current.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\" & newPath).Replace("\\", "\").Trim()
                                                     Exit For
                                                 End If
                                             Next
@@ -1024,7 +1029,7 @@ Public Class ImgInfoSaveDlg
                                     End If
                                     ' Since store logo assets can't be saved on plain text files, output their locations
                                     Dim mainLogo As String = ""                         ' Use to pass final result to Markdown report
-                                    Dim mainAsset As String = MainForm.GetStoreAppMainLogo(appxPkg.PackageName)
+                                    Dim mainAsset As String = MainForm.Current.GetStoreAppMainLogo(appxPkg.PackageName)
                                     If mainAsset <> "" And File.Exists(mainAsset) Then
                                         mainLogo = mainAsset.Replace("\\", "\").Trim()
                                     Else
@@ -1097,7 +1102,7 @@ Public Class ImgInfoSaveDlg
         If ImageToGetInfoFrom.ImageEditionId Is Nothing Then
             ImageToGetInfoFrom.ImageEditionId = " "
         End If
-        If (Not OnlineMode And (Not MainForm.IsWindows10OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or ImageToGetInfoFrom.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows10OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
+        If (Not OnlineMode And (Not MainForm.Current.IsWindows10OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or ImageToGetInfoFrom.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.Current.IsWindows10OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
             Contents &= GetParagraph(LocalizationService.ForSection("ImageInfoSave.Report")("Task.Supported.Message"), ParagraphStyle.Bold) & CrLf
             Exit Sub
         Else

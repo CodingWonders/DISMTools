@@ -221,14 +221,19 @@ Public Class ADDSJoinDialog
         tbNicPDS.Text = dsDomainName
     End Sub
 
+    ''' <summary>
+    ''' Initializes the wizard. This runs in the background, so controls are only updated on the UI thread
+    ''' </summary>
     Private Sub InitializeWizard()
         ProgressReporter.SetMessage("Checking if device is part of a domain...")
         ADDSInitBW.ReportProgress(5)
         dsIsInDomain = DomainServicesModule.DSIsInDomain()
         If dsIsInDomain Then
-            rbAutoDomainsInForest.Enabled = True
-            rbAutoDomainsInForest.Checked = True
-            rbManualDomain.Checked = False
+            UiThread.RunOnUi(Me, Sub()
+                                     rbAutoDomainsInForest.Enabled = True
+                                     rbAutoDomainsInForest.Checked = True
+                                     rbManualDomain.Checked = False
+                                 End Sub)
             ProgressReporter.SetMessage("Getting name of assigned domain...")
             ADDSInitBW.ReportProgress(20)
             dsDomainName = DomainServicesModule.DSGetDomainName()
@@ -236,12 +241,16 @@ Public Class ADDSJoinDialog
             ProgressReporter.SetMessage("Getting domains in current forest...")
             ADDSInitBW.ReportProgress(30)
             DomainsInForest = DomainServicesModule.DSGetDomainsInForest()
-            comboDomainsInForest.Items.AddRange(DomainsInForest.Select(Function(domain) domain.DnsPath).ToArray())
-            comboDomainsInForest.SelectedItem = dsDomainName
+            UiThread.RunOnUi(Me, Sub()
+                                     comboDomainsInForest.Items.AddRange(DomainsInForest.Select(Function(domain) domain.DnsPath).ToArray())
+                                     comboDomainsInForest.SelectedItem = dsDomainName
+                                 End Sub)
         Else
-            rbAutoDomainsInForest.Checked = False
-            rbManualDomain.Checked = True
-            rbAutoDomainsInForest.Enabled = False
+            UiThread.RunOnUi(Me, Sub()
+                                     rbAutoDomainsInForest.Checked = False
+                                     rbManualDomain.Checked = True
+                                     rbAutoDomainsInForest.Enabled = False
+                                 End Sub)
         End If
         ProgressReporter.SetMessage("Getting network adapters...")
         ADDSInitBW.ReportProgress(40)
@@ -254,23 +263,27 @@ Public Class ADDSJoinDialog
         NtLogonPathStart = DomainServicesModule.DSGetDomainControllerNetBIOSName()
         NtDefaultLogonPathStart = NtLogonPathStart
         If dsIsInDomain Then
-            comboAccountMode.SelectedIndex = 1
+            UiThread.RunOnUi(Me, Sub() comboAccountMode.SelectedIndex = 1)
             ProgressReporter.SetMessage("Mapping organizational units and users...")
             ADDSInitBW.ReportProgress(90)
             userMappings = DomainServicesModule.DSMapOrganizationalUnitsAndUsers(dsDomainName, NtLogonPathStart)
             If userMappings IsNot Nothing Then
-                comboOU.Items.AddRange(userMappings.Keys.OrderBy(Function(ou) ou).ToArray())
-                comboOU.SelectedIndex = 0
+                UiThread.RunOnUi(Me, Sub()
+                                         comboOU.Items.AddRange(userMappings.Keys.OrderBy(Function(ou) ou).ToArray())
+                                         comboOU.SelectedIndex = 0
+                                     End Sub)
             End If
         Else
-            comboAccountMode.SelectedIndex = 0
-            If comboAccountMode.Items.Count > 1 Then
-                ' We do this twice to get rid of both items
-                comboAccountMode.Items.RemoveAt(1)
-                comboAccountMode.Items.RemoveAt(1)
-            End If
+            UiThread.RunOnUi(Me, Sub()
+                                     comboAccountMode.SelectedIndex = 0
+                                     If comboAccountMode.Items.Count > 1 Then
+                                         ' We do this twice to get rid of both items
+                                         comboAccountMode.Items.RemoveAt(1)
+                                         comboAccountMode.Items.RemoveAt(1)
+                                     End If
+                                 End Sub)
         End If
-        DsAccountObjectPickerBtn.Enabled = dsIsInDomain
+        UiThread.RunOnUi(Me, Sub() DsAccountObjectPickerBtn.Enabled = dsIsInDomain)
         ProgressReporter.SetMessage("Initialization complete.")
         ADDSInitBW.ReportProgress(100)
     End Sub

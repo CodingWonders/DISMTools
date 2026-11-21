@@ -186,7 +186,7 @@ Public Class ISOCreator
         Try
             If NetworkCostHelper.IsNetworkConnectionMetered() Then
 
-                If MeteredConnectionWarningDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Throw New OperationCanceledException("To avoid additional charges, the download has been canceled")
+                If UiThread.RunOnUi(Of DialogResult)(Me, Function() MeteredConnectionWarningDialog.ShowDialog(Me)) <> Windows.Forms.DialogResult.OK Then Throw New OperationCanceledException("To avoid additional charges, the download has been canceled")
             End If
             ProgressReporter.SetMessage(LocalizationService.ForSection("ISOCreator")("Preparing.ADK.Download.Message"))
             ADKDownloaderBW.ReportProgress(0)
@@ -529,6 +529,12 @@ Public Class ISOCreator
     End Sub
 
     Private Sub JobManager_JobStatusChanged(jobId As Integer, status As JobStatus)
+        ' The job manager raises this event from background tasks. Handle it on the UI thread, as it updates
+        ' controls and may create the notification icon
+        If InvokeRequired Then
+            UiThread.PostToUi(Me, Sub() JobManager_JobStatusChanged(jobId, status))
+            Exit Sub
+        End If
         ' This event is fired when a job status changes
         DynaLog.LogMessage("Job " & jobId & " status changed to: " & status.ToString())
 
@@ -576,6 +582,11 @@ Public Class ISOCreator
     End Sub
 
     Private Sub JobManager_JobProgressChanged(jobId As Integer, isRunning As Boolean)
+        ' The job manager raises this event from background tasks. Handle it on the UI thread
+        If InvokeRequired Then
+            UiThread.PostToUi(Me, Sub() JobManager_JobProgressChanged(jobId, isRunning))
+            Exit Sub
+        End If
         If Not isRunning Then
             ' Job has finished, re-enable buttons only if no other jobs are running
             If _jobManager.GetActiveTaskCount() = 0 Then

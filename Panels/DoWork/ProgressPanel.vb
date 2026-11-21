@@ -590,15 +590,15 @@ Public Class ProgressPanel
     End Function
 
     Private Sub OnAllTasksLogReported(AllTasksMessage As String) Handles Me.AllTasksLogReported
-        allTasks.Text = AllTasksMessage
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = AllTasksMessage)
     End Sub
 
     Private Sub OnCurrTaskLogReported(CurrTaskMessage As String) Handles Me.CurrTaskLogReported
-        currentTask.Text = CurrTaskMessage
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = CurrTaskMessage)
     End Sub
 
     Private Sub OnLogActivityReported(LogMessage As String) Handles Me.LogActivityReported
-        LogView.AppendText(LogMessage)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(LogMessage))
     End Sub
 
     Private Sub ReportAllTasks(AllTasksMessage As String)
@@ -751,10 +751,10 @@ Public Class ProgressPanel
         For Each Task In taskList
             DynaLog.LogMessage("Running task " & taskList.IndexOf(Task) + 1 & " of " & taskList.Count & " (operation number " & Task & ")...")
             RunOps(Task)
-            AllPB.Value = prevValue + (AllPB.Maximum / taskList.Count)
-            prevValue = AllPB.Value
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = prevValue + (AllPB.Maximum / taskList.Count))
+            UiThread.RunOnUi(Me, Sub() prevValue = AllPB.Value)
             If Not currentTCont = taskList.Count Then currentTCont += 1
-            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskList.Count)
+            UiThread.RunOnUi(Me, Sub() taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskList.Count))
             DynaLog.LogMessage("Determining if tasks are successful...")
             If IsSuccessful Then successfulTasks += 1 Else failedTasks += 1
         Next
@@ -819,10 +819,10 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Running operations...")
         DynaLog.LogMessage("Operation number: " & opNum)
         DynaLog.LogMessage("Setting DISM program and grabbing version information...")
-        If DismProgram = "" Then DismProgram = MainForm.DismExe
+        If DismProgram = "" AndAlso MainForm.Current IsNot Nothing Then DismProgram = MainForm.Current.DismExe
         If Not File.Exists(DismProgram) Then DismProgram = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
         DismVersionChecker = FileVersionInfo.GetVersionInfo(DismProgram)
-        CurrentPB.Value = 0
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = 0)
         PackageErrorCodes.Clear()
         FeatureErrorCodes.Clear()
         DynaLog.LogMessage("Mount directory to apply changes to: " & MountDir)
@@ -920,8 +920,8 @@ Public Class ProgressPanel
             Case 998
                 ReplaceFfuFile()
         End Select
-        CurrentPB.Value = CurrentPB.Maximum
-        AllPB.Value = AllPB.Maximum
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
+        UiThread.RunOnUi(Me, Sub() AllPB.Value = AllPB.Maximum)
         Thread.Sleep(1000)
     End Sub
 
@@ -931,25 +931,25 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Creating a project...")
         DynaLog.LogMessage("- Project name: " & Quote & projName & Quote)
         DynaLog.LogMessage("- Project path: " & Quote & projPath & Quote)
-        allTasks.Text = LocalizationService.ForSection("Progress.CreateProject").Format("CreatingProject.Label", projName)
-        currentTask.Text = LocalizationService.ForSection("Progress.CreateProject")("CreateProject.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Creating.Project.Structure"))
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.CreateProject").Format("CreatingProject.Label", projName))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CreateProject")("CreateProject.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Creating.Project.Structure")))
         Try
             DynaLog.LogMessage("Creating main project directory...")
             Directory.CreateDirectory(projPath & "\" & projName)
-            CurrentPB.Value = 16.66
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = 16.66)
             Thread.Sleep(125)
-            AllPB.Value = CurrentPB.Value
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = CurrentPB.Value)
             DynaLog.LogMessage("Creating project settings directory...")
             Directory.CreateDirectory(projPath & "\" & projName & "\" & "settings")
-            CurrentPB.Value = 33.329999999999998
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = 33.329999999999998)
             Thread.Sleep(125)
-            AllPB.Value = CurrentPB.Value
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = CurrentPB.Value)
             DynaLog.LogMessage("Creating mount directory...")
             Directory.CreateDirectory(projPath & "\" & projName & "\" & "mount")
-            CurrentPB.Value = 50
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = 50)
             Thread.Sleep(125)
-            AllPB.Value = CurrentPB.Value
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = CurrentPB.Value)
             DynaLog.LogMessage("Creating scratch directory...")
             Directory.CreateDirectory(projPath & "\" & projName & "\" & "scr_temp")
             DynaLog.LogMessage("Creating unattended answer file directory...")
@@ -962,9 +962,9 @@ Public Class ProgressPanel
             Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\amd64")
             Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\arm")
             Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\arm64")
-            CurrentPB.Value = 66.659999999999997
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = 66.659999999999997)
             Thread.Sleep(125)
-            AllPB.Value = CurrentPB.Value
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = CurrentPB.Value)
             DynaLog.LogMessage("Writing project configuration...")
             File.WriteAllText(projPath & "\" & projName & "\" & "settings\project.ini",
                               "[ProjOptions]" & CrLf &
@@ -994,9 +994,9 @@ Public Class ProgressPanel
                               "ImageLang=N/A" & CrLf & CrLf &
                               "[Params]" & CrLf &
                               "ImageReadWrite=N/A", ASCII)
-            CurrentPB.Value = 83.329999999999998
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = 83.329999999999998)
             Thread.Sleep(125)
-            AllPB.Value = CurrentPB.Value
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = CurrentPB.Value)
             DynaLog.LogMessage("Writing DTProj file contents...")
             File.WriteAllText(projPath & "\" & projName & "\" & projName & ".dtproj",
                               "# DISMTools project file. File version: 0.1" & CrLf &
@@ -1005,18 +1005,18 @@ Public Class ProgressPanel
                               "[Project]" & CrLf &
                               "ProjName=" & projName & CrLf &
                               "ProjGuid=" & Guid.NewGuid().ToString(), ASCII)
-            CurrentPB.Value = 100
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = 100)
             Thread.Sleep(125)
-            AllPB.Value = CurrentPB.Value
-            LogView.AppendText(CrLf & ProgressLogText("Project.Created.Successfully"))
-            CurrentPB.Value = CurrentPB.Maximum
-            AllPB.Value = AllPB.Maximum
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = CurrentPB.Value)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Project.Created.Successfully")))
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = AllPB.Maximum)
             IsSuccessful = True
         Catch ex As Exception
             DynaLog.LogMessage("Could not create the project. Error message: " & ex.Message)
-            LogView.AppendText(CrLf & ProgressLogText("An.Error.Has.Occurred.Please.Read.The.Details") & CrLf & ex.GetType().ToString() & ": " & Err.Description)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("An.Error.Has.Occurred.Please.Read.The.Details") & CrLf & ex.GetType().ToString() & ": " & Err.Description))
             If IsDebugged Then
-                LogView.AppendText(CrLf & ProgressLogText("Debugging.Information") & ex.StackTrace)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Debugging.Information") & ex.StackTrace))
             End If
             IsSuccessful = False
         End Try
@@ -1044,30 +1044,30 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Check for file errors? " & If(AppendixCheckIntegrity, "Yes", "No"))
         DynaLog.LogMessage("- Use reparse point tag fix? " & If(AppendixReparsePt, "Yes", "No"))
         DynaLog.LogMessage("- Capture extended attributes (EAs)? " & If(AppendixCaptureExtendedAttribs, "Yes", "No"))
-        allTasks.Text = LocalizationService.ForSection("Progress.AppendImage")("AppendingImage.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.AppendImage")("Appending.Mount.Dir.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Appending.Mount.Directory.To.Specified.Target.Image") & CrLf & ProgressLogText("Options") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.AppendImage")("AppendingImage.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.AppendImage")("Appending.Mount.Dir.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Appending.Mount.Directory.To.Specified.Target.Image") & CrLf & ProgressLogText("Options") & CrLf &
                            ProgressLogText("Source.Image.Directory") & AppendixSourceDir & CrLf &
                            ProgressLogText("Destination.Image.File") & AppendixDestinationImage & CrLf &
                            ProgressLogText("Destination.Image.Name") & AppendixName & CrLf &
-                           ProgressLogText("Destination.Image.Description") & If(AppendixDescription = "", ProgressLogText("None.Specified"), AppendixDescription) & CrLf)
+                           ProgressLogText("Destination.Image.Description") & If(AppendixDescription = "", ProgressLogText("None.Specified"), AppendixDescription) & CrLf))
         If AppendixWimScriptConfig = "" Then
             DynaLog.LogMessage("No configuration list file has been specified.")
-            LogView.AppendText(ProgressLogText("Configuration.List.File.Not.Specified") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Configuration.List.File.Not.Specified") & CrLf))
         Else
             DynaLog.LogMessage("A configuration list file has been specified. Checking if it exists...")
-            LogView.AppendText(ProgressLogText("Configuration.List.File") & Quote & AppendixWimScriptConfig & Quote & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Configuration.List.File") & Quote & AppendixWimScriptConfig & Quote & CrLf))
             If Not File.Exists(AppendixWimScriptConfig) Then
                 DynaLog.LogMessage("The configuration list file does not exist in the file system and will be skipped.")
-                LogView.AppendText(ProgressLogText("WARNING.The.Configuration.List.File.Does.Not.Exist") & CrLf)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("WARNING.The.Configuration.List.File.Does.Not.Exist") & CrLf))
             End If
         End If
-        LogView.AppendText(ProgressLogText("Append.Image.With.WIMBOOT.Configuration") & If(AppendixUseWimBoot, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Append.Image.With.WIMBOOT.Configuration") & If(AppendixUseWimBoot, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
                            ProgressLogText("Make.Image.Bootable") & If(AppendixBootable, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
                            ProgressLogText("Verify.Image.Integrity") & If(AppendixCheckIntegrity, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
                            ProgressLogText("Check.For.File.Errors") & If(AppendixVerify, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
                            ProgressLogText("Use.The.Reparse.Point.Tag.Fix") & If(AppendixReparsePt, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
-                           ProgressLogText("Capture.Extended.Attributes") & If(AppendixCaptureExtendedAttribs, ProgressLogText("Yes"), ProgressLogText("No")))
+                           ProgressLogText("Capture.Extended.Attributes") & If(AppendixCaptureExtendedAttribs, ProgressLogText("Yes"), ProgressLogText("No"))))
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
@@ -1094,13 +1094,13 @@ Public Class ProgressPanel
         If Not AppendixReparsePt Then CommandArgs &= " /norpfix"
         If AppendixCaptureExtendedAttribs Then CommandArgs &= " /EA"
         RunProcess(DismProgram, CommandArgs)
-        currentTask.Text = LocalizationService.ForSection("Progress.AppendImage")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.AppendImage")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -1109,12 +1109,12 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Image to apply: " & Quote & FFUApplicationSourceImg & Quote)
         DynaLog.LogMessage("- Application drive: " & Quote & FFUApplicationDestDrive & Quote)
         DynaLog.LogMessage("- SFU name pattern: " & Quote & FFUApplicationSFUPattern & Quote)
-        allTasks.Text = LocalizationService.ForSection("Progress.ApplyFfuImage")("ApplyingImage.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.ApplyFfuImage")("Applying.Image.Dest.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Applying.Image") & CrLf & ProgressLogText("Options") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.ApplyFfuImage")("ApplyingImage.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ApplyFfuImage")("Applying.Image.Dest.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Applying.Image") & CrLf & ProgressLogText("Options") & CrLf &
                            ProgressLogText("Source.Image.File") & ApplicationSourceImg & CrLf &
                            ProgressLogText("Index.To.Apply") & ApplicationIndex & CrLf &
-                           ProgressLogText("Target.Directory") & ApplicationDestDir & CrLf)
+                           ProgressLogText("Target.Directory") & ApplicationDestDir & CrLf))
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
@@ -1129,19 +1129,19 @@ Public Class ProgressPanel
         ' Detect additional options and set CommandArgs
         CommandArgs &= " /applydrive=" & Quote & FFUApplicationDestDrive & Quote
         If FFUApplicationSFUPattern = "" Then
-            LogView.AppendText(ProgressLogText("Split.FFU.SFU.File.Pattern.Not.Specified.Not") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Split.FFU.SFU.File.Pattern.Not.Specified.Not") & CrLf))
         Else
-            LogView.AppendText(ProgressLogText("Split.FFU.SFU.File.Pattern") & FFUApplicationSFUPattern & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Split.FFU.SFU.File.Pattern") & FFUApplicationSFUPattern & CrLf))
             CommandArgs &= " /sfufile=" & FFUApplicationSFUPattern
         End If
         RunProcess(DismProgram, CommandArgs)
-        currentTask.Text = LocalizationService.ForSection("Progress.ApplyFfuImage")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ApplyFfuImage")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -1158,12 +1158,12 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Apply with WIMBoot configuration? " & If(ApplicationUseWimBoot, "Yes", "No"))
         DynaLog.LogMessage("- Apply in compact mode? " & If(ApplicationCompactMode, "Yes", "No"))
         DynaLog.LogMessage("- Apply extended attributes (EAs)? " & If(ApplicationUseExtAttr, "Yes", "No"))
-        allTasks.Text = LocalizationService.ForSection("Progress.ApplyImage")("ApplyingImage.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.ApplyImage")("Applying.Image.Dest.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Applying.Image") & CrLf & ProgressLogText("Options") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.ApplyImage")("ApplyingImage.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ApplyImage")("Applying.Image.Dest.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Applying.Image") & CrLf & ProgressLogText("Options") & CrLf &
                            ProgressLogText("Source.Image.File") & ApplicationSourceImg & CrLf &
                            ProgressLogText("Index.To.Apply") & ApplicationIndex & CrLf &
-                           ProgressLogText("Target.Directory") & ApplicationDestDir & CrLf)
+                           ProgressLogText("Target.Directory") & ApplicationDestDir & CrLf))
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
@@ -1180,61 +1180,61 @@ Public Class ProgressPanel
         Dim DestinationPath As String = If(DestinationIsRooted, ApplicationDestDir, Quote & ApplicationDestDir & Quote)
         CommandArgs &= " /applydir=" & DestinationPath
         If ApplicationCheckInt Then
-            LogView.AppendText(ProgressLogText("Verify.Image.Integrity.Yes") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Verify.Image.Integrity.Yes") & CrLf))
             CommandArgs &= " /checkintegrity"
         Else
-            LogView.AppendText(ProgressLogText("Verify.Image.Integrity.No") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Verify.Image.Integrity.No") & CrLf))
         End If
         If ApplicationVerify Then
-            LogView.AppendText(ProgressLogText("Check.For.File.Errors.Yes") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Check.For.File.Errors.Yes") & CrLf))
             CommandArgs &= " /verify"
         Else
-            LogView.AppendText(ProgressLogText("Check.For.File.Errors.No") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Check.For.File.Errors.No") & CrLf))
         End If
         If ApplicationReparsePt Then
-            LogView.AppendText(ProgressLogText("Use.Reparse.Point.Tag.Fix.Yes") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.Reparse.Point.Tag.Fix.Yes") & CrLf))
         Else
-            LogView.AppendText(ProgressLogText("Use.Reparse.Point.Tag.Fix.No") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.Reparse.Point.Tag.Fix.No") & CrLf))
             CommandArgs &= " /norpfix"
         End If
         If ApplicationSWMPattern = "" Then
-            LogView.AppendText(ProgressLogText("Split.WIM.SWM.File.Pattern.Not.Specified.Not") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Split.WIM.SWM.File.Pattern.Not.Specified.Not") & CrLf))
         Else
-            LogView.AppendText(ProgressLogText("Split.WIM.SWM.File.Pattern") & ApplicationSWMPattern & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Split.WIM.SWM.File.Pattern") & ApplicationSWMPattern & CrLf))
             CommandArgs &= " /swmfile=" & ApplicationSWMPattern
         End If
         If ApplicationValidateForTD Then
-            LogView.AppendText(ProgressLogText("Validate.For.Trusted.Desktop.Yes") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Validate.For.Trusted.Desktop.Yes") & CrLf))
             CommandArgs &= " /confirmtrustedfile"
         Else
-            LogView.AppendText(ProgressLogText("Validate.For.Trusted.Desktop.No.Not.Supported") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Validate.For.Trusted.Desktop.No.Not.Supported") & CrLf))
         End If
         If ApplicationUseWimBoot Then
-            LogView.AppendText(ProgressLogText("Apply.Using.WIMBOOT.Configuration.Yes") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Apply.Using.WIMBOOT.Configuration.Yes") & CrLf))
             CommandArgs &= " /wimboot"
         Else
-            LogView.AppendText(ProgressLogText("Apply.Using.WIMBOOT.Configuration.No") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Apply.Using.WIMBOOT.Configuration.No") & CrLf))
         End If
         If ApplicationCompactMode Then
-            LogView.AppendText(ProgressLogText("Use.Compact.Mode.Yes") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.Compact.Mode.Yes") & CrLf))
             CommandArgs &= " /compact"
         Else
-            LogView.AppendText(ProgressLogText("Use.Compact.Mode.No") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.Compact.Mode.No") & CrLf))
         End If
         If ApplicationUseExtAttr Then
-            LogView.AppendText(ProgressLogText("Apply.Using.Extended.Attributes.Yes") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Apply.Using.Extended.Attributes.Yes") & CrLf))
             CommandArgs &= " /ea"
         Else
-            LogView.AppendText(ProgressLogText("Apply.Using.Extended.Attributes.No") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Apply.Using.Extended.Attributes.No") & CrLf))
         End If
         RunProcess(DismProgram, CommandArgs)
-        currentTask.Text = LocalizationService.ForSection("Progress.ApplyImage")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ApplyImage")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -1244,12 +1244,12 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Destination image: " & Quote & FFUCaptureDestinationFfuImage & Quote)
         DynaLog.LogMessage("- Destination image name: " & Quote & FFUCaptureName & Quote)
         DynaLog.LogMessage("- Destination image description: " & Quote & FFUCaptureDescription & Quote)
-        allTasks.Text = LocalizationService.ForSection("Progress.CaptureFfuImage")("CapturingImage.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.CaptureFfuImage")("CaptureDir.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Capturing.Directory") & CrLf & ProgressLogText("Options") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.CaptureFfuImage")("CapturingImage.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CaptureFfuImage")("CaptureDir.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Capturing.Directory") & CrLf & ProgressLogText("Options") & CrLf &
                            ProgressLogText("Source.Directory") & FFUCaptureSourceDrive & CrLf &
                            ProgressLogText("Destination.Image") & FFUCaptureDestinationFfuImage & CrLf &
-                           ProgressLogText("Captured.Image.Name") & FFUCaptureName & CrLf)
+                           ProgressLogText("Captured.Image.Name") & FFUCaptureName & CrLf))
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
@@ -1263,28 +1263,28 @@ Public Class ProgressPanel
         End Select
         ' Get additional options
         If FFUCaptureDescription = "" Then
-            LogView.AppendText(ProgressLogText("Captured.Image.Description.None.Specified") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Captured.Image.Description.None.Specified") & CrLf))
         Else
             DynaLog.LogMessage("A description has been provided.")
-            LogView.AppendText(ProgressLogText("Captured.Image.Description") & Quote & FFUCaptureDescription & Quote & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Captured.Image.Description") & Quote & FFUCaptureDescription & Quote & CrLf))
             CommandArgs &= " /description=" & Quote & FFUCaptureDescription & Quote
         End If
         If FFUCaptureCompressType = 0 Then
-            LogView.AppendText(ProgressLogText("Compression.Type.None") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Compression.Type.None") & CrLf))
             CommandArgs &= " /compress=none"
         ElseIf FFUCaptureCompressType = 1 Then
-            LogView.AppendText(ProgressLogText("Compression.Type.Default") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Compression.Type.Default") & CrLf))
             CommandArgs &= " /compress=default"
         End If
-        LogView.AppendText(CrLf & ProgressLogText("Capturing.Image"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Capturing.Image")))
         RunProcess(DismProgram, CommandArgs)
-        currentTask.Text = LocalizationService.ForSection("Progress.CaptureFfuImage")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CaptureFfuImage")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -1307,12 +1307,12 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Use reparse point tag fix? " & If(CaptureReparsePt, "Yes", "No"))
         DynaLog.LogMessage("- Capture extended attributes (EAs)? " & If(CaptureExtendedAttributes, "Yes", "No"))
         DynaLog.LogMessage("- Capture compression level type: " & CaptureCompressType)
-        allTasks.Text = LocalizationService.ForSection("Progress.CaptureImage")("CapturingImage.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.CaptureImage")("CaptureDir.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Capturing.Directory") & CrLf & ProgressLogText("Options") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.CaptureImage")("CapturingImage.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CaptureImage")("CaptureDir.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Capturing.Directory") & CrLf & ProgressLogText("Options") & CrLf &
                            ProgressLogText("Source.Directory") & CaptureSourceDir & CrLf &
                            ProgressLogText("Destination.Image") & CaptureDestinationImage & CrLf &
-                           ProgressLogText("Captured.Image.Name") & CaptureName & CrLf)
+                           ProgressLogText("Captured.Image.Name") & CaptureName & CrLf))
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
@@ -1326,91 +1326,91 @@ Public Class ProgressPanel
         End Select
         ' Get additional options
         If CaptureDescription = "" Then
-            LogView.AppendText(ProgressLogText("Captured.Image.Description.None.Specified") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Captured.Image.Description.None.Specified") & CrLf))
         Else
             DynaLog.LogMessage("A description has been provided.")
-            LogView.AppendText(ProgressLogText("Captured.Image.Description") & Quote & CaptureDescription & Quote & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Captured.Image.Description") & Quote & CaptureDescription & Quote & CrLf))
             CommandArgs &= " /description=" & Quote & CaptureDescription & Quote
         End If
         If CaptureWimScriptConfig = "" Then
             DynaLog.LogMessage("No configuration list file has been specified.")
-            LogView.AppendText(ProgressLogText("Configuration.List.File.Not.Specified") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Configuration.List.File.Not.Specified") & CrLf))
         Else
             DynaLog.LogMessage("A configuration list file has been specified. Checking if it exists...")
-            LogView.AppendText(ProgressLogText("Configuration.List.File") & CaptureWimScriptConfig & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Configuration.List.File") & CaptureWimScriptConfig & CrLf))
             ' Possibly, the file may have been deleted after being specified. Determine whether it still exists
             If File.Exists(CaptureWimScriptConfig) Then
                 CommandArgs &= " /configfile=" & Quote & CaptureWimScriptConfig & Quote
             Else
                 DynaLog.LogMessage("The configuration list file does not exist in the file system and will be skipped.")
-                LogView.AppendText(ProgressLogText("WARNING.The.Configuration.List.File.Does.Not.Exist") & CrLf)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("WARNING.The.Configuration.List.File.Does.Not.Exist") & CrLf))
             End If
         End If
         If CaptureCompressType = 0 Then
-            LogView.AppendText(ProgressLogText("Compression.Type.None") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Compression.Type.None") & CrLf))
             CommandArgs &= " /compress=none"
         ElseIf CaptureCompressType = 1 Then
-            LogView.AppendText(ProgressLogText("Compression.Type.Fast") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Compression.Type.Fast") & CrLf))
             CommandArgs &= " /compress=fast"
         ElseIf CaptureCompressType = 2 Then
-            LogView.AppendText(ProgressLogText("Compression.Type.Maximum") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Compression.Type.Maximum") & CrLf))
             CommandArgs &= " /compress=max"
         End If
         If CaptureBootable Then
-            LogView.AppendText(ProgressLogText("Mark.Image.As.Bootable.Yes") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Mark.Image.As.Bootable.Yes") & CrLf))
             CommandArgs &= " /bootable"
         Else
-            LogView.AppendText(ProgressLogText("Mark.Image.As.Bootable.No") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Mark.Image.As.Bootable.No") & CrLf))
         End If
         If CaptureCheckIntegrity Then
-            LogView.AppendText(ProgressLogText("Check.Image.Integrity.Yes") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Check.Image.Integrity.Yes") & CrLf))
             CommandArgs &= " /checkintegrity"
         Else
-            LogView.AppendText(ProgressLogText("Check.Image.Integrity.No") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Check.Image.Integrity.No") & CrLf))
         End If
         If CaptureVerify Then
-            LogView.AppendText(ProgressLogText("Verify.File.Errors.Yes") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Verify.File.Errors.Yes") & CrLf))
             CommandArgs &= " /verify"
         Else
-            LogView.AppendText(ProgressLogText("Verify.File.Errors.No") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Verify.File.Errors.No") & CrLf))
         End If
         If CaptureReparsePt Then
-            LogView.AppendText(ProgressLogText("Use.The.Reparse.Point.Tag.Fix.Yes") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.The.Reparse.Point.Tag.Fix.Yes") & CrLf))
         Else
-            LogView.AppendText(ProgressLogText("Use.The.Reparse.Point.Tag.Fix.No") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.The.Reparse.Point.Tag.Fix.No") & CrLf))
             CommandArgs &= " /norpfix"
         End If
         If CaptureUseWimBoot Then
-            LogView.AppendText(ProgressLogText("Append.With.WIMBOOT.Configuration.Yes") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Append.With.WIMBOOT.Configuration.Yes") & CrLf))
             CommandArgs &= " /wimboot"
         Else
-            LogView.AppendText(ProgressLogText("Append.With.WIMBOOT.Configuration.No") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Append.With.WIMBOOT.Configuration.No") & CrLf))
         End If
         If CaptureExtendedAttributes Then
-            LogView.AppendText(ProgressLogText("Capture.Extended.Attributes.Yes") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Capture.Extended.Attributes.Yes") & CrLf))
             CommandArgs &= " /ea"
         Else
-            LogView.AppendText(ProgressLogText("Capture.Extended.Attributes.No") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Capture.Extended.Attributes.No") & CrLf))
         End If
-        LogView.AppendText(CrLf & ProgressLogText("Capturing.Image"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Capturing.Image")))
         RunProcess(DismProgram, CommandArgs)
-        currentTask.Text = LocalizationService.ForSection("Progress.CaptureImage")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CaptureImage")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
     Private Sub CleanupMountpoints()
         DynaLog.LogMessage("Cleaning up mount points by deleting resources from old or corrupted images...")
         DynaLog.LogMessage("This does not require any additional options and invokes an API call. This will take some time depending on your system performance.")
-        allTasks.Text = LocalizationService.ForSection("Progress.CleanupMounts")("Cleaning.Up.Mount.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.CleanupMounts")("Deleting.Corrupted.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Cleaning.Up.Mount.Points") & CrLf & CrLf &
-                           ProgressLogText("This.Can.Take.Some.Time.Depending.On.The"))
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.CleanupMounts")("Cleaning.Up.Mount.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CleanupMounts")("Deleting.Corrupted.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Cleaning.Up.Mount.Points") & CrLf & CrLf &
+                           ProgressLogText("This.Can.Take.Some.Time.Depending.On.The")))
         Try
             DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(If(LogLevel = 1, DismLogLevel.LogErrors, If(LogLevel = 2, DismLogLevel.LogErrorsWarnings, If(LogLevel = 3, DismLogLevel.LogErrorsWarningsInfo, DismLogLevel.LogErrorsWarningsInfo))), If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath))
@@ -1427,18 +1427,18 @@ Public Class ProgressPanel
 
             End Try
         End Try
-        CurrentPB.Value = 50
-        AllPB.Value = CurrentPB.Value
-        currentTask.Text = LocalizationService.ForSection("Progress.CleanupMounts")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = 50)
+        UiThread.RunOnUi(Me, Sub() AllPB.Value = CurrentPB.Value)
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CleanupMounts")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         If errCode Is Nothing Then
             errCode = 0
             IsSuccessful = True
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -1480,16 +1480,16 @@ Public Class ProgressPanel
 
     Private Sub CommitImage()
         DynaLog.LogMessage("Saving changes to the Windows image...")
-        allTasks.Text = LocalizationService.ForSection("Progress.CommitImage")("CommittingImage.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.CommitImage")("Saving.Changes.Image.Button")
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.CommitImage")("CommittingImage.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CommitImage")("Saving.Changes.Image.Button"))
         If ReferenceImage IsNot Nothing Then
             If Path.GetExtension(ReferenceImage.ImageFile).Equals(".ffu", StringComparison.OrdinalIgnoreCase) Then
                 CommitFfu()
                 Exit Sub
             End If
         End If
-        LogView.AppendText(CrLf & ProgressLogText("Saving.Changes") & CrLf & ProgressLogText("Options") & CrLf &
-                           ProgressLogText("Mount.Directory") & MountDir)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Saving.Changes") & CrLf & ProgressLogText("Options") & CrLf &
+                           ProgressLogText("Mount.Directory") & MountDir))
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
@@ -1503,13 +1503,13 @@ Public Class ProgressPanel
         End Select
         ' TODO: Add additional options later
         RunProcess(DismProgram, CommandArgs)
-        currentTask.Text = LocalizationService.ForSection("Progress.CommitImage")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CommitImage")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -1519,46 +1519,47 @@ Public Class ProgressPanel
         If imgIndexDeletionUnmount Then
             DynaLog.LogMessage("Preparing to unmount the Windows image...")
             RunOps(21)
-            AllPB.Value = AllPB.Maximum / taskCount
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = AllPB.Maximum / taskCount)
             currentTCont += 1
-            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
+            UiThread.RunOnUi(Me, Sub() taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount))
         End If
-        allTasks.Text = LocalizationService.ForSection("Progress.RemoveVolumes")("DeletingImages.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.RemoveVolumes")("Prepare.Remove.Button")
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.RemoveVolumes")("DeletingImages.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemoveVolumes")("Prepare.Remove.Button"))
         DynaLog.LogMessage("Source image to remove indexes from: " & Quote & imgIndexDeletionSourceImg & Quote)
-        LogView.AppendText(CrLf & ProgressLogText("Removing.Volume.Images.From.File") & CrLf &
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Removing.Volume.Images.From.File") & CrLf &
                            ProgressLogText("Options") & CrLf &
-                           ProgressLogText("Source.Image") & imgIndexDeletionSourceImg & CrLf)
+                           ProgressLogText("Source.Image") & imgIndexDeletionSourceImg & CrLf))
         If imgIndexDeletionIntCheck Then
-            LogView.AppendText(ProgressLogText("Check.Image.Integrity.Yes"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Check.Image.Integrity.Yes")))
         Else
-            LogView.AppendText(ProgressLogText("Check.Image.Integrity.No"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Check.Image.Integrity.No")))
         End If
-        CurrentPB.Maximum = imgIndexDeletionCount
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Maximum = imgIndexDeletionCount)
         ' Removing volume images
-        LogView.AppendText(CrLf &
-                           ProgressLogText("Removing.Volume.Images") & CrLf)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                           ProgressLogText("Removing.Volume.Images") & CrLf))
         For x = 0 To Array.LastIndexOf(imgIndexDeletionNames, imgIndexDeletionLastName)
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
             If x + 1 > CurrentPB.Maximum Then Exit For
             DynaLog.LogMessage("Volume image to remove: " & Quote & imgIndexDeletionNames(x) & Quote)
             DynaLog.LogMessage("Processing task...")
-            CurrentPB.Value = x + 1
-            currentTask.Text = LocalizationService.ForSection("Progress.RemoveVolumes").Format("Volume.Image.Item", imgIndexDeletionNames(x))
-            LogView.AppendText(CrLf &
-                               "- " & imgIndexDeletionNames(x) & "...")
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = index + 1)
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemoveVolumes").Format("Volume.Image.Item", imgIndexDeletionNames(index)))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               "- " & imgIndexDeletionNames(index) & "..."))
             CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /delete-image /imagefile=" & Quote & imgIndexDeletionSourceImg & Quote & " /name=" & Quote & imgIndexDeletionNames(x) & Quote
             If imgIndexDeletionIntCheck Then
                 CommandArgs &= " /checkintegrity"
             End If
             RunProcess(DismProgram, CommandArgs)
             If Hex(DismExitCode).Length < 8 Then
-                LogView.AppendText(ProgressLogText("Error.Level.2") & DismExitCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & DismExitCode))
             Else
-                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & Hex(DismExitCode))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & Hex(DismExitCode)))
             End If
         Next
-        CurrentPB.Value = CurrentPB.Maximum
-        AllPB.Value = 100
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
+        UiThread.RunOnUi(Me, Sub() AllPB.Value = 100)
         GetErrorCode(False)
     End Sub
 
@@ -1577,31 +1578,31 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Mark the image as bootable? " & If(imgExportMarkBootable, "Yes", "No"))
         DynaLog.LogMessage("- Use WIMBoot configuration? " & If(imgExportUseWimBoot, "Yes", "No"))
         DynaLog.LogMessage("- Check image integrity? " & If(imgExportCheckIntegrity, "Yes", "No"))
-        allTasks.Text = LocalizationService.ForSection("Progress.ExportImage")("ExportingImage.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.ExportImage")("Exporting.Image.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Exporting.The.Specified.Image.To.A.Destination.Image") & CrLf & ProgressLogText("Options") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.ExportImage")("ExportingImage.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ExportImage")("Exporting.Image.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Exporting.The.Specified.Image.To.A.Destination.Image") & CrLf & ProgressLogText("Options") & CrLf &
                            ProgressLogText("Source.Image.File") & imgExportSourceImage & CrLf &
                            ProgressLogText("Source.Image.Index") & imgExportSourceIndex & CrLf &
                            ProgressLogText("Destination.Image.File") & imgExportDestinationImage & CrLf &
-                           If(imgExportDestinationUseCustomName, ProgressLogText("Destination.Image.Name") & imgExportDestinationName, ""))
+                           If(imgExportDestinationUseCustomName, ProgressLogText("Destination.Image.Name") & imgExportDestinationName, "")))
         Select Case imgExportCompressType
             Case 0
-                LogView.AppendText(CrLf & ProgressLogText("Compression.Type.No.Compression"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Compression.Type.No.Compression")))
             Case 1
-                LogView.AppendText(CrLf & ProgressLogText("Compression.Type.Fast.Compression"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Compression.Type.Fast.Compression")))
             Case 2
-                LogView.AppendText(CrLf & ProgressLogText("Compression.Type.Maximum.Compression"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Compression.Type.Maximum.Compression")))
             Case 3
-                LogView.AppendText(CrLf & ProgressLogText("Compression.Type.ESD.Conversion.Recovery"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Compression.Type.ESD.Conversion.Recovery")))
         End Select
-        LogView.AppendText(CrLf & ProgressLogText("Mark.The.Image.As.Bootable") & If(imgExportMarkBootable, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Mark.The.Image.As.Bootable") & If(imgExportMarkBootable, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
                            ProgressLogText("Append.Image.With.WIMBOOT.Configuration") & If(imgExportUseWimBoot, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
-                           ProgressLogText("Check.Image.Integrity.Before.Exporting.The.Image") & If(imgExportCheckIntegrity, ProgressLogText("Yes"), ProgressLogText("No")))
+                           ProgressLogText("Check.Image.Integrity.Before.Exporting.The.Image") & If(imgExportCheckIntegrity, ProgressLogText("Yes"), ProgressLogText("No"))))
         ' Show information regarding SWM files
         DynaLog.LogMessage("Extension of source image file: " & Path.GetExtension(imgExportSourceImage))
         If Path.GetExtension(imgExportSourceImage).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
             DynaLog.LogMessage("We are dealing with SWM files. Showing why we mark all of them for export...")
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("NOTE.The.Source.Image.Contains.An.Asterisk.Sign"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("NOTE.The.Source.Image.Contains.An.Asterisk.Sign")))
         End If
         ' Configure basic command arguments
         Select Case DismVersionChecker.ProductMajorPart
@@ -1633,13 +1634,13 @@ Public Class ProgressPanel
         If imgExportUseWimBoot Then CommandArgs &= " /wimboot"
         If imgExportCheckIntegrity Then CommandArgs &= " /checkintegrity"
         RunProcess(DismProgram, CommandArgs)
-        currentTask.Text = LocalizationService.ForSection("Progress.ExportImage")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ExportImage")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -1664,12 +1665,12 @@ Public Class ProgressPanel
             DynaLog.LogMessage("- Mount with read-only permissions? " & If(isReadOnly, "Yes", "No"))
             DynaLog.LogMessage("- Optimize mount times? " & If(isOptimized, "Yes", "No"))
             DynaLog.LogMessage("- Check image integrity? " & If(isIntegrityTested, "Yes", "No"))
-            allTasks.Text = LocalizationService.ForSection("Progress.MountImage")("MountingImage.Button")
-            currentTask.Text = LocalizationService.ForSection("Progress.MountImage")("Mounting.Image.Button")
-            LogView.AppendText(CrLf & ProgressLogText("Mounting.Image") & CrLf & ProgressLogText("Options") & CrLf &
+            UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.MountImage")("MountingImage.Button"))
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.MountImage")("Mounting.Image.Button"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Mounting.Image") & CrLf & ProgressLogText("Options") & CrLf &
                                ProgressLogText("Image.File") & SourceImg & CrLf &
                                ProgressLogText("Image.Index") & ImgIndex & CrLf &
-                               ProgressLogText("Mount.Point") & MountDir)
+                               ProgressLogText("Mount.Point") & MountDir))
             Try
                 If Not isReadOnly AndAlso (File.GetAttributes(SourceImg) And FileAttributes.ReadOnly) = FileAttributes.ReadOnly Then
                     DynaLog.LogMessage("Source image contains read-only flag. Attempting to remove it...")
@@ -1692,32 +1693,32 @@ Public Class ProgressPanel
                     CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
             End Select
             If isReadOnly Then
-                LogView.AppendText(CrLf & ProgressLogText("Mount.Image.With.Read.Only.Permissions.Yes"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Mount.Image.With.Read.Only.Permissions.Yes")))
                 CommandArgs &= " /readonly"
             Else
-                LogView.AppendText(CrLf & ProgressLogText("Mount.Image.With.Read.Only.Permissions.No"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Mount.Image.With.Read.Only.Permissions.No")))
             End If
             If isOptimized Then
-                LogView.AppendText(CrLf & ProgressLogText("Optimize.Mount.Time.Yes"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Optimize.Mount.Time.Yes")))
                 CommandArgs &= " /optimize"
             Else
-                LogView.AppendText(CrLf & ProgressLogText("Optimize.Mount.Time.No"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Optimize.Mount.Time.No")))
             End If
             If isIntegrityTested Then
-                LogView.AppendText(CrLf & ProgressLogText("Check.Image.Integrity.Yes"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Check.Image.Integrity.Yes")))
                 CommandArgs &= " /checkintegrity"
             Else
-                LogView.AppendText(CrLf & ProgressLogText("Check.Image.Integrity.No"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Check.Image.Integrity.No")))
             End If
             RunProcess(DismProgram, CommandArgs)
-            currentTask.Text = LocalizationService.ForSection("Progress.MountImage")("Gathering.Error.Level.Item")
-            LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.MountImage")("Gathering.Error.Level.Item"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         End If
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -1725,11 +1726,11 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Optimizing the Windows FFU image...")
         DynaLog.LogMessage("- Source image to optimize: " & Quote & FFUOptimizationSource & Quote)
         DynaLog.LogMessage("- Partition to optimize: " & FFUOptimizationCustomPartitionNum & If(FFUOptimizationCustomPartitionNum = 0, " (Default partition in the FFU will be optimized)", ""))
-        allTasks.Text = LocalizationService.ForSection("Progress.Operation")("OptimizingImage.Label")
-        currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Optimizing.Windows.Label")
-        LogView.AppendText(CrLf & ProgressLogText("Optimizing.Windows.Image") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.Operation")("OptimizingImage.Label"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Optimizing.Windows.Label"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Optimizing.Windows.Image") & CrLf &
                            ProgressLogText("Source.Image.To.Optimize") & Quote & FFUOptimizationSource & Quote & CrLf &
-                           ProgressLogText("Partition.To.Optimize") & FFUOptimizationCustomPartitionNum & If(FFUOptimizationCustomPartitionNum = 0, ProgressLogText("Default.Partition.In.The.FFU.Will.Be.Optimized"), "") & CrLf)
+                           ProgressLogText("Partition.To.Optimize") & FFUOptimizationCustomPartitionNum & If(FFUOptimizationCustomPartitionNum = 0, ProgressLogText("Default.Partition.In.The.FFU.Will.Be.Optimized"), "") & CrLf))
         ' Check the DISM version, as the Windows 7-8.1 versions don't allow this action
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
@@ -1741,16 +1742,16 @@ Public Class ProgressPanel
         If FFUOptimizationCustomPartitionNum > 0 Then CommandArgs &= " /partitionnumber=" & FFUOptimizationCustomPartitionNum
 
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
         Else
-            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
         End If
         GetErrorCode(False)
     End Sub
@@ -1759,11 +1760,11 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Optimizing the Windows image...")
         DynaLog.LogMessage("- Source image to optimize: " & Quote & OptimizationSource & Quote)
         DynaLog.LogMessage("- Optimization mode: " & OptimizationMode)
-        allTasks.Text = LocalizationService.ForSection("Progress.Operation")("OptimizingImage.Label")
-        currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Optimizing.Windows.Label")
-        LogView.AppendText(CrLf & ProgressLogText("Optimizing.Windows.Image") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.Operation")("OptimizingImage.Label"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Optimizing.Windows.Label"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Optimizing.Windows.Image") & CrLf &
                            ProgressLogText("Source.Image.To.Optimize") & Quote & OptimizationSource & Quote & CrLf &
-                           ProgressLogText("Optimization.Mode") & If(OptimizationMode = 0, ProgressLogText("Reduce.Online.Configuration.Time"), ProgressLogText("Prepare.Image.For.WIMBOOT.System")) & CrLf)
+                           ProgressLogText("Optimization.Mode") & If(OptimizationMode = 0, ProgressLogText("Reduce.Online.Configuration.Time"), ProgressLogText("Prepare.Image.For.WIMBOOT.System")) & CrLf))
         ' Check the DISM version, as the Windows 7-8.1 versions don't allow this action
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
@@ -1772,16 +1773,16 @@ Public Class ProgressPanel
                 CommandArgs &= " /image=" & Quote & OptimizationSource & Quote & " /optimize-image " & If(OptimizationMode = 0, "/boot", "/wimboot")
         End Select
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
         Else
-            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
         End If
         GetErrorCode(False)
     End Sub
@@ -1790,10 +1791,10 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Reloading the servicing session of the mounted image...")
         DynaLog.LogMessage("- Mount location of the image file we are interested in reloading: " & Quote & MountDir & Quote)
         DynaLog.LogMessage("This invokes an API call. This process will take some time depending on your system performance and how big the Windows image is.")
-        allTasks.Text = LocalizationService.ForSection("Progress.RemountImage")("RemountingImage.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.RemountImage")("ReloadSession.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Reloading.Servicing.Session") & CrLf &
-                           ProgressLogText("Mount.Directory") & MountDir)
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.RemountImage")("RemountingImage.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemountImage")("ReloadSession.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Reloading.Servicing.Session") & CrLf &
+                           ProgressLogText("Mount.Directory") & MountDir))
         Try
             DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(If(LogLevel = 1, DismLogLevel.LogErrors, If(LogLevel = 2, DismLogLevel.LogErrorsWarnings, If(LogLevel = 3, DismLogLevel.LogErrorsWarningsInfo, DismLogLevel.LogErrorsWarningsInfo))), If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath))
@@ -1811,18 +1812,18 @@ Public Class ProgressPanel
 
             End Try
         End Try
-        CurrentPB.Value = 50
-        AllPB.Value = CurrentPB.Value
-        currentTask.Text = LocalizationService.ForSection("Progress.RemountImage")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = 50)
+        UiThread.RunOnUi(Me, Sub() AllPB.Value = CurrentPB.Value)
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemountImage")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         If errCode Is Nothing Then
             errCode = 0
             IsSuccessful = True
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -1832,14 +1833,14 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Maximum size of split images: " & SFUSplitFileSize & " MB")
         DynaLog.LogMessage("- Destination of SFU files: " & Quote & SFUSplitTargetFile & Quote)
         DynaLog.LogMessage("- Check image integrity? " & If(SFUSplitCheckIntegrity, "Yes", "No"))
-        allTasks.Text = LocalizationService.ForSection("Progress.SplitFfuImage")("SplittingImage.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.SplitFfuImage")("Splitting.File.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Splitting.FFU.File.Into.SFU.Files") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.SplitFfuImage")("SplittingImage.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.SplitFfuImage")("Splitting.File.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Splitting.FFU.File.Into.SFU.Files") & CrLf &
                            ProgressLogText("Source.Image.File.To.Split") & Quote & SFUSplitSourceFile & Quote & CrLf &
                            ProgressLogText("Maximum.Size.Of.The.Split.Images.In.MB") & SFUSplitFileSize & " MB" & CrLf &
                            ProgressLogText("Name.And.Path.Of.The.Target.SFU.File") & Quote & SFUSplitTargetFile & Quote & CrLf &
                            ProgressLogText("Check.Integrity.Before.Splitting.This.Image") & If(SFUSplitCheckIntegrity, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf & CrLf &
-                           ProgressLogText("Do.Note.That.If.The.Image.Contains.A") & CrLf)
+                           ProgressLogText("Do.Note.That.If.The.Image.Contains.A") & CrLf))
         ' Check the DISM version, as the Windows 7 version doesn't allow this action
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
@@ -1853,16 +1854,16 @@ Public Class ProgressPanel
                 CommandArgs &= " /split-image /imagefile=" & Quote & SFUSplitSourceFile & Quote & " /sfufile=" & Quote & SFUSplitTargetFile & Quote & " /filesize=" & SFUSplitFileSize & If(SFUSplitCheckIntegrity, " /checkintegrity", "")
         End Select
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
         Else
-            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
         End If
         GetErrorCode(False)
     End Sub
@@ -1873,14 +1874,14 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Maximum size of split images: " & SWMSplitFileSize & " MB")
         DynaLog.LogMessage("- Destination of SWM files: " & Quote & SWMSplitTargetFile & Quote)
         DynaLog.LogMessage("- Check image integrity? " & If(SWMSplitCheckIntegrity, "Yes", "No"))
-        allTasks.Text = LocalizationService.ForSection("Progress.SplitImage")("SplittingImage.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.SplitImage")("Splitting.WIM.File.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Splitting.WIM.File.Into.SWM.Files") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.SplitImage")("SplittingImage.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.SplitImage")("Splitting.WIM.File.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Splitting.WIM.File.Into.SWM.Files") & CrLf &
                            ProgressLogText("Source.Image.File.To.Split") & Quote & SWMSplitSourceFile & Quote & CrLf &
                            ProgressLogText("Maximum.Size.Of.The.Split.Images.In.MB") & SWMSplitFileSize & " MB" & CrLf &
                            ProgressLogText("Name.And.Path.Of.The.Target.SWM.File") & Quote & SWMSplitTargetFile & Quote & CrLf &
                            ProgressLogText("Check.Integrity.Before.Splitting.This.Image") & If(SWMSplitCheckIntegrity, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf & CrLf &
-                           ProgressLogText("Do.Note.That.If.The.Image.Contains.A.2") & CrLf)
+                           ProgressLogText("Do.Note.That.If.The.Image.Contains.A.2") & CrLf))
         ' Check the DISM version, as the Windows 7 version doesn't allow this action
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
@@ -1894,16 +1895,16 @@ Public Class ProgressPanel
                 CommandArgs &= " /split-image /imagefile=" & Quote & SWMSplitSourceFile & Quote & " /swmfile=" & Quote & SWMSplitTargetFile & Quote & " /filesize=" & SWMSplitFileSize & If(SWMSplitCheckIntegrity, " /checkintegrity", "")
         End Select
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
         Else
-            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
         End If
         GetErrorCode(False)
     End Sub
@@ -1915,15 +1916,15 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Unmount operation (may not reflect actual operation): " & UMountOp)
         DynaLog.LogMessage("  - Check image integrity before committing changes? " & If(CheckImgIntegrity, "Yes", "No"))
         DynaLog.LogMessage("  - Append changes to new index? " & If(SaveToNewIndex, "Yes", "No"))
-        allTasks.Text = LocalizationService.ForSection("Progress.UnmountImage")("UnmountingImage.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.UnmountImage")("Unmounting.ImageFile.Button")
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.UnmountImage")("UnmountingImage.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.UnmountImage")("Unmounting.ImageFile.Button"))
         If Not UMountLocalDir Then
             DynaLog.LogMessage("The image that was mounted in the project mount directory will not be unmounted. Using mountdir " & Quote & RandomMountDir & Quote & "...")
             MountDir = RandomMountDir
         End If
-        LogView.AppendText(CrLf & ProgressLogText("Unmounting.Image.File.From.Mount.Point") & CrLf &
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Unmounting.Image.File.From.Mount.Point") & CrLf &
                            ProgressLogText("Mount.Directory") & MountDir & CrLf &
-                           ProgressLogText("Image.Index") & UMountImgIndex)
+                           ProgressLogText("Image.Index") & UMountImgIndex))
         Try
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
@@ -1949,37 +1950,37 @@ Public Class ProgressPanel
                     End If
             End Select
             If UMountOp = 0 Then
-                LogView.AppendText(CrLf & ProgressLogText("Unmount.Operation.Commit"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Unmount.Operation.Commit")))
                 CommandArgs &= " /commit"
             ElseIf UMountOp = 1 Then
-                LogView.AppendText(CrLf & ProgressLogText("Unmount.Operation.Discard"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Unmount.Operation.Discard")))
                 CommandArgs &= " /discard"
             End If
             If UMountOp = 0 Then
                 If CheckImgIntegrity Then
-                    LogView.AppendText(CrLf & ProgressLogText("Check.Image.Integrity.Yes"))
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Check.Image.Integrity.Yes")))
                     CommandArgs &= " /checkintegrity"
                 Else
-                    LogView.AppendText(CrLf & ProgressLogText("Check.Image.Integrity.No"))
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Check.Image.Integrity.No")))
                 End If
                 If SaveToNewIndex Then
-                    LogView.AppendText(CrLf & ProgressLogText("Append.Changes.To.New.Index.Yes"))
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Append.Changes.To.New.Index.Yes")))
                     CommandArgs &= " /append"
                 Else
-                    LogView.AppendText(CrLf & ProgressLogText("Append.Changes.To.New.Index.No"))
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Append.Changes.To.New.Index.No")))
                 End If
             End If
             RunProcess(DismProgram, CommandArgs)
         Catch ex As Exception
             ' Let's try this before setting things up here
         End Try
-        currentTask.Text = LocalizationService.ForSection("Progress.UnmountImage")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.UnmountImage")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -1989,12 +1990,12 @@ Public Class ProgressPanel
 #Region "Package/Feature Management Tasks"
 
     Private Sub ShowPackageInformation(pkgInfo As DismPackageInfo)
-        LogView.AppendText(CrLf & CrLf &
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
                            ProgressLogText("Package.Name") & pkgInfo.PackageName & CrLf &
                            ProgressLogText("Package.Description") & pkgInfo.Description & CrLf &
                            ProgressLogText("Package.Release.Type") & Casters.CastDismReleaseType(pkgInfo.ReleaseType) & CrLf &
                            ProgressLogText("Package.Is.Applicable.To.This.Image") & If(pkgInfo.Applicable, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
-                           ProgressLogText("Package.Is.Already.Installed") & If(pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf)
+                           ProgressLogText("Package.Is.Already.Installed") & If(pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf))
     End Sub
 
     Private Sub CountPackagesToAdd()
@@ -2010,10 +2011,10 @@ Public Class ProgressPanel
                     pkgCount += 1
                 Next
                 DynaLog.LogMessage("Package count: " & pkgCount)
-                LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages") & pkgCount)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages") & pkgCount))
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get packages in all subdirectories. Error message: " & ex.Message)
-                LogView.AppendText(CrLf & ProgressLogText("Exception") & ex.GetType().ToString() & ProgressLogText("Has.Occurred.While.Enumerating.Packages.Enumerating.Packages.In"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Exception") & ex.GetType().ToString() & ProgressLogText("Has.Occurred.While.Enumerating.Packages.Enumerating.Packages.In")))
                 DynaLog.LogMessage("Getting CAB files...")
                 For Each CabPkg In My.Computer.FileSystem.GetFiles(pkgSource, FileIO.SearchOption.SearchTopLevelOnly, "*.cab")
                     pkgCount += 1
@@ -2023,14 +2024,14 @@ Public Class ProgressPanel
                     pkgCount += 1
                 Next
                 DynaLog.LogMessage("Package count: " & pkgCount)
-                LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages") & pkgCount)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages") & pkgCount))
             End Try
         ElseIf pkgAdditionOp = 1 Then
             DynaLog.LogMessage("Addition operation is selective addition. A package count has already been obtained from the queue.")
-            LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages") & pkgCount)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages") & pkgCount))
         ElseIf pkgAdditionOp = 2 Then
             DynaLog.LogMessage("Addition operation is Update Manifest addition. Only 1 package will be added.")
-            LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages.1"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages.1")))
         End If
     End Sub
 
@@ -2043,10 +2044,10 @@ Public Class ProgressPanel
             CommandArgs &= " /preventpending"
         End If
         RunProcess(DismProgram, CommandArgs)
-        currentTask.Text = LocalizationService.ForSection("Progress.Packages.AddRecursive")("Gathering.Error.Level.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.Packages.AddRecursive")("Gathering.Error.Level.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
-        LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
     End Sub
 
     Private Sub AddPackages(targetImage As String)
@@ -2058,42 +2059,42 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Save changes to the Windows image after finishing? " & If(pkgAdditionCommit, "Yes", "No"))
         ' Reset internal integers
         pkgCurrentNum = 0
-        allTasks.Text = LocalizationService.ForSection("Progress.AddPackages")("AddingPackages.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.AddPackages")("Preparing.Packages.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Adding.Packages.To.Mounted.Image") & CrLf &
-                           ProgressLogText("Package.Source") & pkgSource & CrLf)
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.AddPackages")("AddingPackages.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.AddPackages")("Preparing.Packages.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Adding.Packages.To.Mounted.Image") & CrLf &
+                           ProgressLogText("Package.Source") & pkgSource & CrLf))
         If pkgAdditionOp = 0 Then
-            LogView.AppendText(ProgressLogText("Addition.Operation.Recursive"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Addition.Operation.Recursive")))
         ElseIf pkgAdditionOp = 1 Then
-            LogView.AppendText(ProgressLogText("Addition.Operation.Selective"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Addition.Operation.Selective")))
         End If
         If pkgIgnoreApplicabilityChecks Then
-            LogView.AppendText(CrLf & ProgressLogText("Ignore.Applicability.Checks.Yes"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Ignore.Applicability.Checks.Yes")))
         Else
-            LogView.AppendText(CrLf & ProgressLogText("Ignore.Applicability.Checks.No"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Ignore.Applicability.Checks.No")))
         End If
         If pkgPreventIfPendingOnline Then
-            LogView.AppendText(CrLf & ProgressLogText("Prevent.Package.Addition.If.Online.Actions.Need.To") & CrLf &
-                               ProgressLogText("NOTE.If.The.Mounted.Image.Requires.That.Online"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Prevent.Package.Addition.If.Online.Actions.Need.To") & CrLf &
+                               ProgressLogText("NOTE.If.The.Mounted.Image.Requires.That.Online")))
         Else
-            LogView.AppendText(CrLf & ProgressLogText("Prevent.Package.Addition.If.Online.Actions.Need.To.2"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Prevent.Package.Addition.If.Online.Actions.Need.To.2")))
         End If
         If pkgAdditionCommit Then
-            LogView.AppendText(CrLf & ProgressLogText("Commit.Image.After.Operations.Are.Done.Yes"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Commit.Image.After.Operations.Are.Done.Yes")))
         Else
-            LogView.AppendText(CrLf & ProgressLogText("Commit.Image.After.Operations.Are.Done.No"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Commit.Image.After.Operations.Are.Done.No")))
         End If
 
         ' Perform package enumeration
-        LogView.AppendText(CrLf & ProgressLogText("Enumerating.Packages.To.Add.Please.Wait"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Enumerating.Packages.To.Add.Please.Wait")))
         CountPackagesToAdd()
         Thread.Sleep(2000)      ' Sleep to prevent thrashing
 
         ' Begin package addition
-        currentTask.Text = LocalizationService.ForSection("Progress.AddPackages").Format("AddingPackages.Item", pkgCount)
-        CurrentPB.Style = ProgressBarStyle.Blocks
-        LogView.AppendText(CrLf & CrLf &
-                           ProgressLogText("Processing") & pkgCount & ProgressLogText("Packages") & CrLf)
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.AddPackages").Format("AddingPackages.Item", pkgCount))
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Style = ProgressBarStyle.Blocks)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
+                           ProgressLogText("Processing") & pkgCount & ProgressLogText("Packages") & CrLf))
         If pkgAdditionOp = 0 Then
             DynaLog.LogMessage("Addition operation is recursive addition. DISM will scan the package source for packages to add.")
             AddPackagesRecursively(targetImage)
@@ -2106,12 +2107,12 @@ Public Class ProgressPanel
         Thread.Sleep(2000)
         If pkgAdditionCommit Then
             DynaLog.LogMessage("Preparing to save changes...")
-            AllPB.Value = AllPB.Maximum / taskCount
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = AllPB.Maximum / taskCount)
             currentTCont += 1
-            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
+            UiThread.RunOnUi(Me, Sub() taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount))
             RunOps(8)
         Else
-            AllPB.Value = 100
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = 100)
         End If
         If pkgAdditionOp = 0 Then
             GetErrorCode(False)
@@ -2122,19 +2123,20 @@ Public Class ProgressPanel
         End If
         If PackageErrorCodes.Contains("BC2") Then
             DynaLog.LogMessage("A system restart is needed to fully apply some packages.")
-            LogView.AppendText(CrLf & ProgressLogText("Some.Packages.Require.A.System.Restart.To.Be"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Some.Packages.Require.A.System.Restart.To.Be")))
         End If
     End Sub
 
     Private Sub AddPackagesSelectively(targetImage As String)
-        CurrentPB.Maximum = pkgCount
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Maximum = pkgCount)
         For x = 0 To Array.LastIndexOf(pkgs, pkgLastCheckedPackageName)
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            currentTask.Text = LocalizationService.ForSection("Progress.AddPackages").Format("AddingPackage.Item", x + 1, pkgCount)
-            CurrentPB.Value = x + 1
-            LogView.AppendText(CrLf &
-                               ProgressLogText("Package") & (x + 1) & ProgressLogText("Of.Word") & pkgCount)        ' You don't want to see "Package 0 of 407", right?
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.AddPackages").Format("AddingPackage.Item", index + 1, pkgCount))
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = index + 1)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               ProgressLogText("Package") & (index + 1) & ProgressLogText("Of.Word") & pkgCount)) ' You don't want to see "Package 0 of 407", right?
 
             ' Get package information with the DISM API
             DynaLog.LogMessage("Getting information about package file " & Quote & Path.GetFileName(pkgs(x)) & Quote & "...")
@@ -2156,14 +2158,14 @@ Public Class ProgressPanel
                             DynaLog.LogMessage("The package can be added to the Windows image. Determining installation state of package...")
                             If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
                                 DynaLog.LogMessage("The package has already been added at some point.")
-                                LogView.AppendText(CrLf & ProgressLogText("Package.Is.Already.Added.Skipping.Installation.Of.This"))
+                                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Package.Is.Already.Added.Skipping.Installation.Of.This")))
                                 pkgFailedAdditions += 1
                             End If
                         Else
                             DynaLog.LogMessage("The package cannot be added to the Windows image as it is not applicable.")
                             If Not pkgIgnoreApplicabilityChecks Then
                                 DynaLog.LogMessage("Applicability checks are not ignored.")
-                                LogView.AppendText(CrLf & ProgressLogText("Package.Is.Not.Applicable.To.This.Image.Skipping"))
+                                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Package.Is.Not.Applicable.To.This.Image.Skipping")))
                                 If PackageErrorCodes.Count <= 0 Then
                                     PackageErrorCodes.Add("0x800F8023")
                                 Else
@@ -2174,7 +2176,7 @@ Public Class ProgressPanel
                         End If
                     End Using
                 Else
-                    LogView.AppendText(CrLf & ProgressLogText("The.Package.About.To.Be.Added.Is.A"))
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("The.Package.About.To.Be.Added.Is.A")))
                     ' Force these values to continue package addition
                     pkgIsApplicable = True
                     pkgIsInstalled = False
@@ -2182,7 +2184,7 @@ Public Class ProgressPanel
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error message: " & ex.Message)
                 DynaLog.LogMessage("Logging immediate failure...")
-                LogView.AppendText(CrLf & ex.Message)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ex.Message))
                 If PackageErrorCodes.Count <= 0 Then
                     PackageErrorCodes.Add(If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
                 Else
@@ -2200,7 +2202,7 @@ Public Class ProgressPanel
             End Try
             If Not pkgIsApplicable Or pkgIsInstalled Then Continue For
             DynaLog.LogMessage("The package is applicable and has not been installed yet. Adding it...")
-            LogView.AppendText(CrLf & ProgressLogText("Processing.Package"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Processing.Package")))
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-package /packagepath=" & Quote & pkgs(x) & Quote
             If pkgIgnoreApplicabilityChecks Then
                 CommandArgs &= " /ignorecheck"
@@ -2209,30 +2211,31 @@ Public Class ProgressPanel
                 CommandArgs &= " /preventpending"
             End If
             RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
             GetPkgErrorLevel()
-            LogView.AppendText(ProgressLogText("Error.Level.3") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.3") & errCode))
             If PackageErrorCodes.Count <= 0 Then
                 PackageErrorCodes.Add(errCode)
             Else
                 PackageErrorCodes.Add(errCode)
             End If
         Next
-        CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Packages") & CrLf)
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Packages") & CrLf))
         For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & ProgressLogText("Package.No") & (x + 1) & ": " & PackageErrorCodes(x))
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Package.No") & (index + 1) & ": " & PackageErrorCodes(index)))
         Next
     End Sub
 
     Private Sub AddUpdateManifest(targetImage As String)
         DynaLog.LogMessage("Addition operation is Update Manifest addition.")
-        CurrentPB.Maximum = pkgCount
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Maximum = pkgCount)
         CommandArgs = BckArgs
-        currentTask.Text = LocalizationService.ForSection("Progress.AddPackages").Format("AddingPackage.Item", 1, pkgCount)
-        CurrentPB.Value = 1
-        LogView.AppendText(CrLf & ProgressLogText("The.Package.About.To.Be.Added.Is.A.2"))
-        LogView.AppendText(CrLf & ProgressLogText("Processing.Package"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.AddPackages").Format("AddingPackage.Item", 1, pkgCount))
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = 1)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("The.Package.About.To.Be.Added.Is.A.2")))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Processing.Package")))
         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-package /packagepath=" & Quote & pkgs(0) & Quote
         If pkgIgnoreApplicabilityChecks Then
             CommandArgs &= " /ignorecheck"
@@ -2241,18 +2244,19 @@ Public Class ProgressPanel
             CommandArgs &= " /preventpending"
         End If
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
         GetPkgErrorLevel()
-        LogView.AppendText(ProgressLogText("Error.Level.3") & errCode)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.3") & errCode))
         If PackageErrorCodes.Count <= 0 Then
             PackageErrorCodes.Add(errCode)
         Else
             PackageErrorCodes.Add(errCode)
         End If
-        CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Packages") & CrLf)
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Packages") & CrLf))
         For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & ProgressLogText("Package.No") & (x + 1) & ": " & PackageErrorCodes(x))
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Package.No") & (index + 1) & ": " & PackageErrorCodes(index)))
         Next
     End Sub
 
@@ -2260,16 +2264,16 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Preparing to remove packages...")
         DynaLog.LogMessage("- Package removal operation: " & pkgRemovalOp)
         DynaLog.LogMessage("- Amount of packages to remove: " & pkgRemovalCount)
-        allTasks.Text = LocalizationService.ForSection("Progress.RemovePackages")("RemovingPackages.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.RemovePackages")("PrepareRemove.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Removing.Packages.From.Mounted.Image") & CrLf &
-                           ProgressLogText("Enumerating.Packages.To.Remove.Please.Wait"))
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.RemovePackages")("RemovingPackages.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemovePackages")("PrepareRemove.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Removing.Packages.From.Mounted.Image") & CrLf &
+                           ProgressLogText("Enumerating.Packages.To.Remove.Please.Wait")))
         Thread.Sleep(1000)
-        LogView.AppendText(CrLf & ProgressLogText("Amount.Of.Packages.To.Remove") & pkgRemovalCount)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Amount.Of.Packages.To.Remove") & pkgRemovalCount))
 
         ' Begin package removal
-        currentTask.Text = LocalizationService.ForSection("Progress.RemovePackages")("RemovingPackages.Item")
-        CurrentPB.Maximum = pkgRemovalCount
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemovePackages")("RemovingPackages.Item"))
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Maximum = pkgRemovalCount)
         If pkgRemovalOp = 0 Then
             DynaLog.LogMessage("Packages that are installed will be removed from the Windows image.")
             RemoveInstalledPackages(targetImage)
@@ -2279,13 +2283,14 @@ Public Class ProgressPanel
             RemovePackageFiles(targetImage)
         End If
         Directory.Delete(Application.StartupPath & "\tempinfo", True)
-        CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Packages") & CrLf)
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Packages") & CrLf))
         For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & ProgressLogText("Package.No") & (x + 1) & ": " & PackageErrorCodes(x))
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Package.No") & (index + 1) & ": " & PackageErrorCodes(index)))
         Next
         Thread.Sleep(2000)
-        AllPB.Value = 100
+        UiThread.RunOnUi(Me, Sub() AllPB.Value = 100)
         If pkgSuccessfulRemovals > 0 Then
             GetErrorCode(True)
         ElseIf pkgSuccessfulRemovals <= 0 Then
@@ -2293,18 +2298,19 @@ Public Class ProgressPanel
         End If
         If PackageErrorCodes.Contains("BC2") Then
             DynaLog.LogMessage("A system restart is needed to fully remove some packages.")
-            LogView.AppendText(CrLf & ProgressLogText("Some.Packages.Require.A.System.Restart.To.Be"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Some.Packages.Require.A.System.Restart.To.Be")))
         End If
     End Sub
 
     Private Sub RemovePackageFiles(targetImage As String)
         For x = 0 To Array.LastIndexOf(pkgRemovalFiles, pkgRemovalLastFile)
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            currentTask.Text = LocalizationService.ForSection("Progress.RemovePackages").Format("RemovingPackage.Item", x + 1, pkgRemovalCount)
-            LogView.AppendText(CrLf &
-                               ProgressLogText("Package") & (x + 1) & ProgressLogText("Of.Word") & pkgRemovalCount)
-            CurrentPB.Value = x + 1
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemovePackages").Format("RemovingPackage.Item", index + 1, pkgRemovalCount))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               ProgressLogText("Package") & (index + 1) & ProgressLogText("Of.Word") & pkgRemovalCount))
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = index + 1)
             Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
             DynaLog.LogMessage("Getting information about package file " & Quote & Path.GetFileName(pkgRemovalFiles(x)) & Quote & "...")
             Dim pkgIsRemovable As Boolean
@@ -2315,14 +2321,14 @@ Public Class ProgressPanel
                 Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                     DynaLog.LogMessage("Getting package information...")
                     Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByPath(imgSession, pkgRemovalFiles(x))
-                    LogView.AppendText(CrLf & CrLf &
-                                       ProgressLogText("Package.Name") & pkgInfo.PackageName & CrLf)
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
+                                       ProgressLogText("Package.Name") & pkgInfo.PackageName & CrLf))
                     If pkgInfo.PackageState = DismPackageFeatureState.Installed Then
-                        LogView.AppendText(ProgressLogText("Package.State.Installed") & CrLf)
+                        UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Package.State.Installed") & CrLf))
                     ElseIf pkgInfo.PackageState = DismPackageFeatureState.UninstallPending Then
-                        LogView.AppendText(ProgressLogText("Package.State.An.Uninstall.Is.Pending") & CrLf)
+                        UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Package.State.An.Uninstall.Is.Pending") & CrLf))
                     ElseIf pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
-                        LogView.AppendText(ProgressLogText("Package.State.An.Install.Is.Pending") & CrLf)
+                        UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Package.State.An.Install.Is.Pending") & CrLf))
                     End If
                     If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
                         DynaLog.LogMessage("This package is either installed or about to be installed, and can be removed.")
@@ -2336,7 +2342,7 @@ Public Class ProgressPanel
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error message: " & ex.Message)
                 DynaLog.LogMessage("Logging immediate failure...")
-                LogView.AppendText(CrLf & ex.Message)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ex.Message))
                 If PackageErrorCodes.Count <= 0 Then
                     PackageErrorCodes.Add(If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
                 Else
@@ -2355,10 +2361,10 @@ Public Class ProgressPanel
             If Not pkgIsRemovable Then Continue For
             If pkgIsReadyForRemoval Then
                 DynaLog.LogMessage("The package can be removed.")
-                LogView.AppendText(CrLf & ProgressLogText("Processing.Package.Removal"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Processing.Package.Removal")))
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-package /packagepath=" & pkgRemovalFiles(x)
                 RunProcess(DismProgram, CommandArgs)
-                LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
                 errCode = Hex(Decimal.ToInt32(DismExitCode))
                 If DismExitCode = 0 Then
                     pkgSuccessfulRemovals += 1
@@ -2366,9 +2372,9 @@ Public Class ProgressPanel
                     pkgFailedRemovals += 1
                 End If
                 If errCode.Length >= 8 Then
-                    LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x.2") & errCode)
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x.2") & errCode))
                 Else
-                    LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.2") & errCode)
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.2") & errCode))
                 End If
                 If PackageErrorCodes.Count <= 0 Then
                     If errCode.Length >= 8 Then
@@ -2385,7 +2391,7 @@ Public Class ProgressPanel
                 End If
             Else
                 DynaLog.LogMessage("The package cannot be removed.")
-                LogView.AppendText(CrLf & ProgressLogText("This.Package.Can.T.Be.Removed.Skipping.Removal"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("This.Package.Can.T.Be.Removed.Skipping.Removal")))
                 pkgFailedRemovals += 1
                 Continue For
             End If
@@ -2394,12 +2400,13 @@ Public Class ProgressPanel
 
     Private Sub RemoveInstalledPackages(targetImage As String)
         For x = 0 To Array.LastIndexOf(pkgRemovalNames, pkgRemovalLastName)
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            currentTask.Text = LocalizationService.ForSection("Progress.RemovePackages").Format("RemovingPackage.Item", x + 1, pkgRemovalCount)
-            LogView.AppendText(CrLf &
-                               ProgressLogText("Package") & (x + 1) & ProgressLogText("Of.Word") & pkgRemovalCount)
-            CurrentPB.Value = x + 1
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemovePackages").Format("RemovingPackage.Item", index + 1, pkgRemovalCount))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               ProgressLogText("Package") & (index + 1) & ProgressLogText("Of.Word") & pkgRemovalCount))
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = index + 1)
             Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
 
             DynaLog.LogMessage("Getting information about package file " & Quote & pkgRemovalNames(x) & Quote & "...")
@@ -2411,9 +2418,9 @@ Public Class ProgressPanel
                 Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                     DynaLog.LogMessage("Getting package information...")
                     Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByName(imgSession, pkgRemovalNames(x))
-                    LogView.AppendText(CrLf & CrLf &
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
                                        ProgressLogText("Package.Name") & pkgInfo.PackageName & CrLf &
-                                       ProgressLogText("Package.State") & Casters.CastDismPackageState(pkgInfo.PackageState))
+                                       ProgressLogText("Package.State") & Casters.CastDismPackageState(pkgInfo.PackageState)))
                     If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
                         DynaLog.LogMessage("This package is either installed or about to be installed, and can be removed.")
                         pkgIsReadyForRemoval = True
@@ -2426,7 +2433,7 @@ Public Class ProgressPanel
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error message: " & ex.Message)
                 DynaLog.LogMessage("Logging immediate failure...")
-                LogView.AppendText(CrLf & ex.Message)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ex.Message))
                 If PackageErrorCodes.Count <= 0 Then
                     PackageErrorCodes.Add(If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
                 Else
@@ -2445,10 +2452,10 @@ Public Class ProgressPanel
             If Not pkgIsRemovable Then Continue For
             If pkgIsReadyForRemoval Then
                 DynaLog.LogMessage("The package can be removed.")
-                LogView.AppendText(CrLf & ProgressLogText("Processing.Package.Removal"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Processing.Package.Removal")))
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-package /packagename=" & pkgRemovalNames(x)
                 RunProcess(DismProgram, CommandArgs)
-                LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
                 errCode = Hex(Decimal.ToInt32(DismExitCode))
                 If DismExitCode = 0 Then
                     pkgSuccessfulRemovals += 1
@@ -2456,9 +2463,9 @@ Public Class ProgressPanel
                     pkgFailedRemovals += 1
                 End If
                 If errCode.Length >= 8 Then
-                    LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x.2") & errCode)
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x.2") & errCode))
                 Else
-                    LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.2") & errCode)
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.2") & errCode))
                 End If
                 If PackageErrorCodes.Count <= 0 Then
                     If errCode.Length >= 8 Then
@@ -2475,7 +2482,7 @@ Public Class ProgressPanel
                 End If
             Else
                 DynaLog.LogMessage("The package cannot be removed.")
-                LogView.AppendText(CrLf & ProgressLogText("This.Package.Can.T.Be.Removed.Skipping.Removal"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("This.Package.Can.T.Be.Removed.Skipping.Removal")))
                 pkgFailedRemovals += 1
                 Continue For
             End If
@@ -2491,66 +2498,67 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Will all parent features be enabled? " & If(featParentIsEnabled, "Yes", "No"))
         DynaLog.LogMessage("- Contact Windows Update for feature enablement (only for active installations)? " & If(featContactWindowsUpdate, "Yes", "No"))
         DynaLog.LogMessage("- Save changes to the Windows image after finishing? " & If(featEnablementCommit, "Yes", "No"))
-        allTasks.Text = LocalizationService.ForSection("Progress.EnableFeatures")("EnablingFeatures.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.EnableFeatures")("PrepareEnable.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Enabling.Features") & CrLf &
-                           ProgressLogText("Options") & CrLf)
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.EnableFeatures")("EnablingFeatures.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.EnableFeatures")("PrepareEnable.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Enabling.Features") & CrLf &
+                           ProgressLogText("Options") & CrLf))
         If featisParentPkgNameUsed Then
-            LogView.AppendText(ProgressLogText("Use.Parent.Package.To.Enable.Features.Yes"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.Parent.Package.To.Enable.Features.Yes")))
         Else
-            LogView.AppendText(ProgressLogText("Use.Parent.Package.To.Enable.Features.No"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.Parent.Package.To.Enable.Features.No")))
         End If
         If featParentPkgName = "" Then
-            LogView.AppendText(CrLf & ProgressLogText("Parent.Package.Name.Not.Specified"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Parent.Package.Name.Not.Specified")))
         Else
-            LogView.AppendText(CrLf & ProgressLogText("Parent.Package.Name") & Quote & featParentPkgName & Quote)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Parent.Package.Name") & Quote & featParentPkgName & Quote))
         End If
         If featisSourceSpecified Then
-            LogView.AppendText(CrLf & ProgressLogText("Use.Feature.Source.Yes"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Use.Feature.Source.Yes")))
         Else
-            LogView.AppendText(CrLf & ProgressLogText("Use.Feature.Source.No"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Use.Feature.Source.No")))
         End If
         If featSource = "" Then
-            LogView.AppendText(CrLf & ProgressLogText("Feature.Source.Not.Specified"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Feature.Source.Not.Specified")))
         Else
-            LogView.AppendText(CrLf & ProgressLogText("Feature.Source") & Quote & featSource & Quote)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Feature.Source") & Quote & featSource & Quote))
         End If
         If featParentIsEnabled Then
-            LogView.AppendText(CrLf & ProgressLogText("Enable.All.Parent.Features.Yes"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Enable.All.Parent.Features.Yes")))
         Else
-            LogView.AppendText(CrLf & ProgressLogText("Enable.All.Parent.Features.No"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Enable.All.Parent.Features.No")))
         End If
         DynaLog.LogMessage("Boot mode of the host system: " & SystemInformation.BootMode)
         If featContactWindowsUpdate And OnlineMgmt And SystemInformation.BootMode <> BootMode.FailSafe Then
             DynaLog.LogMessage("Host system is booted to normal mode or Safe Mode with networking.")
-            LogView.AppendText(CrLf & ProgressLogText("Contact.Windows.Update.Yes"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Contact.Windows.Update.Yes")))
         ElseIf featContactWindowsUpdate And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe Then
             DynaLog.LogMessage("Host system is booted to Safe Mode.")
-            LogView.AppendText(CrLf & ProgressLogText("Contact.Windows.Update.No.The.System.Is.In"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Contact.Windows.Update.No.The.System.Is.In")))
         ElseIf featContactWindowsUpdate And Not OnlineMgmt Then
             DynaLog.LogMessage("The active installation is not being managed.")
-            LogView.AppendText(CrLf & ProgressLogText("Contact.Windows.Update.No.This.Is.Not.An"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Contact.Windows.Update.No.This.Is.Not.An")))
         Else
-            LogView.AppendText(CrLf & ProgressLogText("Contact.Windows.Update.No"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Contact.Windows.Update.No")))
         End If
         If featEnablementCommit Then
-            LogView.AppendText(CrLf & ProgressLogText("Commit.Image.After.Enabling.Features.Yes"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Commit.Image.After.Enabling.Features.Yes")))
         Else
-            LogView.AppendText(CrLf & ProgressLogText("Commit.Image.After.Enabling.Features.No"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Commit.Image.After.Enabling.Features.No")))
         End If
-        LogView.AppendText(CrLf & CrLf & ProgressLogText("Enumerating.Features.To.Enable"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Enumerating.Features.To.Enable")))
         Thread.Sleep(500)
-        LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Features.To.Enable") & featEnablementCount)
-        currentTask.Text = LocalizationService.ForSection("Progress.EnableFeatures")("EnablingFeatures.Item")
-        CurrentPB.Maximum = featEnablementCount
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Features.To.Enable") & featEnablementCount))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.EnableFeatures")("EnablingFeatures.Item"))
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Maximum = featEnablementCount)
         For x = 0 To Array.LastIndexOf(featEnablementNames, featEnablementLastName)
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            currentTask.Text = LocalizationService.ForSection("Progress.EnableFeatures").Format("EnablingFeature.Item", x + 1, featEnablementCount)
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.EnableFeatures").Format("EnablingFeature.Item", index + 1, featEnablementCount))
             Dim featureName As String = featEnablementNames(x).Replace("ListViewItem: ", "").Replace("{", "").Replace("}", "").Trim()
-            LogView.AppendText(CrLf &
-                               ProgressLogText("Feature") & (x + 1) & ProgressLogText("Of.Word") & featEnablementCount)
-            CurrentPB.Value = x + 1
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               ProgressLogText("Feature") & (index + 1) & ProgressLogText("Of.Word") & featEnablementCount))
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = index + 1)
             DynaLog.LogMessage("Getting information about feature " & Quote & featureName & Quote & "...")
             Try
                 DynaLog.LogMessage("Initializing API...")
@@ -2559,9 +2567,9 @@ Public Class ProgressPanel
                 Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                     DynaLog.LogMessage("Getting feature information...")
                     Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featureName)
-                    LogView.AppendText(CrLf & CrLf &
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
                                        ProgressLogText("Feature.Name") & featInfo.FeatureName & CrLf &
-                                       ProgressLogText("Feature.Description") & featInfo.Description & CrLf)
+                                       ProgressLogText("Feature.Description") & featInfo.Description & CrLf))
                 End Using
             Finally
                 Try
@@ -2576,7 +2584,7 @@ Public Class ProgressPanel
             If featisSourceSpecified And featSource <> "" Then
                 ' We may only require /Source if the feature is removed and if we do it like that
                 If featEnablementOnlyUseSourceWhenNeeded AndAlso Not featEnablementRequiredSources.Any(Function(feature) feature.Equals(featureName, StringComparison.OrdinalIgnoreCase)) Then
-                    LogView.AppendText(CrLf & "This feature does not need a source to be enabled. Continuing without the source..." & CrLf)
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & "This feature does not need a source to be enabled. Continuing without the source..." & CrLf))
                 Else
                     ' Like image captures, feature enablements will fail if the source is in the root
                     ' of a volume and is quoted.
@@ -2588,12 +2596,12 @@ Public Class ProgressPanel
             If featParentIsEnabled Then CommandArgs &= " /all"
             If Not featContactWindowsUpdate And OnlineMgmt Then CommandArgs &= " /limitaccess"
             RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
             GetFeatErrorLevel()
             If errCode.Length >= 8 Then
-                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
             Else
-                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
             End If
             If FeatureErrorCodes.Count <= 0 Then
                 If errCode.Length >= 8 Then
@@ -2609,20 +2617,21 @@ Public Class ProgressPanel
                 End If
             End If
         Next
-        CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Features") & CrLf)
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Features") & CrLf))
         For x = 0 To FeatureErrorCodes.Count - 1
-            LogView.AppendText(CrLf & ProgressLogText("Feature.No") & (x + 1) & ": " & FeatureErrorCodes(x))
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Feature.No") & (index + 1) & ": " & FeatureErrorCodes(index)))
         Next
         Thread.Sleep(2000)
         If featEnablementCommit Then
             DynaLog.LogMessage("Preparing to save changes...")
-            AllPB.Value = AllPB.Maximum / taskCount
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = AllPB.Maximum / taskCount)
             currentTCont += 1
-            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
+            UiThread.RunOnUi(Me, Sub() taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount))
             RunOps(8)
         Else
-            AllPB.Value = 100
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = 100)
         End If
         If featSuccessfulEnablements > 0 Then
             GetErrorCode(True)
@@ -2631,7 +2640,7 @@ Public Class ProgressPanel
         End If
         If FeatureErrorCodes.Contains("BC2") Then
             DynaLog.LogMessage("A system restart is needed to fully apply some features.")
-            LogView.AppendText(CrLf & ProgressLogText("Some.Features.Require.A.System.Restart.To.Be"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Some.Features.Require.A.System.Restart.To.Be")))
         End If
     End Sub
 
@@ -2640,37 +2649,38 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Will a parent package name be used? " & If(featDisablementParentPkgUsed, "Yes", "No"))
         DynaLog.LogMessage("- Parent package name: " & Quote & featDisablementParentPkg & Quote)
         DynaLog.LogMessage("- Remove feature manifest? " & If(featDisablementRemoveManifest, "Yes", "No"))
-        allTasks.Text = LocalizationService.ForSection("Progress.DisableFeatures")("Disabling.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.DisableFeatures")("PrepareDisable.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Disabling.Features") & CrLf &
-                           ProgressLogText("Options") & CrLf)
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.DisableFeatures")("Disabling.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.DisableFeatures")("PrepareDisable.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Disabling.Features") & CrLf &
+                           ProgressLogText("Options") & CrLf))
         If featDisablementParentPkgUsed Then
-            LogView.AppendText(ProgressLogText("Use.Parent.Package.To.Disable.Features.Yes"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.Parent.Package.To.Disable.Features.Yes")))
         Else
-            LogView.AppendText(ProgressLogText("Use.Parent.Package.To.Disable.Features.No"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.Parent.Package.To.Disable.Features.No")))
         End If
         If featDisablementParentPkg = "" Then
-            LogView.AppendText(CrLf & ProgressLogText("Parent.Package.Name.Not.Specified"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Parent.Package.Name.Not.Specified")))
         Else
-            LogView.AppendText(CrLf & ProgressLogText("Parent.Package.Name") & Quote & featDisablementParentPkg & Quote)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Parent.Package.Name") & Quote & featDisablementParentPkg & Quote))
         End If
         If featDisablementRemoveManifest Then
-            LogView.AppendText(CrLf & ProgressLogText("Remove.Feature.Manifest.Yes"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Remove.Feature.Manifest.Yes")))
         Else
-            LogView.AppendText(CrLf & ProgressLogText("Remove.Feature.Manifest.No"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Remove.Feature.Manifest.No")))
         End If
-        LogView.AppendText(CrLf & CrLf & ProgressLogText("Enumerating.Features.To.Disable"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Enumerating.Features.To.Disable")))
         Thread.Sleep(500)
-        LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Features.To.Disable") & featDisablementCount)
-        currentTask.Text = LocalizationService.ForSection("Progress.DisableFeatures")("Disabling.Item")
-        CurrentPB.Maximum = featDisablementCount
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Features.To.Disable") & featDisablementCount))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.DisableFeatures")("Disabling.Item"))
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Maximum = featDisablementCount)
         For x = 0 To Array.LastIndexOf(featDisablementNames, featDisablementLastName)
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            currentTask.Text = LocalizationService.ForSection("Progress.DisableFeatures").Format("DisablingFeature.Item", x + 1, featDisablementCount)
-            LogView.AppendText(CrLf &
-                               ProgressLogText("Feature") & (x + 1) & ProgressLogText("Of.Word") & featDisablementCount)
-            CurrentPB.Value = x + 1
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.DisableFeatures").Format("DisablingFeature.Item", index + 1, featDisablementCount))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               ProgressLogText("Feature") & (index + 1) & ProgressLogText("Of.Word") & featDisablementCount))
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = index + 1)
             DynaLog.LogMessage("Getting information about feature " & Quote & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim() & Quote & "...")
             Try
                 DynaLog.LogMessage("Initializing API...")
@@ -2679,9 +2689,9 @@ Public Class ProgressPanel
                 Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                     DynaLog.LogMessage("Getting feature information...")
                     Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
-                    LogView.AppendText(CrLf & CrLf &
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
                                        ProgressLogText("Feature.Name") & featInfo.FeatureName & CrLf &
-                                       ProgressLogText("Feature.Description") & featInfo.Description & CrLf)
+                                       ProgressLogText("Feature.Description") & featInfo.Description & CrLf))
 
                 End Using
             Finally
@@ -2700,7 +2710,7 @@ Public Class ProgressPanel
                 CommandArgs &= " /remove"
             End If
             RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
             errCode = Hex(Decimal.ToInt32(DismExitCode))
             If DismExitCode = 0 Then
                 featSuccessfulDisablements += 1
@@ -2708,9 +2718,9 @@ Public Class ProgressPanel
                 featFailedDisablements += 1
             End If
             If errCode.Length >= 8 Then
-                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
             Else
-                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
             End If
             If FeatureErrorCodes.Count <= 0 Then
                 If errCode.Length >= 8 Then
@@ -2726,10 +2736,11 @@ Public Class ProgressPanel
                 End If
             End If
         Next
-        CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Features") & CrLf)
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Features") & CrLf))
         For x = 0 To FeatureErrorCodes.Count - 1
-            LogView.AppendText(CrLf & ProgressLogText("Feature.No") & (x + 1) & ": " & FeatureErrorCodes(x))
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Feature.No") & (index + 1) & ": " & FeatureErrorCodes(index)))
         Next
         Thread.Sleep(2000)
         If featSuccessfulDisablements > 0 Then
@@ -2739,59 +2750,59 @@ Public Class ProgressPanel
         End If
         If FeatureErrorCodes.Contains("BC2") Then
             DynaLog.LogMessage("A system restart is needed to fully apply some features.")
-            LogView.AppendText(CrLf & ProgressLogText("Some.Features.Require.A.System.Restart.To.Be"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Some.Features.Require.A.System.Restart.To.Be")))
         End If
     End Sub
 
     Private Sub CleanupImage(targetImage As String)
         DynaLog.LogMessage("Preparing to clean up the image...")
         DynaLog.LogMessage("Cleanup task: " & CleanupTask)
-        allTasks.Text = LocalizationService.ForSection("Progress.CleanupImage")("Cleaning.Up.Image.Button")
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.CleanupImage")("Cleaning.Up.Image.Button"))
         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /cleanup-image"
         Select Case CleanupTask
             Case 0
                 DynaLog.LogMessage("Reverting pending servicing actions to a last known good state...")
-                currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("RevertPending.Button")
-                LogView.AppendText(CrLf &
-                                   ProgressLogText("Reverting.Pending.Servicing.Actions"))
+                UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("RevertPending.Button"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                                   ProgressLogText("Reverting.Pending.Servicing.Actions")))
                 CommandArgs &= " /revertpendingactions"
             Case 1
                 DynaLog.LogMessage("Cleaning up Service Pack backup files...")
                 DynaLog.LogMessage("- Hide Service Packs from Installed Updates list? " & If(CleanupHideSP, "Yes", "No"))
-                currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Cleaning.Up.ServicePack.Item")
-                LogView.AppendText(CrLf &
+                UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Cleaning.Up.ServicePack.Item"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
                                    ProgressLogText("Cleaning.Up.Service.Pack.Backup.Files") & CrLf &
                                    ProgressLogText("Options") & CrLf &
-                                   ProgressLogText("Hide.Service.Packs.From.The.Installed.Updates.List") & If(CleanupHideSP, ProgressLogText("Yes"), ProgressLogText("No")))
+                                   ProgressLogText("Hide.Service.Packs.From.The.Installed.Updates.List") & If(CleanupHideSP, ProgressLogText("Yes"), ProgressLogText("No"))))
                 CommandArgs &= " /spsuperseded" & If(CleanupHideSP, " /hidesp", "")
             Case 2
                 DynaLog.LogMessage("Cleaning up component store...")
                 DynaLog.LogMessage("- Reset superseded component base? " & If(ResetCompBase, "Yes", "No"))
                 DynaLog.LogMessage("- Defer long operations? " & If(DeferCleanupOps, "Yes", "No"))
-                currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Cleaning.Up.Component.Item")
-                LogView.AppendText(CrLf &
+                UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Cleaning.Up.Component.Item"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
                                    ProgressLogText("Cleaning.Up.The.Component.Store") & CrLf &
                                    ProgressLogText("Options") & CrLf &
                                    ProgressLogText("Perform.Superseded.Component.Base.Reset") & If(ResetCompBase, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
-                                   ProgressLogText("Defer.Long.Running.Operations") & If(DeferCleanupOps, ProgressLogText("Yes"), ProgressLogText("No")))
+                                   ProgressLogText("Defer.Long.Running.Operations") & If(DeferCleanupOps, ProgressLogText("Yes"), ProgressLogText("No"))))
                 CommandArgs &= " /startcomponentcleanup" & If(ResetCompBase, " /resetbase", "") & If(ResetCompBase And DeferCleanupOps, " /defer", "")
             Case 3
                 DynaLog.LogMessage("Analyzing component store...")
-                currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Analyzing.Component.Item")
-                LogView.AppendText(CrLf &
-                                   ProgressLogText("Analyzing.The.Component.Store"))
+                UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Analyzing.Component.Item"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                                   ProgressLogText("Analyzing.The.Component.Store")))
                 CommandArgs &= " /analyzecomponentstore"
             Case 4
                 DynaLog.LogMessage("Checking component store health...")
-                currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Checking.Comp.Store.Item")
-                LogView.AppendText(CrLf &
-                                   ProgressLogText("Checking.The.Component.Store.Health"))
+                UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Checking.Comp.Store.Item"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                                   ProgressLogText("Checking.The.Component.Store.Health")))
                 CommandArgs &= " /checkhealth"
             Case 5
                 DynaLog.LogMessage("Scanning component store...")
-                currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Scanning.Component.Item")
-                LogView.AppendText(CrLf &
-                                   ProgressLogText("Scanning.The.Component.Store"))
+                UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Scanning.Component.Item"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                                   ProgressLogText("Scanning.The.Component.Store")))
                 CommandArgs &= " /scanhealth"
             Case 6
                 DynaLog.LogMessage("Repairing component store...")
@@ -2799,13 +2810,13 @@ Public Class ProgressPanel
                 DynaLog.LogMessage("- Limit Windows Update access (only for active installations)? " & If(LimitWUAccess, "Yes", "No"))
                 DynaLog.LogMessage("Boot mode of host system: " & SystemInformation.BootMode)
                 ' The most known thing about DISM : dism /online /cleanup-image /restorehealth
-                currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Repairing.Component.Item")
-                LogView.AppendText(CrLf &
+                UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Repairing.Component.Item"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
                                    ProgressLogText("Repairing.The.Component.Store") & CrLf &
                                    ProgressLogText("Options") & CrLf &
                                    ProgressLogText("Use.Different.Source") & If(UseCompRepairSource, ProgressLogText("Yes.2") & Quote & ComponentRepairSource & Quote & ")", ProgressLogText("No")) & CrLf &
                                    ProgressLogText("Limit.Windows.Update.Access") & If(LimitWUAccess And OnlineMgmt, ProgressLogText("Yes"), If(LimitWUAccess And Not OnlineMgmt, ProgressLogText("No.This.Is.Not.An.Online.Installation"), ProgressLogText("No"))) &
-                                   If(Not LimitWUAccess And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe, ProgressLogText("The.System.Is.In.Safe.Mode"), ""))
+                                   If(Not LimitWUAccess And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe, ProgressLogText("The.System.Is.In.Safe.Mode"), "")))
                 ' Like image captures, cleanup/comp store restore will fail if the source is in the root
                 ' of a volume and is quoted.
                 Dim SourceIsRooted As Boolean = False
@@ -2817,13 +2828,13 @@ Public Class ProgressPanel
                 CommandArgs &= " /restorehealth" & If(UseCompRepairSource And Directory.Exists(ComponentRepairSource), " /source=" & SourcePath, "") & If(LimitWUAccess And OnlineMgmt, " /limitaccess", "")
         End Select
         RunProcess(DismProgram, CommandArgs)
-        currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.CleanupImage")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -2836,34 +2847,34 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Provisioning package: " & Quote & ppkgAdditionPackagePath & Quote)
         DynaLog.LogMessage("- Catalog path: " & Quote & ppkgAdditionCatalogPath & Quote)
         DynaLog.LogMessage("- Commit image after finishing? " & If(ppkgAdditionCommit, "Yes", "No"))
-        allTasks.Text = LocalizationService.ForSection("Progress.ProvPackage.Add")("AddingPackage.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.ProvPackage.Add")("Image.Button")
-        LogView.AppendText(ProgressLogText("Adding.Provisioning.Package.To.The.Image") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.ProvPackage.Add")("AddingPackage.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ProvPackage.Add")("Image.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Adding.Provisioning.Package.To.The.Image") & CrLf &
                            ProgressLogText("Options") & CrLf & CrLf &
                            ProgressLogText("Provisioning.Package") & Quote & ppkgAdditionPackagePath & Quote & CrLf &
                            ProgressLogText("Catalog.File") & If(ppkgAdditionCatalogPath = "", ProgressLogText("None.Specified.2"), Quote & ppkgAdditionCatalogPath & Quote) & CrLf &
-                           ProgressLogText("Commit.Image.After.Adding.Provisioning.Package") & If(ppkgAdditionCommit, ProgressLogText("Yes"), ProgressLogText("No")))
+                           ProgressLogText("Commit.Image.After.Adding.Provisioning.Package") & If(ppkgAdditionCommit, ProgressLogText("Yes"), ProgressLogText("No"))))
         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-provisioningpackage /packagepath=" & Quote & ppkgAdditionPackagePath & Quote & If(ppkgAdditionCatalogPath <> "" And File.Exists(ppkgAdditionCatalogPath), " /catalogpath=" & Quote & ppkgAdditionCatalogPath & Quote, "")
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
         Else
-            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
         End If
         If ppkgAdditionCommit Then
             DynaLog.LogMessage("Preparing to save changes...")
-            AllPB.Value = AllPB.Maximum / taskCount
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = AllPB.Maximum / taskCount)
             currentTCont += 1
-            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
+            UiThread.RunOnUi(Me, Sub() taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount))
             RunOps(8)
         Else
-            AllPB.Value = 100
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = 100)
         End If
         GetErrorCode(False)
     End Sub
@@ -2874,68 +2885,69 @@ Public Class ProgressPanel
 
     Private Sub AddProvisionedAppxPackages(targetImage As String)
         DynaLog.LogMessage("Preparing to add provisioned AppX packages...")
-        allTasks.Text = LocalizationService.ForSection("Progress.ProvAppx.Add")("AddingPackages.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Add")("Preparing.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Adding.Provisioned.APPX.Packages") & CrLf &
-                           ProgressLogText("Options") & CrLf)
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.ProvAppx.Add")("AddingPackages.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Add")("Preparing.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Adding.Provisioned.APPX.Packages") & CrLf &
+                           ProgressLogText("Options") & CrLf))
         If appxAdditionUseLicenseFile Then
-            LogView.AppendText(ProgressLogText("Use.A.License.File.For.APPX.Packages.Yes") & CrLf &
-                               ProgressLogText("License.File") & appxAdditionLicenseFile & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.A.License.File.For.APPX.Packages.Yes") & CrLf &
+                               ProgressLogText("License.File") & appxAdditionLicenseFile & CrLf))
         Else
-            LogView.AppendText(ProgressLogText("Use.A.License.File.For.APPX.Packages.No") & CrLf &
-                               ProgressLogText("License.File.Not.Using") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.A.License.File.For.APPX.Packages.No") & CrLf &
+                               ProgressLogText("License.File.Not.Using") & CrLf))
         End If
         If appxAdditionUseCustomDataFile Then
-            LogView.AppendText(ProgressLogText("Use.A.Custom.Data.File.For.APPX.Packages") & CrLf &
-                               ProgressLogText("Custom.Data.File") & appxAdditionCustomDataFile & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.A.Custom.Data.File.For.APPX.Packages") & CrLf &
+                               ProgressLogText("Custom.Data.File") & appxAdditionCustomDataFile & CrLf))
         Else
-            LogView.AppendText(ProgressLogText("Use.A.Custom.Data.File.For.APPX.Packages.2") & CrLf &
-                               ProgressLogText("Custom.Data.File.Not.Using") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.A.Custom.Data.File.For.APPX.Packages.2") & CrLf &
+                               ProgressLogText("Custom.Data.File.Not.Using") & CrLf))
         End If
         If appxAdditionUseAllRegions Then
-            LogView.AppendText(ProgressLogText("Use.All.Regions.For.APPX.Packages.Yes") & CrLf &
-                               ProgressLogText("Package.Regions.All") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.All.Regions.For.APPX.Packages.Yes") & CrLf &
+                               ProgressLogText("Package.Regions.All") & CrLf))
         Else
-            LogView.AppendText(ProgressLogText("Use.All.Regions.For.APPX.Packages.No") & CrLf &
-                               ProgressLogText("Package.Regions") & Quote & appxAdditionRegions & Quote & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Use.All.Regions.For.APPX.Packages.No") & CrLf &
+                               ProgressLogText("Package.Regions") & Quote & appxAdditionRegions & Quote & CrLf))
         End If
         If appxAdditionCommit Then
-            LogView.AppendText(ProgressLogText("Commit.Image.After.Adding.APPX.Packages.Yes"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Commit.Image.After.Adding.APPX.Packages.Yes")))
         Else
-            LogView.AppendText(ProgressLogText("Commit.Image.After.Adding.APPX.Packages.No"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Commit.Image.After.Adding.APPX.Packages.No")))
         End If
-        LogView.AppendText(CrLf & CrLf & ProgressLogText("Enumerating.APPX.Packages.To.Add"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Enumerating.APPX.Packages.To.Add")))
         Thread.Sleep(500)
-        LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages.To.Add") & appxAdditionCount)
-        currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Add")("AddingPackages.Item")
-        CurrentPB.Maximum = appxAdditionCount
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages.To.Add") & appxAdditionCount))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Add")("AddingPackages.Item"))
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Maximum = appxAdditionCount)
         For x = 0 To Array.LastIndexOf(appxAdditionPackages, appxAdditionLastPackage)
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Add").Format("AddingPackage.Item", x + 1, appxAdditionCount)
-            LogView.AppendText(CrLf &
-                               ProgressLogText("Package") & (x + 1) & ProgressLogText("Of.Word") & appxAdditionCount)
-            CurrentPB.Value = x + 1
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Add").Format("AddingPackage.Item", index + 1, appxAdditionCount))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               ProgressLogText("Package") & (index + 1) & ProgressLogText("Of.Word") & appxAdditionCount))
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = index + 1)
             DynaLog.LogMessage("Information about the AppX package:")
             DynaLog.LogMessage(appxAdditionPackageList(x).ToString())
-            LogView.AppendText(CrLf &
-                               ProgressLogText("APPX.Package.File") & appxAdditionPackageList(x).PackageFile & CrLf &
-                               ProgressLogText("Application.Name") & appxAdditionPackageList(x).PackageName & CrLf &
-                               ProgressLogText("Application.Publisher") & appxAdditionPackageList(x).PackagePublisher & CrLf &
-                               ProgressLogText("Application.Version") & appxAdditionPackageList(x).PackageVersion & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               ProgressLogText("APPX.Package.File") & appxAdditionPackageList(index).PackageFile & CrLf &
+                               ProgressLogText("Application.Name") & appxAdditionPackageList(index).PackageName & CrLf &
+                               ProgressLogText("Application.Publisher") & appxAdditionPackageList(index).PackagePublisher & CrLf &
+                               ProgressLogText("Application.Version") & appxAdditionPackageList(index).PackageVersion & CrLf))
             ' Detect if it is an encrypted application
             DynaLog.LogMessage("Extension of AppX package: " & Path.GetExtension(appxAdditionPackageList(x).PackageFile))
             If Path.GetExtension(appxAdditionPackageList(x).PackageFile).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso OnlineMgmt Then
                 DynaLog.LogMessage("The application is encrypted and the active installation is being managed. Adding package using PowerShell...")
                 ' Run PowerShell command. Support will be improved
-                LogView.AppendText(CrLf & ProgressLogText("The.Application.About.To.Be.Added.Is.An") & CrLf)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("The.Application.About.To.Be.Added.Is.An") & CrLf))
                 Dim AppxAuxProc As New Process()
                 AppxAuxProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
                 CommandArgs = "-Command Add-AppxPackage -Path '" & appxAdditionPackageList(x).PackageFile & "'"
                 AppxAuxProc.StartInfo.Arguments = CommandArgs
                 AppxAuxProc.Start()
                 AppxAuxProc.WaitForExit()
-                LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
                 If Hex(AppxAuxProc.ExitCode).Length < 8 Then
                     errCode = AppxAuxProc.ExitCode
                 Else
@@ -2947,9 +2959,9 @@ Public Class ProgressPanel
                     appxFailedAdditions += 1
                 End If
                 If errCode.Length >= 8 Then
-                    LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
                 Else
-                    LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
                 End If
                 If PackageErrorCodes.Count <= 0 Then
                     If errCode.Length >= 8 Then
@@ -2968,7 +2980,7 @@ Public Class ProgressPanel
             ElseIf Path.GetExtension(appxAdditionPackageList(x).PackageFile).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso Not OnlineMgmt Then
                 DynaLog.LogMessage("The application is encrypted but the active installation is not being managed.")
                 ' Continue loop without installing application
-                LogView.AppendText(CrLf & ProgressLogText("The.Application.About.To.Be.Added.Is.An.2") & CrLf)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("The.Application.About.To.Be.Added.Is.An.2") & CrLf))
                 Continue For
             Else
                 DynaLog.LogMessage("The application is not encrypted. Continuing addition...")
@@ -2984,31 +2996,31 @@ Public Class ProgressPanel
                 Else
                     DynaLog.LogMessage("Either no license file has been specified or it does not exist in the file system.")
                     If appxAdditionPackageList(x).PackageLicenseFile <> "" Then
-                        LogView.AppendText(CrLf &
+                        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
                                            ProgressLogText("Warning.The.License.File.Does.Not.Exist.Continuing") & CrLf &
                                            ProgressLogText("Do.Note.That.If.This.App.Requires.A") & CrLf &
-                                           ProgressLogText("Also.This.May.Compromise.The.Image"))
+                                           ProgressLogText("Also.This.May.Compromise.The.Image")))
                     End If
                     CommandArgs &= " /skiplicense"
                 End If
                 ' Inform user that a package will be installed with dependencies
                 DynaLog.LogMessage("Count of dependencies: " & appxAdditionPackageList(x).PackageSpecifiedDependencies.Count)
                 If appxAdditionPackageList(x).PackageSpecifiedDependencies.Count > 0 Then
-                    LogView.AppendText(ProgressLogText("The.Following.Dependency.Packages.Will.Be.Installed.Alongside") & CrLf)
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("The.Following.Dependency.Packages.Will.Be.Installed.Alongside") & CrLf))
                 End If
                 ' Add dependencies
                 For Each Dependency As AppxDependency In appxAdditionPackageList(x).PackageSpecifiedDependencies
                     DynaLog.LogMessage("Verifying if dependency " & Quote & Path.GetFileName(Dependency.DependencyFile) & Quote & " exists...")
                     If File.Exists(Dependency.DependencyFile) Then
                         DynaLog.LogMessage("The dependency exists in the file system.")
-                        LogView.AppendText(ProgressLogText("Dependency") & Quote & Path.GetFileName(Dependency.DependencyFile) & Quote & CrLf)
+                        UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Dependency") & Quote & Path.GetFileName(Dependency.DependencyFile) & Quote & CrLf))
                         CommandArgs &= " /dependencypackagepath=" & Quote & Dependency.DependencyFile & Quote
                     Else
                         DynaLog.LogMessage("The dependency does not exist in the file system.")
-                        LogView.AppendText(CrLf &
+                        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
                                            ProgressLogText("Warning.The.Dependency") & CrLf &
                                            Quote & Dependency.DependencyFile & Quote & CrLf &
-                                           ProgressLogText("Does.Not.Exist.In.The.File.System.Skipping"))
+                                           ProgressLogText("Does.Not.Exist.In.The.File.System.Skipping")))
                         Continue For
                     End If
                 Next
@@ -3017,8 +3029,8 @@ Public Class ProgressPanel
                     CommandArgs &= " /customdatapath=" & Quote & appxAdditionCustomDataFile & Quote
                 ElseIf appxAdditionPackageList(x).PackageCustomDataFile <> "" And Not File.Exists(appxAdditionPackageList(x).PackageCustomDataFile) Then
                     DynaLog.LogMessage("A custom data file has been specified but it does not exist in the file system.")
-                    LogView.AppendText(CrLf &
-                                       ProgressLogText("Warning.The.Custom.Data.File.Does.Not.Exist"))
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                                       ProgressLogText("Warning.The.Custom.Data.File.Does.Not.Exist")))
                 End If
                 If (FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 And FileVersionInfo.GetVersionInfo(DismProgram).ProductBuildPart >= 17134) And
                    (ImgVersion.Major = 10 And ImgVersion.Build >= 17134) Then
@@ -3047,7 +3059,7 @@ Public Class ProgressPanel
                 End If
                 RunProcess(DismProgram, CommandArgs)
             End If
-            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
             If Hex(DismExitCode).Length < 8 Then
                 errCode = DismExitCode
             Else
@@ -3059,9 +3071,9 @@ Public Class ProgressPanel
                 appxFailedAdditions += 1
             End If
             If errCode.Length >= 8 Then
-                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
             Else
-                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
             End If
             If PackageErrorCodes.Count <= 0 Then
                 If errCode.Length >= 8 Then
@@ -3077,20 +3089,21 @@ Public Class ProgressPanel
                 End If
             End If
         Next
-        CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.APPX.Packages") & CrLf)
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.APPX.Packages") & CrLf))
         For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & ProgressLogText("Package.No") & (x + 1) & ": " & PackageErrorCodes(x))
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Package.No") & (index + 1) & ": " & PackageErrorCodes(index)))
         Next
         Thread.Sleep(2000)
         If appxAdditionCommit Then
             DynaLog.LogMessage("Preparing to save changes...")
-            AllPB.Value = AllPB.Maximum / taskCount
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = AllPB.Maximum / taskCount)
             currentTCont += 1
-            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
+            UiThread.RunOnUi(Me, Sub() taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount))
             RunOps(8)
         Else
-            AllPB.Value = 100
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = 100)
         End If
         If appxSuccessfulAdditions > 0 Then
             GetErrorCode(True)
@@ -3105,20 +3118,20 @@ Public Class ProgressPanel
             If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & removalStoreApp, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
                 DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & removalStoreApp & Quote & " = 0. This app is not registered to a user")
                 ' Application is not registered to any user
-                LogView.AppendText(CrLf &
-                                   ProgressLogText("Application.Is.Registered.To.A.User.No"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                                   ProgressLogText("Application.Is.Registered.To.A.User.No")))
             Else
                 DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & removalStoreApp & Quote & " > 0. This app is registered to users")
                 ' Application is registered to a user
-                LogView.AppendText(CrLf &
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
                                    ProgressLogText("Application.Is.Registered.To.A.User.Yes") & CrLf &
-                                   ProgressLogText("The.Removal.Of.This.Application.May.Require.You"))
+                                   ProgressLogText("The.Removal.Of.This.Application.May.Require.You")))
             End If
         Else
             DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & removalStoreApp & Quote & " = 0. This app is not registered to a user")
             ' Application is not registered to any user
-            LogView.AppendText(CrLf &
-                               ProgressLogText("Application.Is.Registered.To.A.User.No"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               ProgressLogText("Application.Is.Registered.To.A.User.No")))
         End If
     End Sub
 
@@ -3126,51 +3139,52 @@ Public Class ProgressPanel
         Dim extAppxHelperPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "online_appx_removal.ps1")
         If File.Exists(extAppxHelperPath) Then
             DynaLog.LogMessage("AppX removal helper exists. Proceeding with the removal of those bastards!")
-            LogView.AppendText(CrLf & ProgressLogText("A.PowerShell.Helper.Will.Be.Used.To.Remove"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("A.PowerShell.Helper.Will.Be.Used.To.Remove")))
             RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
                        String.Format("-executionpolicy Bypass -noprofile -nologo -file {0}{1}{0} -appxFullNames {0}{2}{0}", Quote, extAppxHelperPath,
                                      String.Join(";", PackageNames.Where(Function(PackageName) Not String.IsNullOrEmpty(PackageName)))))
-            LogView.AppendText(CrLf & ProgressLogText("Log.Off.For.The.Deprovisioning.Of.Applications.To"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Log.Off.For.The.Deprovisioning.Of.Applications.To")))
         End If
     End Sub
 
     Private Sub RemoveProvisionedAppxPackages(targetImage As String)
         DynaLog.LogMessage("Preparing to remove AppX packages...")
-        allTasks.Text = LocalizationService.ForSection("Progress.ProvAppx.Remove")("RemovingPackages.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Remove")("Preparing.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Removing.Provisioned.APPX.Packages") & CrLf & CrLf &
-                           ProgressLogText("Enumerating.APPX.Packages.To.Remove"))
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.ProvAppx.Remove")("RemovingPackages.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Remove")("Preparing.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Removing.Provisioned.APPX.Packages") & CrLf & CrLf &
+                           ProgressLogText("Enumerating.APPX.Packages.To.Remove")))
         Thread.Sleep(500)
-        LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages.To.Remove") & appxRemovalCount)
-        currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Remove")("RemovingPackages.Item")
-        CurrentPB.Maximum = appxRemovalCount
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Total.Number.Of.Packages.To.Remove") & appxRemovalCount))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Remove")("RemovingPackages.Item"))
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Maximum = appxRemovalCount)
         If OnlineMgmt Then
             RemoveOnlineAppxPackages(appxRemovalPackages)
-            CurrentPB.Value = CurrentPB.Maximum
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
             Thread.Sleep(2000)
-            AllPB.Value = 100
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = 100)
             GetErrorCode(True)
         Else
             For x = 0 To Array.LastIndexOf(appxRemovalPackages, appxRemovalLastPackage)
+                Dim index As Integer = x    ' Local copy for the UI thread lambdas below
                 If x + 1 > CurrentPB.Maximum Then Exit For
                 CommandArgs = BckArgs
                 Dim removalStoreApp As String = appxRemovalPackages(x)
-                currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Remove").Format("RemovingPackage.Item", x + 1, appxRemovalCount)
-                LogView.AppendText(CrLf &
-                                   ProgressLogText("Package") & (x + 1) & ProgressLogText("Of.Word") & appxRemovalCount)
-                CurrentPB.Value = x + 1
+                UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ProvAppx.Remove").Format("RemovingPackage.Item", index + 1, appxRemovalCount))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                                   ProgressLogText("Package") & (index + 1) & ProgressLogText("Of.Word") & appxRemovalCount))
+                UiThread.RunOnUi(Me, Sub() CurrentPB.Value = index + 1)
                 ' Display package name and DisplayName
-                LogView.AppendText(CrLf &
-                                   ProgressLogText("Package.Name") & appxRemovalPackages(x) & CrLf &
-                                   ProgressLogText("Display.Name") & appxRemovalPkgNames(x))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                                   ProgressLogText("Package.Name") & appxRemovalPackages(index) & CrLf &
+                                   ProgressLogText("Display.Name") & appxRemovalPkgNames(index)))
                 ' Display whether an application is registered to a user
                 CheckAppRegistrationStatus(removalStoreApp)
                 ' Initialize command. Its syntax is simple, so don't spend too much time determining options
-                LogView.AppendText(CrLf & CrLf &
-                                   ProgressLogText("Processing.Package"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
+                                   ProgressLogText("Processing.Package")))
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
                 RunProcess(DismProgram, CommandArgs)
-                LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
                 If Hex(DismExitCode).Length < 8 Then
                     errCode = DismExitCode
                 Else
@@ -3182,9 +3196,9 @@ Public Class ProgressPanel
                     appxFailedRemovals += 1
                 End If
                 If errCode.Length >= 8 Then
-                    LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
                 Else
-                    LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
                 End If
                 If PackageErrorCodes.Count <= 0 Then
                     If errCode.Length >= 8 Then
@@ -3200,13 +3214,14 @@ Public Class ProgressPanel
                     End If
                 End If
             Next
-            CurrentPB.Value = CurrentPB.Maximum
-            LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.APPX.Packages") & CrLf)
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.APPX.Packages") & CrLf))
             For x = 0 To PackageErrorCodes.Count - 1
-                LogView.AppendText(CrLf & ProgressLogText("Package.No") & (x + 1) & ": " & PackageErrorCodes(x))
+                Dim index As Integer = x    ' Local copy for the UI thread lambdas below
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Package.No") & (index + 1) & ": " & PackageErrorCodes(index)))
             Next
             Thread.Sleep(2000)
-            AllPB.Value = 100
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = 100)
             If appxSuccessfulRemovals > 0 Then
                 GetErrorCode(True)
             ElseIf appxSuccessfulRemovals <= 0 Then
@@ -3223,8 +3238,8 @@ Public Class ProgressPanel
     Private Sub SetKeyboardLayeredDriver(targetImage As String)
         DynaLog.LogMessage("Preparing to set keyboard layered driver...")
         DynaLog.LogMessage("Type of new keyboard layered driver: " & KeyboardLayeredDriverType)
-        allTasks.Text = LocalizationService.ForSection("Progress.LayeredDriver")("SettingDriver.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.LayeredDriver")("Setting.Keyboard.Button")
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.LayeredDriver")("SettingDriver.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.LayeredDriver")("Setting.Keyboard.Button"))
         currentLay = New KeyboardDrivers(currentKeybLayeredDriverType).LayeredDriver
         newKeybLay = New KeyboardDrivers(KeyboardLayeredDriverType).LayeredDriver
         Dim currentLayout As String = ""
@@ -3261,21 +3276,21 @@ Public Class ProgressPanel
             Case KeyboardDrivers.LayeredKeyboardDriver.J_106109Key
                 newLayout = "Japanese Keyboard (106/109 Key)"
         End Select
-        LogView.AppendText(CrLf & ProgressLogText("Setting.The.Keyboard.Layered.Driver") & CrLf &
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Setting.The.Keyboard.Layered.Driver") & CrLf &
                            ProgressLogText("Current.Keyboard.Layered.Driver") & currentLayout & CrLf &
-                           ProgressLogText("New.Keyboard.Layered.Driver") & newLayout & CrLf)
+                           ProgressLogText("New.Keyboard.Layered.Driver") & newLayout & CrLf))
         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /set-layereddriver:" & KeyboardLayeredDriverType
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
         Else
-            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
         End If
         GetErrorCode(False)
     End Sub
@@ -3290,32 +3305,33 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Capability source: " & Quote & capAdditionSource & Quote)
         DynaLog.LogMessage("- Limit Windows Update access (only for active installations)? " & If(capAdditionLimitWUAccess, "Yes", "No"))
         DynaLog.LogMessage("- Save changes to the Windows image after finishing? " & If(capAdditionCommit, "Yes", "No"))
-        allTasks.Text = LocalizationService.ForSection("Progress.AddCapabilities")("Add.Capabilities.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.AddCapabilities")("PrepareAdd.Button")
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.AddCapabilities")("Add.Capabilities.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.AddCapabilities")("PrepareAdd.Button"))
         DynaLog.LogMessage("Boot mode of the host system: " & SystemInformation.BootMode)
-        LogView.AppendText(CrLf & ProgressLogText("Adding.Capabilities.To.Mounted.Image") & CrLf &
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Adding.Capabilities.To.Mounted.Image") & CrLf &
                            ProgressLogText("Options") & CrLf &
                            ProgressLogText("Use.A.Source.For.Capability.Addition") & If(capAdditionUseSource, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
                            ProgressLogText("Capability.Source") & If(capAdditionUseSource, Quote & capAdditionSource & Quote, ProgressLogText("No.Source.Has.Been.Provided")) & CrLf &
                            ProgressLogText("Limit.Access.To.Windows.Update") & If(capAdditionLimitWUAccess And OnlineMgmt, ProgressLogText("Yes"), If(capAdditionLimitWUAccess And Not OnlineMgmt, ProgressLogText("No.This.Is.Not.An.Online.Installation"), ProgressLogText("No"))) & If(Not capAdditionLimitWUAccess And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe, ProgressLogText("The.System.Is.In.Safe.Mode"), "") & CrLf &
-                           ProgressLogText("Commit.Image.After.Adding.Capabilities") & If(capAdditionCommit, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf)
+                           ProgressLogText("Commit.Image.After.Adding.Capabilities") & If(capAdditionCommit, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf))
         If capAdditionUseSource And Not Directory.Exists(capAdditionSource) Then
             DynaLog.LogMessage("A source is expected to be used but it does not exist in the file system.")
-            LogView.AppendText(CrLf &
-                               ProgressLogText("Warning.The.Specified.Source.Does.Not.Exist.In"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               ProgressLogText("Warning.The.Specified.Source.Does.Not.Exist.In")))
         End If
-        currentTask.Text = LocalizationService.ForSection("Progress.AddCapabilities")("Add.Capabilities.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Enumerating.Capabilities.To.Add.Please.Wait") & CrLf &
-                           ProgressLogText("Total.Number.Of.Capabilities") & capAdditionCount)
-        CurrentPB.Maximum = capAdditionCount
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.AddCapabilities")("Add.Capabilities.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Enumerating.Capabilities.To.Add.Please.Wait") & CrLf &
+                           ProgressLogText("Total.Number.Of.Capabilities") & capAdditionCount))
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Maximum = capAdditionCount)
         For x = 0 To Array.LastIndexOf(capAdditionIds, capAdditionLastId)
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            currentTask.Text = LocalizationService.ForSection("Progress.AddCapabilities").Format("AddingCapability.Item", x + 1, capAdditionCount)
-            CurrentPB.Value = x + 1
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.AddCapabilities").Format("AddingCapability.Item", index + 1, capAdditionCount))
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = index + 1)
             DynaLog.LogMessage("Getting information about capability " & Quote & capAdditionIds(x) & Quote & "...")
-            LogView.AppendText(CrLf &
-                               ProgressLogText("Capability") & (x + 1) & ProgressLogText("Of.Word") & capAdditionCount)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               ProgressLogText("Capability") & (index + 1) & ProgressLogText("Of.Word") & capAdditionCount))
             ' Get capability information
             ' Try opening the session. If API is not initialized, initialize it
             Try
@@ -3326,10 +3342,10 @@ Public Class ProgressPanel
                     DynaLog.LogMessage("Getting capability information...")
                     ' Get capability information
                     Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capAdditionIds(x))
-                    LogView.AppendText(CrLf & CrLf &
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
                                        ProgressLogText("Capability.Identity") & capInfo.Name & CrLf &
                                        ProgressLogText("Capability.Name") & capInfo.DisplayName & CrLf &
-                                       ProgressLogText("Capability.Description") & capInfo.Description & CrLf)
+                                       ProgressLogText("Capability.Description") & capInfo.Description & CrLf))
                 End Using
             Finally
                 Try
@@ -3349,7 +3365,7 @@ Public Class ProgressPanel
             End If
             If capAdditionLimitWUAccess And OnlineMgmt Then CommandArgs &= " /limitaccess"
             RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
             errCode = Hex(Decimal.ToInt32(DismExitCode))
             If DismExitCode = 0 Then
                 capSuccessfulAdditions += 1
@@ -3357,9 +3373,9 @@ Public Class ProgressPanel
                 capFailedAdditions += 1
             End If
             If errCode.Length >= 8 Then
-                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
             Else
-                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
             End If
             If FeatureErrorCodes.Count <= 0 Then
                 If errCode.Length >= 8 Then
@@ -3375,17 +3391,18 @@ Public Class ProgressPanel
                 End If
             End If
         Next
-        CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Capabilities") & CrLf)
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Capabilities") & CrLf))
         For x = 0 To FeatureErrorCodes.Count - 1
-            LogView.AppendText(CrLf & ProgressLogText("Capability.No") & (x + 1) & ": " & FeatureErrorCodes(x))
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Capability.No") & (index + 1) & ": " & FeatureErrorCodes(index)))
         Next
         Thread.Sleep(2000)
         If capAdditionCommit Then
             DynaLog.LogMessage("Preparing to save changes...")
-            AllPB.Value = AllPB.Maximum / taskCount
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = AllPB.Maximum / taskCount)
             currentTCont += 1
-            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
+            UiThread.RunOnUi(Me, Sub() taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount))
             RunOps(8)
         End If
         If capSuccessfulAdditions > 0 Then
@@ -3395,27 +3412,28 @@ Public Class ProgressPanel
         End If
         If FeatureErrorCodes.Contains("BC2") Then
             DynaLog.LogMessage("A system restart is needed to fully apply some capabilities.")
-            LogView.AppendText(CrLf & ProgressLogText("Some.Capabilities.Require.A.System.Restart.To.Be"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Some.Capabilities.Require.A.System.Restart.To.Be")))
         End If
     End Sub
 
     Private Sub RemoveCapabilities(targetImage As String)
         DynaLog.LogMessage("Preparing to remove capabilities...")
-        allTasks.Text = LocalizationService.ForSection("Progress.RemoveCapabilities")("Remove.Capabilities.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.RemoveCaps")("Preparing.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Removing.Capabilities.From.Mounted.Image") & CrLf)
-        currentTask.Text = LocalizationService.ForSection("Progress.RemoveCapabilities")("Remove.Capabilities.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Enumerating.Capabilities.To.Remove.Please.Wait") & CrLf &
-                           ProgressLogText("Total.Number.Of.Capabilities") & capRemovalCount)
-        CurrentPB.Maximum = capRemovalCount
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.RemoveCapabilities")("Remove.Capabilities.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemoveCaps")("Preparing.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Removing.Capabilities.From.Mounted.Image") & CrLf))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemoveCapabilities")("Remove.Capabilities.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Enumerating.Capabilities.To.Remove.Please.Wait") & CrLf &
+                           ProgressLogText("Total.Number.Of.Capabilities") & capRemovalCount))
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Maximum = capRemovalCount)
         For x = 0 To Array.LastIndexOf(capRemovalIds, capRemovalLastId)
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            currentTask.Text = LocalizationService.ForSection("Progress.RemoveCapabilities").Format("Capability.Item", x + 1, capRemovalCount)
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemoveCapabilities").Format("Capability.Item", index + 1, capRemovalCount))
             DynaLog.LogMessage("Getting information about capability " & Quote & capRemovalIds(x) & Quote & "...")
-            CurrentPB.Value = x + 1
-            LogView.AppendText(CrLf &
-                               ProgressLogText("Capability") & (x + 1) & ProgressLogText("Of.Word") & capRemovalCount)
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = index + 1)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               ProgressLogText("Capability") & (index + 1) & ProgressLogText("Of.Word") & capRemovalCount))
             Try
                 DynaLog.LogMessage("Initializing API...")
                 DismApi.Initialize(DismLogLevel.LogErrors)
@@ -3423,10 +3441,10 @@ Public Class ProgressPanel
                 Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                     DynaLog.LogMessage("Getting capability information...")
                     Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capRemovalIds(x))
-                    LogView.AppendText(CrLf & CrLf &
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
                                        ProgressLogText("Capability.Identity") & capInfo.Name & CrLf &
                                        ProgressLogText("Capability.Name") & capInfo.DisplayName & CrLf &
-                                       ProgressLogText("Capability.Description") & capInfo.Description & CrLf)
+                                       ProgressLogText("Capability.Description") & capInfo.Description & CrLf))
                 End Using
             Finally
                 Try
@@ -3438,7 +3456,7 @@ Public Class ProgressPanel
             End Try
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-capability /capabilityname=" & capRemovalIds(x)
             RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
             errCode = Hex(Decimal.ToInt32(DismExitCode))
             If DismExitCode = 0 Then
                 capSuccessfulRemovals += 1
@@ -3446,9 +3464,9 @@ Public Class ProgressPanel
                 capFailedRemovals += 1
             End If
             If errCode.Length >= 8 Then
-                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
             Else
-                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
             End If
             If FeatureErrorCodes.Count <= 0 Then
                 If errCode.Length >= 8 Then
@@ -3464,10 +3482,11 @@ Public Class ProgressPanel
                 End If
             End If
         Next
-        CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Capabilities") & CrLf)
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Capabilities") & CrLf))
         For x = 0 To FeatureErrorCodes.Count - 1
-            LogView.AppendText(CrLf & ProgressLogText("Capability.No") & (x + 1) & ": " & FeatureErrorCodes(x))
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Capability.No") & (index + 1) & ": " & FeatureErrorCodes(index)))
         Next
         Thread.Sleep(2000)
         If capSuccessfulRemovals > 0 Then
@@ -3477,7 +3496,7 @@ Public Class ProgressPanel
         End If
         If FeatureErrorCodes.Contains("BC2") Then
             DynaLog.LogMessage("A system restart is needed to fully remove some capabilities.")
-            LogView.AppendText(CrLf & ProgressLogText("Some.Capabilities.Require.A.System.Restart.To.Be"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Some.Capabilities.Require.A.System.Restart.To.Be")))
         End If
     End Sub
 
@@ -3492,13 +3511,13 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- EULA destination (if chosen to copy the EULA): " & imgEditionEulaDestination)
         DynaLog.LogMessage("- Accept the EULA? " & If(imgEditionAcceptEula, "Yes", "No"))
         DynaLog.LogMessage("- Product key (if chosen to accept the EULA): " & imgEditionEditionKey)
-        allTasks.Text = LocalizationService.ForSection("Progress.Operation")("UpgradingImage.Label")
-        currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Setting.New.Image.Label")
-        LogView.AppendText(CrLf & ProgressLogText("Setting.The.New.Image.Edition") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.Operation")("UpgradingImage.Label"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Setting.New.Image.Label"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Setting.The.New.Image.Edition") & CrLf &
                            ProgressLogText("Options") & CrLf &
                            ProgressLogText("New.Edition") & imgEditionNewEdition & CrLf &
                            ProgressLogText("Will.The.EULA.Be.Copied") & If(imgEditionCopyEula, ProgressLogText("Yes.To.The.Following.Destination") & imgEditionEulaDestination, ProgressLogText("No")) & CrLf &
-                           ProgressLogText("Will.The.EULA.Be.Accepted") & If(imgEditionAcceptEula, ProgressLogText("Yes.With.The.Following.Product.Key") & imgEditionEditionKey, ProgressLogText("No")) & CrLf)
+                           ProgressLogText("Will.The.EULA.Be.Accepted") & If(imgEditionAcceptEula, ProgressLogText("Yes.With.The.Following.Product.Key") & imgEditionEditionKey, ProgressLogText("No")) & CrLf))
         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /set-edition=" & imgEditionNewEdition
         DynaLog.LogMessage("Checking if the active installation is being managed...")
         If OnlineMgmt Then
@@ -3512,16 +3531,16 @@ Public Class ProgressPanel
             DynaLog.LogMessage("The active installation is not being managed. Ignoring other settings...")
         End If
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
         Else
-            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
         End If
         GetErrorCode(False)
     End Sub
@@ -3529,23 +3548,23 @@ Public Class ProgressPanel
     Private Sub SetImageProductKey(targetImage As String)
         DynaLog.LogMessage("Preparing to set the product key...")
         DynaLog.LogMessage("- New Product Key: " & pkSetNewProductKey)
-        allTasks.Text = LocalizationService.ForSection("Progress.Operation")("Setting.ProductKey.Label")
-        currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Setting.New.ProductKey.Label")
-        LogView.AppendText(CrLf & ProgressLogText("Setting.The.New.Product.Key") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.Operation")("Setting.ProductKey.Label"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Setting.New.ProductKey.Label"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Setting.The.New.Product.Key") & CrLf &
                            ProgressLogText("Options") & CrLf &
-                           ProgressLogText("New.Product.Key") & pkSetNewProductKey & CrLf)
+                           ProgressLogText("New.Product.Key") & pkSetNewProductKey & CrLf))
         CommandArgs &= " /image=" & targetImage & " /norestart /set-productkey=" & pkSetNewProductKey
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
         Else
-            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
         End If
         GetErrorCode(False)
     End Sub
@@ -3558,27 +3577,28 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Preparing to add OS drivers...")
         DynaLog.LogMessage("- Force installation of unsigned drivers? " & If(drvAdditionForceUnsigned, "Yes", "No"))
         DynaLog.LogMessage("- Save changes to the Windows image after finishing? " & If(drvAdditionCommit, "Yes", "No"))
-        allTasks.Text = LocalizationService.ForSection("Progress.AddDrivers")("AddingDrivers.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.AddDrivers")("Preparing.Drivers.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Adding.Driver.Packages.To.Mounted.Image") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.AddDrivers")("AddingDrivers.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.AddDrivers")("Preparing.Drivers.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Adding.Driver.Packages.To.Mounted.Image") & CrLf &
                            ProgressLogText("Options") & CrLf &
                            ProgressLogText("Force.Installation.Of.Unsigned.Drivers") & If(drvAdditionForceUnsigned, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
-                           ProgressLogText("Commit.Image.After.Adding.Driver.Packages") & If(drvAdditionCommit, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf)
+                           ProgressLogText("Commit.Image.After.Adding.Driver.Packages") & If(drvAdditionCommit, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf))
         If drvAdditionForceUnsigned Then
-            LogView.AppendText(CrLf &
-                               ProgressLogText("Warning.The.Option.To.Force.Installation.Of.Unsigned"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               ProgressLogText("Warning.The.Option.To.Force.Installation.Of.Unsigned")))
         End If
-        currentTask.Text = LocalizationService.ForSection("Progress.AddDrivers")("AddingDrivers.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Enumerating.Drivers.To.Add.Please.Wait") & CrLf &
-                           ProgressLogText("Total.Number.Of.Drivers") & drvAdditionCount)
-        CurrentPB.Maximum = drvAdditionCount
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.AddDrivers")("AddingDrivers.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Enumerating.Drivers.To.Add.Please.Wait") & CrLf &
+                           ProgressLogText("Total.Number.Of.Drivers") & drvAdditionCount))
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Maximum = drvAdditionCount)
         For x = 0 To Array.LastIndexOf(drvAdditionPkgs, drvAdditionLastPkg)
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
-            currentTask.Text = LocalizationService.ForSection("Progress.AddDrivers").Format("AddingDriver.Item", x + 1, drvAdditionCount)
-            CurrentPB.Value = x + 1
-            LogView.AppendText(CrLf &
-                               ProgressLogText("Driver") & (x + 1) & ProgressLogText("Of.Word") & drvAdditionCount)
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.AddDrivers").Format("AddingDriver.Item", index + 1, drvAdditionCount))
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = index + 1)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               ProgressLogText("Driver") & (index + 1) & ProgressLogText("Of.Word") & drvAdditionCount))
             ' Get driver information
             DynaLog.LogMessage("Checking file system attributes of driver...")
             If Not (File.GetAttributes(drvAdditionPkgs(x)) And FileAttributes.Directory) = FileAttributes.Directory Then
@@ -3594,24 +3614,24 @@ Public Class ProgressPanel
                         DynaLog.LogMessage("Information collection count: " & drvInfoCollection.Count)
                         If drvInfoCollection.Count > 0 And drvInfoCollection.Count <= 10 Then
                             For Each drvInfo As DismDriver In drvInfoCollection
-                                LogView.AppendText(CrLf & CrLf &
+                                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
                                                    ProgressLogText("Hardware.Description") & drvInfo.HardwareDescription & CrLf &
                                                    ProgressLogText("Hardware.ID") & drvInfo.HardwareId & CrLf &
                                                    ProgressLogText("Additional.IDs") & CrLf &
                                                    ProgressLogText("Compatible.IDs") & drvInfo.CompatibleIds & CrLf &
                                                    ProgressLogText("Excluded.IDs") & drvInfo.ExcludeIds & CrLf &
                                                    ProgressLogText("Hardware.Manufacturer") & drvInfo.ManufacturerName & CrLf &
-                                                   ProgressLogText("Hardware.Architecture") & Casters.CastDismArchitecture(drvInfo.Architecture))
+                                                   ProgressLogText("Hardware.Architecture") & Casters.CastDismArchitecture(drvInfo.Architecture)))
                             Next
                         ElseIf drvInfoCollection.Count > 10 Then
                             DynaLog.LogMessage("The driver information contains more than 10 hardware targets.")
-                            LogView.AppendText(CrLf & CrLf &
+                            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
                                                ProgressLogText("This.Driver.File.Targets.More.Than.10.Devices") & CrLf &
                                                ProgressLogText("If.You.Want.To.Get.Information.Of.This") & CrLf & CrLf &
-                                               "    " & Path.GetFileName(drvAdditionPkgs(x)))
+                                               "    " & Path.GetFileName(drvAdditionPkgs(index))))
                         Else
-                            LogView.AppendText(CrLf & CrLf &
-                                               ProgressLogText("We.Couldn.T.Get.Information.Of.This.Driver"))
+                            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
+                                               ProgressLogText("We.Couldn.T.Get.Information.Of.This.Driver")))
                         End If
                     End Using
                 Finally
@@ -3624,8 +3644,8 @@ Public Class ProgressPanel
                 End Try
             Else
                 DynaLog.LogMessage("The driver is a folder. It will be processed recursively.")
-                LogView.AppendText(CrLf & CrLf &
-                                   ProgressLogText("The.Driver.Package.Currently.About.To.Be.Processed"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
+                                   ProgressLogText("The.Driver.Package.Currently.About.To.Be.Processed")))
             End If
             DynaLog.LogMessage("Checking current operating mode...")
             Dim isRecursive As Boolean = (File.GetAttributes(drvAdditionPkgs(x)) And FileAttributes.Directory) = FileAttributes.Directory And drvAdditionFolderRecursiveScan.Contains(drvAdditionPkgs(x))
@@ -3668,12 +3688,12 @@ Public Class ProgressPanel
                     CommandArgs &= " /forceunsigned"
                 End If
                 If isRecursive Then
-                    LogView.AppendText(CrLf & ProgressLogText("This.Folder.Will.Be.Scanned.Recursively.Driver.Addition"))
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("This.Folder.Will.Be.Scanned.Recursively.Driver.Addition")))
                     CommandArgs &= " /recurse"
                 End If
                 RunProcess(DismProgram, CommandArgs)
             End If
-            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
             errCode = Hex(Decimal.ToInt32(DismExitCode))
             If DismExitCode = 0 Then
                 drvSuccessfulAdditions += 1
@@ -3681,9 +3701,9 @@ Public Class ProgressPanel
                 drvFailedAdditions += 1
             End If
             If errCode.Length >= 8 Then
-                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
             Else
-                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
             End If
             If PackageErrorCodes.Count <= 0 Then
                 If errCode.Length >= 8 Then
@@ -3699,17 +3719,18 @@ Public Class ProgressPanel
                 End If
             End If
         Next
-        CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Drivers") & CrLf)
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Drivers") & CrLf))
         For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & ProgressLogText("Driver.No") & (x + 1) & ": " & PackageErrorCodes(x))
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Driver.No") & (index + 1) & ": " & PackageErrorCodes(index)))
         Next
         Thread.Sleep(2000)
         If drvAdditionCommit Then
             DynaLog.LogMessage("Preparing to save changes...")
-            AllPB.Value = AllPB.Maximum / taskCount
+            UiThread.RunOnUi(Me, Sub() AllPB.Value = AllPB.Maximum / taskCount)
             currentTCont += 1
-            taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
+            UiThread.RunOnUi(Me, Sub() taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount))
             RunOps(8)
         End If
         If drvSuccessfulAdditions > 0 Then
@@ -3740,26 +3761,27 @@ Public Class ProgressPanel
 
     Private Sub RemoveDrivers(targetImage As String)
         DynaLog.LogMessage("Preparing to remove OS drivers...")
-        allTasks.Text = LocalizationService.ForSection("Progress.RemoveDrivers")("RemovingDrivers.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.RemoveDrivers")("Preparing.Drivers.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Removing.Driver.Packages.From.Mounted.Image") & CrLf)
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.RemoveDrivers")("RemovingDrivers.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemoveDrivers")("Preparing.Drivers.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Removing.Driver.Packages.From.Mounted.Image") & CrLf))
         ' Get all driver packages
         DynaLog.LogMessage("Getting drivers of the Windows image... This can take some time, depending on the amount of drivers installed.")
-        LogView.AppendText(CrLf & ProgressLogText("Getting.Image.Drivers.This.May.Take.Some.Time") & CrLf)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Image.Drivers.This.May.Take.Some.Time") & CrLf))
         GetThirdPartyDrivers()
-        currentTask.Text = LocalizationService.ForSection("Progress.RemoveDrivers")("RemovingDrivers.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Enumerating.Drivers.To.Remove.Please.Wait") & CrLf &
-                           ProgressLogText("Total.Number.Of.Drivers") & drvRemovalCount)
-        CurrentPB.Maximum = drvRemovalCount
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemoveDrivers")("RemovingDrivers.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Enumerating.Drivers.To.Remove.Please.Wait") & CrLf &
+                           ProgressLogText("Total.Number.Of.Drivers") & drvRemovalCount))
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Maximum = drvRemovalCount)
         For x = 0 To Array.LastIndexOf(drvRemovalPkgs, drvRemovalLastPkg)
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
             If x + 1 > CurrentPB.Maximum Then Exit For
             CommandArgs = BckArgs
             Dim driverRemovalPackage As String = drvRemovalPkgs(x)
-            currentTask.Text = LocalizationService.ForSection("Progress.RemoveDrivers").Format("RemovingDriver.Item", x + 1, drvRemovalCount)
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemoveDrivers").Format("RemovingDriver.Item", index + 1, drvRemovalCount))
             DynaLog.LogMessage("Getting information about driver file " & Quote & Path.GetFileName(driverRemovalPackage) & Quote & "...")
-            CurrentPB.Value = x + 1
-            LogView.AppendText(CrLf &
-                               ProgressLogText("Driver") & (x + 1) & ProgressLogText("Of.Word") & drvRemovalCount)
+            UiThread.RunOnUi(Me, Sub() CurrentPB.Value = index + 1)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf &
+                               ProgressLogText("Driver") & (index + 1) & ProgressLogText("Of.Word") & drvRemovalCount))
             ' Get driver information
             ShowDriverInformationForRemoval(driverRemovalPackage)
             DynaLog.LogMessage("Checking current operating mode...")
@@ -3787,7 +3809,7 @@ Public Class ProgressPanel
                 CommandArgs &= " /image=" & targetImage & " /remove-driver /driver=" & Quote & driverRemovalPackage & Quote
                 RunProcess(DismProgram, CommandArgs)
             End If
-            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
             errCode = Hex(Decimal.ToInt32(DismExitCode))
             If DismExitCode = 0 Then
                 drvSuccessfulRemovals += 1
@@ -3795,9 +3817,9 @@ Public Class ProgressPanel
                 drvFailedRemovals += 1
             End If
             If errCode.Length >= 8 Then
-                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
             Else
-                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
             End If
             If PackageErrorCodes.Count <= 0 Then
                 If errCode.Length >= 8 Then
@@ -3813,10 +3835,11 @@ Public Class ProgressPanel
                 End If
             End If
         Next
-        CurrentPB.Value = CurrentPB.Maximum
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Drivers") & CrLf)
+        UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum)
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level.For.Selected.Drivers") & CrLf))
         For x = 0 To PackageErrorCodes.Count - 1
-            LogView.AppendText(CrLf & ProgressLogText("Driver.No") & (x + 1) & ": " & PackageErrorCodes(x))
+            Dim index As Integer = x    ' Local copy for the UI thread lambdas below
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Driver.No") & (index + 1) & ": " & PackageErrorCodes(index)))
         Next
         Thread.Sleep(2000)
         If drvSuccessfulRemovals > 0 Then
@@ -3831,13 +3854,13 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Export target: " & Quote & drvExportTarget & Quote)
         DynaLog.LogMessage("Export all drivers? " & If(drvExportAllDrvs, "Yes", "No"))
         If Not drvExportAllDrvs Then DynaLog.LogMessage("Class names to use as filter for driver exports: " & drvExportSpecificClassNames.Count)
-        allTasks.Text = LocalizationService.ForSection("Progress.ExportDrivers")("ExportingDrivers.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.ExportDrivers")("ExportThirdParty.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Exporting.Drivers.To.Specified.Folder") & CrLf &
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.ExportDrivers")("ExportingDrivers.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ExportDrivers")("ExportThirdParty.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Exporting.Drivers.To.Specified.Folder") & CrLf &
                            ProgressLogText("Export.Target") & Quote & drvExportTarget & Quote & CrLf &
                            ProgressLogText("Export.All.Drivers.Or.Just.Those.With.Matching") & If(drvExportAllDrvs, ProgressLogText("All.Drivers"), ProgressLogText("Drivers.With.Matching.Class.Name")) & CrLf &
                            ProgressLogText("If.Not.All.Drivers.Are.Exported.How.Many.Class.Names") & drvExportSpecificClassNames.Count & CrLf &
-                           ProgressLogText("On.Selective.Driver.Export.Organize.Results") & If(drvExportOrganizeClassNameExports, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf)
+                           ProgressLogText("On.Selective.Driver.Export.Organize.Results") & If(drvExportOrganizeClassNameExports, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf))
         If drvExportAllDrvs Then
             If drvExportWin7Mode Then
                 Try
@@ -3919,9 +3942,9 @@ Public Class ProgressPanel
                     If driversToExport Is Nothing Then Exit Try
 
                     DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
-                    LogView.AppendText(CrLf & driversToExport.Count & ProgressLogText("Driver.S.Will.Be.Exported.To.The.Destination"))
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & driversToExport.Count & ProgressLogText("Driver.S.Will.Be.Exported.To.The.Destination")))
                     For Each driverToExport In driversToExport
-                        LogView.AppendText(CrLf & ProgressLogText("Exporting.Driver.File") & Path.GetFileName(driverToExport.DriverOriginalFileName) & "...")
+                        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Exporting.Driver.File") & Path.GetFileName(driverToExport.DriverOriginalFileName) & "..."))
                         Dim drvName As String = Path.GetFileName(driverToExport.DriverOriginalFileName)
                         Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
                         CopyRecursive(Path.GetDirectoryName(driverToExport.DriverOriginalFileName), destinationDriverPath)
@@ -4029,9 +4052,9 @@ Public Class ProgressPanel
                     If driversToExport Is Nothing Then Exit Try
 
                     DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
-                    LogView.AppendText(CrLf & driversToExport.Count & ProgressLogText("Driver.S.Will.Be.Exported.To.The.Destination"))
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & driversToExport.Count & ProgressLogText("Driver.S.Will.Be.Exported.To.The.Destination")))
                     For Each driverToExport In driversToExport
-                        LogView.AppendText(CrLf & ProgressLogText("Exporting.Driver.File") & Path.GetFileName(driverToExport.DriverOriginalFileName) & "...")
+                        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Exporting.Driver.File") & Path.GetFileName(driverToExport.DriverOriginalFileName) & "..."))
                         Dim drvName As String = Path.GetFileName(driverToExport.DriverOriginalFileName)
                         Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
 
@@ -4059,7 +4082,7 @@ Public Class ProgressPanel
                 End Try
             Else
                 Try
-                    LogView.AppendText(CrLf & ProgressLogText("Getting.Image.Drivers"))
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Image.Drivers")))
                     DismApi.Initialize(DismLogLevel.LogErrors)
                     Using session As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MountDir))
                         DynaLog.LogMessage("Getting drivers with DISMAPI...")
@@ -4070,9 +4093,9 @@ Public Class ProgressPanel
                         If driversToExport Is Nothing Then Exit Try
 
                         DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
-                        LogView.AppendText(CrLf & driversToExport.Count & ProgressLogText("Driver.S.Will.Be.Exported.To.The.Destination"))
+                        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & driversToExport.Count & ProgressLogText("Driver.S.Will.Be.Exported.To.The.Destination")))
                         For Each driverToExport In driversToExport
-                            LogView.AppendText(CrLf & ProgressLogText("Exporting.Driver.File") & Path.GetFileName(driverToExport.OriginalFileName) & "...")
+                            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Exporting.Driver.File") & Path.GetFileName(driverToExport.OriginalFileName) & "..."))
                             Dim drvName As String = Path.GetFileName(driverToExport.OriginalFileName)
                             Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
 
@@ -4108,16 +4131,16 @@ Public Class ProgressPanel
                 End Try
             End If
         End If
-        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
         Else
-            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
         End If
         GetErrorCode(False)
     End Sub
@@ -4172,30 +4195,30 @@ Public Class ProgressPanel
     Private Sub ImportDrivers(targetImage As String)
         DynaLog.LogMessage("Preparing to import image drivers...")
         DynaLog.LogMessage("Source type: " & ImportSourceInt)
-        allTasks.Text = LocalizationService.ForSection("Progress.ImportDrivers")("ImportingDrivers.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.ImportDrivers")("PrepareImport.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Importing.Third.Party.Drivers") & CrLf)
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.ImportDrivers")("ImportingDrivers.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ImportDrivers")("PrepareImport.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Importing.Third.Party.Drivers") & CrLf))
         Select Case ImportSourceInt
             Case 0
-                LogView.AppendText(ProgressLogText("Driver.Import.Source.Windows.Image") & Quote & DrvImport_SourceImage & Quote & ")" & CrLf)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Driver.Import.Source.Windows.Image") & Quote & DrvImport_SourceImage & Quote & ")" & CrLf))
             Case 1
-                LogView.AppendText(ProgressLogText("Driver.Import.Source.Active.Installation") & CrLf)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Driver.Import.Source.Active.Installation") & CrLf))
             Case 2
-                LogView.AppendText(ProgressLogText("Driver.Import.Source.Offline.Installation") & Quote & DrvImport_SourceDisk & Quote & ")" & CrLf)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Driver.Import.Source.Offline.Installation") & Quote & DrvImport_SourceDisk & Quote & ")" & CrLf))
         End Select
         Thread.Sleep(500)
-        LogView.AppendText(CrLf & ProgressLogText("Creating.Temporary.Folder.For.Driver.Exports") & CrLf)
-        currentTask.Text = LocalizationService.ForSection("Progress.ImportDrivers")("ExportThirdParty.Item")
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Creating.Temporary.Folder.For.Driver.Exports") & CrLf))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ImportDrivers")("ExportThirdParty.Item"))
         Try
             DynaLog.LogMessage("Creating directory where drivers will be exported to...")
             Directory.CreateDirectory(Application.StartupPath & "\export_temp")
         Catch ex As Exception
             DynaLog.LogMessage("Could not create the driver export directory. Error message: " & ex.Message)
-            LogView.AppendText(CrLf & ProgressLogText("The.Temporary.Folder.Could.Not.Be.Created.See") & CrLf & CrLf & ex.ToString() & "-" & ex.Message)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("The.Temporary.Folder.Could.Not.Be.Created.See") & CrLf & CrLf & ex.ToString() & "-" & ex.Message))
         End Try
         If Directory.Exists(Application.StartupPath & "\export_temp") Then
             DynaLog.LogMessage("Exporting drivers...")
-            LogView.AppendText(CrLf & ProgressLogText("Exporting.Third.Party.Drivers.From.Import.Source") & CrLf)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Exporting.Third.Party.Drivers.From.Import.Source") & CrLf))
             Dim importSource As String = ""
             Select Case ImportSourceInt
                 Case 0
@@ -4205,23 +4228,23 @@ Public Class ProgressPanel
             End Select
             CommandArgs &= If(ImportSourceInt = 1, " /online", " /image=" & importSource) & " /export-driver /destination=" & Quote & Application.StartupPath & "\export_temp" & Quote
             RunProcess(DismProgram, CommandArgs)
-            LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
             If Hex(DismExitCode).Length < 8 Then
                 errCode = DismExitCode
             Else
                 errCode = Hex(DismExitCode)
             End If
             If errCode.Length >= 8 Then
-                LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
             Else
-                LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
             End If
             If DismExitCode = 0 Then
                 DynaLog.LogMessage("The previous operation succeeded. Adding the drivers...")
-                CurrentPB.Value = CurrentPB.Maximum / 2
-                AllPB.Value = AllPB.Maximum / 2
-                currentTask.Text = LocalizationService.ForSection("Progress.ImportDrivers")("ImportThirdParty.Item")
-                LogView.AppendText(CrLf & ProgressLogText("Importing.Third.Party.Drivers.From.The.Temporary.Export"))
+                UiThread.RunOnUi(Me, Sub() CurrentPB.Value = CurrentPB.Maximum / 2)
+                UiThread.RunOnUi(Me, Sub() AllPB.Value = AllPB.Maximum / 2)
+                UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ImportDrivers")("ImportThirdParty.Item"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Importing.Third.Party.Drivers.From.The.Temporary.Export")))
                 CommandArgs = BckArgs
                 If OnlineMgmt Then
                     DynaLog.LogMessage("Online installation management mode detected. Using PNPUTIL to add the driver...")
@@ -4253,19 +4276,19 @@ Public Class ProgressPanel
                     errCode = Hex(DismExitCode)
                 End If
                 If errCode.Length >= 8 Then
-                    LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
                 Else
-                    LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+                    UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
                 End If
                 GetErrorCode(False)
             End If
-            LogView.AppendText(CrLf & ProgressLogText("Deleting.Temporary.Export.Directory"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Deleting.Temporary.Export.Directory")))
             Try
                 DynaLog.LogMessage("Attempting to delete the driver export directory...")
                 Directory.Delete(Application.StartupPath & "\export_temp", True)
             Catch ex As Exception
                 DynaLog.LogMessage("Could not delete driver export directory. Error message: " & ex.Message)
-                LogView.AppendText(CrLf & ProgressLogText("We.Couldn.T.Delete.The.Temporary.Export.Directory") & Quote & ProgressLogText("Export.Temp") & Quote & ProgressLogText("Directory.Manually"))
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("We.Couldn.T.Delete.The.Temporary.Export.Directory") & Quote & ProgressLogText("Export.Temp") & Quote & ProgressLogText("Directory.Manually")))
             End Try
         End If
     End Sub
@@ -4276,7 +4299,7 @@ Public Class ProgressPanel
             Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                 For Each drv As DismDriverPackage In drvCollection
                     If drv.PublishedName = driverRemovalPackage Then
-                        LogView.AppendText(CrLf & CrLf &
+                        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
                                            ProgressLogText("Published.Name") & drv.PublishedName & CrLf &
                                            ProgressLogText("Provider.Name") & drv.ProviderName & CrLf &
                                            ProgressLogText("Class.Name") & drv.ClassName & CrLf &
@@ -4284,16 +4307,16 @@ Public Class ProgressPanel
                                            ProgressLogText("Class.GUID") & drv.ClassGuid & CrLf &
                                            ProgressLogText("Version.And.Date") & drv.Version.ToString() & " / " & drv.Date.ToString() & CrLf &
                                            ProgressLogText("Is.Part.Of.The.Windows.Distribution") & If(drv.InBox, ProgressLogText("Yes"), ProgressLogText("No")) & CrLf &
-                                           ProgressLogText("Is.Critical.To.The.Boot.Process") & If(drv.BootCritical, ProgressLogText("Yes"), ProgressLogText("No")))
+                                           ProgressLogText("Is.Critical.To.The.Boot.Process") & If(drv.BootCritical, ProgressLogText("Yes"), ProgressLogText("No"))))
                         If drv.InBox Then
                             DynaLog.LogMessage("This driver is part of the Windows distribution.")
-                            LogView.AppendText(CrLf & CrLf &
-                                               ProgressLogText("Warning.This.Driver.Package.Is.Part.Of.The"))
+                            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
+                                               ProgressLogText("Warning.This.Driver.Package.Is.Part.Of.The")))
                         End If
                         If drv.BootCritical Then
                             DynaLog.LogMessage("This driver is critical to the boot process of the Windows image.")
-                            LogView.AppendText(CrLf & CrLf &
-                                               ProgressLogText("Warning.This.Driver.Package.Is.Critical.To.The"))
+                            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf &
+                                               ProgressLogText("Warning.This.Driver.Package.Is.Critical.To.The")))
                         End If
                         Exit For
                     End If
@@ -4316,12 +4339,12 @@ Public Class ProgressPanel
     Private Sub ApplyUnattendedFile(targetImage As String)
         DynaLog.LogMessage("Preparing to apply unattended answer file...")
         DynaLog.LogMessage("Answer file: " & Quote & Path.GetFileName(UnattendedFile) & Quote)
-        allTasks.Text = LocalizationService.ForSection("Progress.ApplyUnattend")("ApplyAnswerFile.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.ApplyUnattend")("Applying.Answer.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Applying.Unattended.Answer.File.Options") & CrLf &
-                           ProgressLogText("Unattended.Answer.File") & UnattendedFile)
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.ApplyUnattend")("ApplyAnswerFile.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ApplyUnattend")("Applying.Answer.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Applying.Unattended.Answer.File.Options") & CrLf &
+                           ProgressLogText("Unattended.Answer.File") & UnattendedFile))
         Try
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Creating.Directories.And.Copying.Files"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Creating.Directories.And.Copying.Files")))
             DynaLog.LogMessage("Copying unattended answer file to the Panther directory of the Windows image...")
             If Not Directory.Exists(Path.Combine(MountDir, "Windows", "Panther")) Then
                 Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "Panther"))
@@ -4334,19 +4357,19 @@ Public Class ProgressPanel
                 End If
                 File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "system32", "sysprep", "unattend.xml"), True)
             End If
-            LogView.AppendText(CrLf & ProgressLogText("The.Unattended.Answer.File.Has.Been.Successfully.Copied"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("The.Unattended.Answer.File.Has.Been.Successfully.Copied")))
             GetErrorCode(True)
         Catch ex As Exception
             DynaLog.LogMessage("Could not copy unattended answer file to targets. Error message: " & ex.Message)
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /apply-unattend=" & Quote & UnattendedFile & Quote
             RunProcess(DismProgram, CommandArgs)
-            currentTask.Text = LocalizationService.ForSection("Progress.ApplyUnattend")("Gathering.Error.Level.Item")
-            LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ApplyUnattend")("Gathering.Error.Level.Item"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
             GetErrorCode(False)
             If errCode.Length >= 8 Then
-                LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
             Else
-                LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
             End If
         End Try
     End Sub
@@ -4358,22 +4381,22 @@ Public Class ProgressPanel
     Private Sub SetTargetPath(targetImage As String)
         DynaLog.LogMessage("Preparing to set the target path of the Windows PE image...")
         DynaLog.LogMessage("Target path to set: " & Quote & peNewTargetPath & Quote)
-        allTasks.Text = LocalizationService.ForSection("Progress.SetTargetPath")("Setting.Target.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.SetTargetPath")("Setting.Windows.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Setting.The.Windows.PE.Target.Path") & CrLf &
-                           ProgressLogText("New.Target.Path") & Quote & peNewTargetPath & Quote)
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.SetTargetPath")("Setting.Target.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.SetTargetPath")("Setting.Windows.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Setting.The.Windows.PE.Target.Path") & CrLf &
+                           ProgressLogText("New.Target.Path") & Quote & peNewTargetPath & Quote))
         CommandArgs &= " /image=" & targetImage & " /set-targetpath=" & peNewTargetPath
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
         Else
-            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
         End If
         GetErrorCode(False)
     End Sub
@@ -4381,22 +4404,22 @@ Public Class ProgressPanel
     Private Sub SetScratchSpace(targetImage As String)
         DynaLog.LogMessage("Preparing to set the scratch space of the Windows PE image...")
         DynaLog.LogMessage("Scratch space to set: " & peNewScratchSpace & " MB")
-        allTasks.Text = LocalizationService.ForSection("Progress.ScratchSpace")("Setting.ScratchSpace.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.ScratchSpace")("SetScratchSpace.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Setting.The.Windows.PE.Scratch.Space") & CrLf &
-                           ProgressLogText("New.Scratch.Space.Amount") & peNewScratchSpace & " MB")
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.ScratchSpace")("Setting.ScratchSpace.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ScratchSpace")("SetScratchSpace.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Setting.The.Windows.PE.Scratch.Space") & CrLf &
+                           ProgressLogText("New.Scratch.Space.Amount") & peNewScratchSpace & " MB"))
         CommandArgs &= " /image=" & targetImage & " /set-scratchspace=" & peNewScratchSpace
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Getting.Error.Level")))
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
         Else
             errCode = Hex(DismExitCode)
         End If
         If errCode.Length >= 8 Then
-            LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.0x.2") & errCode))
         Else
-            LogView.AppendText(ProgressLogText("Error.Level.2") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Error.Level.2") & errCode))
         End If
         GetErrorCode(False)
     End Sub
@@ -4408,50 +4431,50 @@ Public Class ProgressPanel
     Private Sub SetOSUnistallWindow()
         DynaLog.LogMessage("Preparing to set the OS rollback window...")
         DynaLog.LogMessage("New window: " & osUninstDayCount & " day(s)")
-        allTasks.Text = LocalizationService.ForSection("Progress.RollbackWindow")("SetWindow.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.RollbackWindow")("SetDays.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Setting.The.Amount.Of.Days.An.Uninstall.Can") & CrLf &
-                           ProgressLogText("Number.Of.Days") & osUninstDayCount)
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.RollbackWindow")("SetWindow.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RollbackWindow")("SetDays.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Setting.The.Amount.Of.Days.An.Uninstall.Can") & CrLf &
+                           ProgressLogText("Number.Of.Days") & osUninstDayCount))
         CommandArgs &= " /online /set-osuninstallwindow /value:" & osUninstDayCount
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
     Private Sub RemoveOSUnistall()
         DynaLog.LogMessage("Preparing to remove the OS rollback...")
-        allTasks.Text = LocalizationService.ForSection("Progress.RemoveRollback")("RemoveRollback.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.RemoveRollback")("RemoveRevert.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Removing.The.Ability.To.Revert.To.An.Old"))
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.RemoveRollback")("RemoveRollback.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.RemoveRollback")("RemoveRevert.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Removing.The.Ability.To.Revert.To.An.Old")))
         CommandArgs &= " /online /remove-osuninstall"
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
     Private Sub InitiateOSUnistall()
         DynaLog.LogMessage("Preparing to initiate the OS rollback...")
-        allTasks.Text = LocalizationService.ForSection("Progress.OSUninstall")("Uninstalling.Version.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.StartRollback")("Preparing.OSRollback.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Preparing.Operating.System.Rollback"))
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.OSUninstall")("Uninstalling.Version.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.StartRollback")("Preparing.OSRollback.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Preparing.Operating.System.Rollback")))
         CommandArgs = " /online /norestart /initiate-osuninstall"
         RunProcess(DismProgram, CommandArgs)
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -4465,19 +4488,19 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Source image index: " & imgConversionIndex)
         DynaLog.LogMessage("- Destination image file: " & Quote & imgDestFile & Quote)
         DynaLog.LogMessage("- Conversion mode: " & imgConversionMode)
-        allTasks.Text = LocalizationService.ForSection("Progress.ConvertImage")("ConvertingImage.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.ConvertImage")("Converting.Image.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Converting.Image") & CrLf &
-                           ProgressLogText("Options") & CrLf)
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.ConvertImage")("ConvertingImage.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ConvertImage")("Converting.Image.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Converting.Image") & CrLf &
+                           ProgressLogText("Options") & CrLf))
 
         ' Gather options
-        LogView.AppendText(ProgressLogText("Source.Image.File") & imgSrcFile & CrLf &
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Source.Image.File") & imgSrcFile & CrLf &
                            ProgressLogText("Index.To.Convert") & imgConversionIndex & CrLf &
-                           ProgressLogText("Destination.Image.File") & imgDestFile & CrLf)
+                           ProgressLogText("Destination.Image.File") & imgDestFile & CrLf))
         If imgConversionMode = 0 Then
-            LogView.AppendText(ProgressLogText("Image.Conversion.Mode.Windows.Imaging.WIM.Electronic.Software"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Image.Conversion.Mode.Windows.Imaging.WIM.Electronic.Software")))
         ElseIf imgConversionMode = 1 Then
-            LogView.AppendText(ProgressLogText("Image.Conversion.Mode.Electronic.Software.Distribution.ESD.Windows"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Image.Conversion.Mode.Electronic.Software.Distribution.ESD.Windows")))
         End If
 
         ' Run commands
@@ -4498,13 +4521,13 @@ Public Class ProgressPanel
             CommandArgs &= " /compress:max"
         End If
         RunProcess(DismProgram, CommandArgs)
-        currentTask.Text = LocalizationService.ForSection("Progress.ConvertImage")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.ConvertImage")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -4513,14 +4536,14 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Source image file: " & Quote & imgSwmSource & Quote)
         DynaLog.LogMessage("- Source image index: " & imgMergerIndex)
         DynaLog.LogMessage("- Destination image file: " & Quote & imgWimDestination & Quote)
-        allTasks.Text = LocalizationService.ForSection("Progress.MergeSWM")("MergingSwmfiles.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.MergeSWM")("Merging.Swmfiles.WIM.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Merging.SWM.Files.Into.A.WIM.File") & CrLf &
-                           ProgressLogText("Options") & CrLf)
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.MergeSWM")("MergingSwmfiles.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.MergeSWM")("Merging.Swmfiles.WIM.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Merging.SWM.Files.Into.A.WIM.File") & CrLf &
+                           ProgressLogText("Options") & CrLf))
         ' Gather options
-        LogView.AppendText(ProgressLogText("Source.Image.File") & imgSwmSource & CrLf &
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Source.Image.File") & imgSwmSource & CrLf &
                            ProgressLogText("Target.Index") & imgMergerIndex & CrLf &
-                           ProgressLogText("Destination.Image.File") & imgWimDestination & CrLf)
+                           ProgressLogText("Destination.Image.File") & imgWimDestination & CrLf))
 
         ' Run commands
         Select Case DismVersionChecker.ProductMajorPart
@@ -4535,13 +4558,13 @@ Public Class ProgressPanel
                 CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=" & imgMergerIndex & " /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
         End Select
         RunProcess(DismProgram, CommandArgs)
-        currentTask.Text = LocalizationService.ForSection("Progress.MergeSWM")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.MergeSWM")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -4550,18 +4573,18 @@ Public Class ProgressPanel
         DynaLog.LogMessage("- Source image file: " & Quote & SwitchSourceImg & Quote)
         DynaLog.LogMessage("- Source image index: " & SwitchSourceIndex)
         DynaLog.LogMessage("- Target image index: " & SwitchTargetIndex)
-        allTasks.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Switching.Image.Button")
-        currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Unmounting.Source.Button")
-        LogView.AppendText(CrLf & ProgressLogText("Switching.Image.Indexes") & CrLf &
-                           ProgressLogText("Options") & CrLf)
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Switching.Image.Button"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Unmounting.Source.Button"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Switching.Image.Indexes") & CrLf &
+                           ProgressLogText("Options") & CrLf))
         ' Gather options
-        LogView.AppendText(ProgressLogText("Target.Mount.Directory") & SwitchTarget & CrLf &
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(ProgressLogText("Target.Mount.Directory") & SwitchTarget & CrLf &
                            ProgressLogText("Source.Image.Index") & SwitchSourceIndex & CrLf &
-                           ProgressLogText("Target.Image.Index") & SwitchTargetIndex & " (" & SwitchTargetIndexName & ")")
+                           ProgressLogText("Target.Image.Index") & SwitchTargetIndex & " (" & SwitchTargetIndexName & ")"))
         If SwitchCommitSourceIndex Then
-            LogView.AppendText(CrLf & ProgressLogText("Commit.Source.Index.Yes"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Commit.Source.Index.Yes")))
         Else
-            LogView.AppendText(CrLf & ProgressLogText("Commit.Source.Index.No"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Commit.Source.Index.No")))
         End If
         DynaLog.LogMessage("Unmounting source image whilst saving changes...")
         ' Run commands
@@ -4582,18 +4605,18 @@ Public Class ProgressPanel
             CommandArgs &= " /discard"
         End If
         RunProcess(DismProgram, CommandArgs)
-        currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
         If Decimal.ToInt32(DismExitCode) <> 0 Then
             DynaLog.LogMessage("Could not save changes to the image. Unmounting image whilst discarding changes...")
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Could.Not.Commit.Changes.To.The.Image.Discarding"))
-            currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Unmounting.Source.Index.Item")
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Could.Not.Commit.Changes.To.The.Image.Discarding")))
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Unmounting.Source.Index.Item"))
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -4606,25 +4629,25 @@ Public Class ProgressPanel
                     CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
             End Select
             RunProcess(DismProgram, CommandArgs)
-            currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("CurrentTask.Item")
-            LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+            UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("CurrentTask.Item"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
             GetErrorCode(False)
             If errCode.Length >= 8 Then
-                LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
             Else
-                LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+                UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
             End If
             If Decimal.ToInt32(DismExitCode) <> 0 Then
                 DynaLog.LogMessage("Could not unmount the image.")
                 Return
             End If
         End If
-        AllPB.Value = AllPB.Maximum / taskCount
+        UiThread.RunOnUi(Me, Sub() AllPB.Value = AllPB.Maximum / taskCount)
         currentTCont += 1
         DynaLog.LogMessage("Mounting Windows image...")
-        taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount)
-        currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Mounting.Target.Index.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Mounting.Image.Index") & SwitchTargetIndex & ")...")
+        UiThread.RunOnUi(Me, Sub() taskCountLbl.Text = LocalizationService.ForSection("Progress").Format("Tasks.Label", currentTCont, taskCount))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Mounting.Target.Index.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Mounting.Image.Index") & SwitchTargetIndex & ")..."))
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
@@ -4640,13 +4663,13 @@ Public Class ProgressPanel
             CommandArgs &= " /readonly"
         End If
         RunProcess(DismProgram, CommandArgs)
-        currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Gathering.Error.Level.Item")
-        LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.SwitchIndexes")("Gathering.Error.Level.Item"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Gathering.Error.Level")))
         GetErrorCode(False)
         If errCode.Length >= 8 Then
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level.0x") & errCode))
         Else
-            LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & CrLf & ProgressLogText("Error.Level") & errCode))
         End If
     End Sub
 
@@ -4654,19 +4677,19 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Preparing to replace FFU files...")
         DynaLog.LogMessage("- Source file: " & Quote & FFUReplaceSourceFFU & Quote)
         DynaLog.LogMessage("- Destination file: " & Quote & FFUReplaceDestinationFFU & Quote)
-        allTasks.Text = LocalizationService.ForSection("Progress.Operation")("Replacing.FFU.Files.Label")
-        currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Replacing.Original.FFU.Label")
-        LogView.AppendText(CrLf & ProgressLogText("Replacing.FFU.File") & Quote & FFUReplaceDestinationFFU & Quote & ProgressLogText("With") & Quote & FFUReplaceSourceFFU & Quote & "...")
+        UiThread.RunOnUi(Me, Sub() allTasks.Text = LocalizationService.ForSection("Progress.Operation")("Replacing.FFU.Files.Label"))
+        UiThread.RunOnUi(Me, Sub() currentTask.Text = LocalizationService.ForSection("Progress.Operation")("Replacing.Original.FFU.Label"))
+        UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("Replacing.FFU.File") & Quote & FFUReplaceDestinationFFU & Quote & ProgressLogText("With") & Quote & FFUReplaceSourceFFU & Quote & "..."))
         Try
             If Not File.Exists(FFUReplaceSourceFFU) Or Not File.Exists(FFUReplaceDestinationFFU) Then Throw New Exception("One or both FFU files do not exist.")
             File.Delete(FFUReplaceDestinationFFU)
             File.Move(FFUReplaceSourceFFU, FFUReplaceDestinationFFU)
             IsSuccessful = True
-            LogView.AppendText(CrLf & ProgressLogText("The.FFU.File.Has.Been.Successfully.Replaced"))
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("The.FFU.File.Has.Been.Successfully.Replaced")))
         Catch ex As Exception
             DynaLog.LogMessage("FFU files could not be replaced. Error message: " & ex.Message)
             IsSuccessful = False
-            LogView.AppendText(CrLf & ProgressLogText("The.FFU.File.Could.Not.Be.Replaced") & ex.Message)
+            UiThread.RunOnUi(Me, Sub() LogView.AppendText(CrLf & ProgressLogText("The.FFU.File.Could.Not.Be.Replaced") & ex.Message))
         End Try
     End Sub
 
@@ -5234,7 +5257,6 @@ Public Class ProgressPanel
         Else
             IsDebugged = False
         End If
-        Control.CheckForIllegalCrossThreadCalls = False
         LinkLabel1.Visible = False
         DynaLog.LogMessage("Detecting presence of directory in which operation logs are stored...")
         If Not Directory.Exists(Application.StartupPath & "\logs") Then

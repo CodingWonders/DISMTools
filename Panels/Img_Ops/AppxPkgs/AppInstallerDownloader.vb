@@ -174,8 +174,12 @@ Public Class AppInstallerDownloader
 
 #Region "WebClient event handlers"
 
+    ' The WebClient events below are raised on thread pool threads, as the download is started from the background worker.
+    ' Controls must only be touched on the UI thread
+
     Private Sub WebClient_DownloadProgressChanged(sender As Object, e As DownloadProgressChangedEventArgs)
-        ProgressBar1.Value = e.ProgressPercentage
+        Dim progressPercentage As Integer = e.ProgressPercentage
+        UiThread.PostToUi(Me, Sub() ProgressBar1.Value = progressPercentage)
         Dim useFrenchSizeUnits As Boolean = LocalizationService.CurrentCultureCode.StartsWith("fr", StringComparison.OrdinalIgnoreCase)
         progress = LocalizationService.ForSection("AppInstaller.Progress").Format("MainPackage.Label", BytesToReadableSize(e.BytesReceived, useFrenchSizeUnits), BytesToReadableSize(e.TotalBytesToReceive, useFrenchSizeUnits))
         downSpd = CLng(Math.Round(e.BytesReceived / sw.Elapsed.TotalSeconds, 2))
@@ -185,7 +189,6 @@ Public Class AppInstallerDownloader
     End Sub
 
     Private Sub WebClient_DownloadFileCompleted(sender As Object, e As AsyncCompletedEventArgs)
-        WindowHelper.EnableCloseCapability(Handle)
         If Not e.Cancelled AndAlso e.Error IsNot Nothing Then
             DownloadError = e.Error
             If File.Exists(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri)) Then
@@ -200,7 +203,10 @@ Public Class AppInstallerDownloader
             End If
         End If
         Thread.Sleep(500)
-        Close()
+        UiThread.PostToUi(Me, Sub()
+                                  WindowHelper.EnableCloseCapability(Handle)
+                                  Close()
+                              End Sub)
     End Sub
 
 #End Region
@@ -211,13 +217,13 @@ Public Class AppInstallerDownloader
         downSpdLbl.Text = LocalizationService.ForSection("AppInstaller.Status").Format("DownloadSpeed.Label", BytesToReadableSize(downSpd, useFrenchSizeUnits))
         downETALbl.Text = LocalizationService.ForSection("AppInstaller.Status").Format("EtaSeconds.Label", time.ToString("m\:ss"))
         If ProgressBar1.Value <= ProgressBar1.Maximum Then
-            TaskbarHelper.SetIndicatorState(ProgressBar1.Value, Windows.Shell.TaskbarItemProgressState.Normal, MainForm.Handle)
+            If MainForm.Current IsNot Nothing Then TaskbarHelper.SetIndicatorState(ProgressBar1.Value, Windows.Shell.TaskbarItemProgressState.Normal, MainForm.Current.Handle)
             Text = String.Format("[{0}%] {1}", Math.Round(ProgressBar1.Value, 0), originalTitle)
         End If
     End Sub
 
     Private Sub AppInstallerDownloader_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        TaskbarHelper.SetIndicatorState(100, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
+        If MainForm.Current IsNot Nothing Then TaskbarHelper.SetIndicatorState(100, Windows.Shell.TaskbarItemProgressState.None, MainForm.Current.Handle)
         Timer1.Stop()
 
         If DownloadError IsNot Nothing Then
@@ -235,9 +241,10 @@ Public Class AppInstallerDownloader
     End Sub
 
     Private Sub CopyUri_Button_Click(sender As Object, e As EventArgs) Handles CopyUri_Button.Click
+        Dim uriText As String = downUriLbl.Text
         Dim thread As New Thread(Sub()
                                      Dim data As New DataObject()
-                                     data.SetText(downUriLbl.Text)
+                                     data.SetText(uriText)
                                      Clipboard.SetDataObject(data, True)
                                  End Sub)
         thread.SetApartmentState(ApartmentState.STA)

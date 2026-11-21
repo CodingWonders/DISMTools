@@ -149,6 +149,14 @@ Public Class WindowHelper
     Private Shared notificationBalloon As NotifyIcon
 
     Public Shared Sub DisplayNotificationBalloon(balloonIcon As ToolTipIcon, balloonCaption As String, balloonMessage As String)
+        ' A notification icon owns a hidden window. Always create it on the UI thread: if it were created on a
+        ' background thread, the program could freeze when Windows broadcasts a user preference change
+        Dim uiForm As MainForm = MainForm.Current
+        If uiForm IsNot Nothing AndAlso uiForm.InvokeRequired Then
+            UiThread.PostToUi(uiForm, Sub() DisplayNotificationBalloon(balloonIcon, balloonCaption, balloonMessage))
+            Exit Sub
+        End If
+
         If notificationBalloon IsNot Nothing Then notificationBalloon.Dispose()
 
         notificationBalloon = New NotifyIcon() With {

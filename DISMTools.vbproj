@@ -1120,6 +1120,7 @@
     <Compile Include="Utilities\DriverSignerViewer.vb" />
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\DynaLog.vb" />
+    <Compile Include="Utilities\UiThread.vb" />
     <Compile Include="Utilities\FileAssociations\FileAssociationHelper.vb" />
     <Compile Include="Utilities\GroupPolicy\ServicingGPOHelper.vb" />
     <Compile Include="Utilities\ImageUtils.vb" />
