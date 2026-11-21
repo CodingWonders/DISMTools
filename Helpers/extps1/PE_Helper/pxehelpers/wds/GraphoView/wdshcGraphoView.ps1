@@ -17,7 +17,7 @@ $global:selectedImageFileName = ""
 
 $ImgGroupCombo_SelectedIndexChanged = {
     if ($null -ne $global:images) {
-        $global:selectedImageGroup = $global:imageGroupArray[$ImgGroupCombo.SelectedIndex]
+        $global:selectedImageGroup = ([string[]]$global:imageGroupArray)[$ImgGroupCombo.SelectedIndex]
         $global:imageFilesArray = ($global:images | Where-Object { $_.ImageGroup -eq "$global:selectedImageGroup" } | Group-Object -Property FileName).Name
 
         $ImgNameCombo.Items.Clear()
