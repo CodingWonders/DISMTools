@@ -1713,6 +1713,12 @@
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\PXEHelpers.Startup.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\sds\ipxe\boot.ipxe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\sds\ipxe\dhcp_option_lookup.ipxe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\GraphoView\wdshcGraphoView.designer.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -2366,7 +2372,6 @@
   <ItemGroup>
     <Folder Include="bin\Debug\" />
     <Folder Include="Helpers\extps1\PE_Helper\files\diskpart\" />
-    <Folder Include="Helpers\extps1\PE_Helper\pxehelpers\sds\" />
     <Folder Include="Helpers\extps1\PE_Helper\tools\HotInstall\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
