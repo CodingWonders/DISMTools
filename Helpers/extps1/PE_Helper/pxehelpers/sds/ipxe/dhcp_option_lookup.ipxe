@@ -1,0 +1,63 @@
+#!ipxe
+# DHCP option names (RFC 2132 and later) and display types
+set optname1 Subnet Mask
+set opttype1 ipv4
+set optname2 Time Offset
+set opttype2 int32
+set optname3 Router
+set opttype3 ipv4
+set optname4 Time Server
+set opttype4 ipv4
+set optname6 Domain Name Server
+set opttype6 ipv4
+set optname7 Log Server
+set opttype7 ipv4
+set optname12 Host Name
+set opttype12 string
+set optname13 Boot File Size
+set opttype13 uint16
+set optname15 Domain Name
+set opttype15 string
+set optname17 Root Path
+set opttype17 string
+set optname28 Broadcast Address
+set opttype28 ipv4
+set optname42 NTP Servers
+set opttype42 ipv4
+set optname43 Vendor-Specific Information
+set opttype43 hex
+set optname44 NetBIOS Name Server
+set opttype44 ipv4
+set optname46 NetBIOS Node Type
+set opttype46 uint8
+set optname51 IP Address Lease Time
+set opttype51 uint32
+set optname53 DHCP Message Type
+set opttype53 uint8
+set optname54 DHCP Server Identifier
+set opttype54 ipv4
+set optname58 Renewal Time (T1)
+set opttype58 uint32
+set optname59 Rebinding Time (T2)
+set opttype59 uint32
+set optname60 Vendor Class Identifier
+set opttype60 string
+set optname61 Client Identifier
+set opttype61 hex
+set optname66 TFTP Server Name
+set opttype66 string
+set optname67 Bootfile Name
+set opttype67 string
+set optname77 User Class
+set opttype77 string
+set optname93 Client System Architecture
+set opttype93 uint16
+set optname94 Client Network Interface ID
+set opttype94 hex
+set optname97 Client Machine Identifier
+set opttype97 hex
+set optname119 Domain Search
+set opttype119 dnssl
+set optname121 Classless Static Route
+set opttype121 hex
+exit

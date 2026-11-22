@@ -2366,6 +2366,7 @@
   <ItemGroup>
     <Folder Include="bin\Debug\" />
     <Folder Include="Helpers\extps1\PE_Helper\files\diskpart\" />
+    <Folder Include="Helpers\extps1\PE_Helper\pxehelpers\sds\" />
     <Folder Include="Helpers\extps1\PE_Helper\tools\HotInstall\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
@@ -2402,6 +2403,7 @@ SET ISPREVIEW="Yes"
 SET GEN_INSTALLER="Yes"
 SET COPY_DOCS="Yes"
 SET CREATE_SAMPLE_USERDATA="Yes"
+SET DT_SDS_COPYUNDI=1
 ECHO Generating program structure...
 IF EXIST "$(SolutionDir)portable" (
 	COPY "$(SolutionDir)portable" . /Y
@@ -2420,6 +2422,16 @@ IF NOT EXIST bin (
 	move "helpers\extps1\*.*" "bin\extps1"
 	md "bin\extps1\PE_Helper"
 	xcopy "helpers\extps1\PE_Helper\*.*" "bin\extps1\PE_Helper" /cehyi
+	REM System Deployment Services -- copy snponly ipxe if it exists
+	IF EXIST "$(SolutionDir)Tools\sdstools\ipxeout\*.efi" (
+		ECHO Copying UEFI PXE NBP files...
+		XCOPY "$(SolutionDir)Tools\sdstools\ipxeout\*.efi" "bin\extps1\PE_Helper\pxehelpers\sds\ipxe" /cehyi
+	)
+	REM System Deployment Services -- copy UNDI binaries if we want to and they exist
+	IF DEFINED DT_SDS_COPYUNDI IF %25DT_SDS_COPYUNDI%25 EQU 1 (
+		ECHO Copying UNDI/BIOS PXE NBP files...
+		FOR %25%25A IN (undionly.kpxe ipxe.pxe) DO IF EXIST "$(SolutionDir)Tools\sdstools\ipxeout\%25%25A" COPY /Y "$(SolutionDir)Tools\sdstools\ipxeout\%25%25A" "bin\extps1\PE_Helper\pxehelpers\sds\ipxe\%25%25~nxA"
+	)
 	IF EXIST "$(SolutionDir)helpers\extps1\PE_Helper\Compile.ps1" (
 		:: Compile the script with CTT's compilation script (license in source code and About section)
 		ECHO Invoking pre-processing...
