@@ -1120,6 +1120,12 @@
     <Compile Include="Utilities\DriverSignerViewer.vb" />
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\DynaLog.vb" />
+    <Compile Include="Utilities\NativeInterop\AdvancedAPI\AdvApi.vb" />
+    <Compile Include="Utilities\NativeInterop\Kernel\Kernel32.vb" />
+    <Compile Include="Utilities\NativeInterop\Network\Enums\NetApiStatus.vb" />
+    <Compile Include="Utilities\NativeInterop\Network\Enums\ShareType.vb" />
+    <Compile Include="Utilities\NativeInterop\Network\NetApi.vb" />
+    <Compile Include="Utilities\NativeInterop\Network\Structures\ShareInfo.vb" />
     <Compile Include="Utilities\UiThread.vb" />
     <Compile Include="Utilities\FileAssociations\FileAssociationHelper.vb" />
     <Compile Include="Utilities\GroupPolicy\ServicingGPOHelper.vb" />
