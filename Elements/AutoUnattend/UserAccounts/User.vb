@@ -94,6 +94,19 @@ Namespace Elements
 
     Public Class UserValidator
 
+        Private Shared Function GetUserNamesByRID(ParamArray UserRids As Integer()) As List(Of String)
+            Dim userNames As New List(Of String)
+
+            For Each UserRid In UserRids
+                Dim UserMOC As ManagementObjectCollection = WMIHelper.GetResultsFromManagementQuery(String.Format("SELECT Name FROM Win32_UserAccount WHERE SID LIKE {0}S-1-5-21-%-{1}{0}", Quote, UserRid))
+                If UserMOC Is Nothing Then Continue For
+
+                userNames.Add(WMIHelper.GetObjectValue(UserMOC(0), "Name"))
+            Next
+
+            Return userNames
+        End Function
+
         Public Shared Function ValidateUsers(userList As List(Of User), Optional computerName As ComputerName = Nothing) As UserValidationResults
             DynaLog.LogMessage("Beginning validation of users in user list, with " & userList.Count & " user(s)...")
             DynaLog.LogMessage("- Computer name passed for extended validation: " & Quote & computerName.Name & Quote)
@@ -105,7 +118,8 @@ Namespace Elements
                 Return New UserValidationResults(False, "Either no users have been specified, or a program error occurred.")
             End If
             Dim errorReason As String = ""
-            Dim ExistingUsers() As String = New String(7) {"administrator", "guest", "defaultaccount", "system", "network service", "local service", "none", "wdagutilityaccount"}
+            Dim ExistingUsers As New List(Of String) From {"administrator", "guest", "defaultaccount", "system", "network service", "local service", "none", "wdagutilityaccount"}
+            ExistingUsers.AddRange(GetUserNamesByRID(500, 501))
             ' Assume it's true by default
             Dim FullyValid As Boolean = True
             For Each listedUser As User In userList
