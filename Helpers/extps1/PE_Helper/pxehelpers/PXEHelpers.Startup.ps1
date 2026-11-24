@@ -150,6 +150,7 @@ Write-Host "`n    Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
 Write-Progress -Activity "PXE Helpers starting up..." -Status "Loading PXE Helper providers..." -PercentComplete 50
 
 $providerList = [List[PxeHelperProvider]]::new()
+$providerList.Add([PxeHelperProvider]::new("DISMTools System Deployment Services Helper", "Select this provider to deploy a Windows image using an SDS deployment server.", "0.9+", "sds\sdshelper.ps1", $false, ""))
 $providerList.Add([PxeHelperProvider]::new("Windows Deployment Services Helper", "Select this provider to deploy a Windows image using a WDS server.", "0.7+", "wds\wdshelper.ps1", $true, ""))
 $providerList.Add([PxeHelperProvider]::new("FOG Helper", "Select this provider to deploy a Windows image using a FOG server.", "0.7.1+", "fog\foghelper.ps1", $true, "This provider is divided into 2 stages: a Windows stage and a Linux stage."))
 
