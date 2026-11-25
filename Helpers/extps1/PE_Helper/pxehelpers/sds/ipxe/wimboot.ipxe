@@ -1,0 +1,12 @@
+#!ipxe
+dhcp net0
+set gateway 0.0.0.0
+#set keep-san 1
+#sanhook iscsi:192.168.1.248:tcp:3260:0:iqn.2000-01.com.synology:test
+set boot-url http://${dhcp-server}
+  kernel ${boot-url}/wimboot
+  initrd ${boot-url}/BOOTMGR          BOOTMGR
+  initrd ${boot-url}/BOOT/BCD         BCD
+  initrd ${boot-url}/BOOT/BOOT.SDI    BOOT.SDI
+  initrd ${boot-url}/SOURCES/BOOT.WIM BOOT.WIM
+  boot
