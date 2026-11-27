@@ -839,6 +839,10 @@ function Start-PECustomization
             Write-Host "Preparing NetInstall..."
             New-Item -Path "$imagePath\pxehelpers" -ItemType Directory | Out-Null
             Copy-Item -Path "$((Get-Location).Path)\pxehelpers\*" -Destination "$imagePath\pxehelpers" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+
+            # for SDS we do not need some things
+            Remove-Item -Path "$imagePath\pxehelpers\sds\sdsserver\*" -Verbose -Force
+
             Write-Host "The target system is now ready for network-based installations"
         }
         catch
