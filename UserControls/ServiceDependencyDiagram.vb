@@ -24,6 +24,17 @@ Public Class ServiceDependencyDiagram
         Public Property Level As Integer
         Public Property IsMain As Boolean
 
+        ''' <summary>
+        ''' Height of the wrapped title text, measured during layout.
+        ''' </summary>
+        Public Property TitleHeight As Single
+
+        ''' <summary>
+        ''' Height of the wrapped subtitle text, measured during layout. Zero when
+        ''' the node has no subtitle.
+        ''' </summary>
+        Public Property SubtitleHeight As Single
+
         Public ReadOnly Property Bounds As RectangleF
             Get
                 Return New RectangleF(X, Y, Width, Height)
@@ -422,18 +433,108 @@ Public Class ServiceDependencyDiagram
 
 #Region "Layout"
 
+    Private Const NodePadding As Single = 10.0F
+    Private Const NodeTitleTop As Single = 8.0F
+    Private Const NodeMinimumTitleHeight As Single = 24.0F
+    Private Const NodeTitleBodyGap As Single = 4.0F
+    Private Const NodeBottomPadding As Single = 8.0F
+    Private Const NodeTitleSubtitleGap As Single = 2.0F
+
+    ''' <summary>
+    ''' Gets the text shown as the title of a node.
+    ''' </summary>
+    Private Shared Function GetNodeTitle(node As DiagramNode) As String
+        Dim displayName As String = node.Service.DisplayName
+
+        If String.IsNullOrWhiteSpace(displayName) OrElse displayName.StartsWith("@") Then Return node.Service.Name
+
+        Return displayName
+    End Function
+
+    ''' <summary>
+    ''' Gets the subtitle of a node: the service name, shown only when the
+    ''' title is something else (for example a display name).
+    ''' </summary>
+    Private Shared Function GetNodeSubtitle(node As DiagramNode) As String
+        Dim title As String = GetNodeTitle(node)
+
+        If String.Equals(title, node.Service.Name, StringComparison.OrdinalIgnoreCase) Then Return String.Empty
+
+        Return node.Service.Name
+    End Function
+
+    ''' <summary>
+    ''' Creates the format used to measure and draw a node title. Wrapping is
+    ''' allowed, so long titles flow onto extra lines.
+    ''' </summary>
+    Private Shared Function CreateTitleFormat() As StringFormat
+        Return New StringFormat With {
+            .Alignment = StringAlignment.Center,
+            .LineAlignment = StringAlignment.Near,
+            .Trimming = StringTrimming.None
+        }
+    End Function
+
+    Private Shared Function CreateBodyFormat() As StringFormat
+        Return New StringFormat With {
+            .Alignment = StringAlignment.Near,
+            .LineAlignment = StringAlignment.Near,
+            .Trimming = StringTrimming.EllipsisCharacter
+        }
+    End Function
+
+    ''' <summary>
+    ''' Gets the Y offset (relative to the node's top) where the body text starts.
+    ''' </summary>
+    Private Shared Function GetBodyTop(node As DiagramNode) As Single
+        Dim top As Single = NodeTitleTop + node.TitleHeight
+
+        If node.SubtitleHeight > 0.0F Then top += NodeTitleSubtitleGap + node.SubtitleHeight
+
+        Return top + NodeTitleBodyGap
+    End Function
+
     Private Function CalculateNodeHeight(g As Graphics, node As DiagramNode) As Single
-        Dim padding As Single = 10,
-            titleHeight As Single = 24 + 8 ' title + padding
+        Dim textWidth As Single = NodeWidth - NodePadding * 2.0F
 
-        Dim bodyFont As New Font(Font.FontFamily, Font.Size, FontStyle.Regular),
-            bodyWidth As Single = NodeWidth - padding * 2
+        ' Measure the title with the same font and format used to draw it.
+        Dim titleSize As SizeF
 
-        Dim description As String = If(String.IsNullOrWhiteSpace(node.Service.Description), "No description", node.Service.Description),
-            bodyText As String = String.Format("{1}{0}Start mode: {2}{0}Type: {3}", Environment.NewLine, description, node.Service.StartTypeToString(), node.Service.TypeToString())
+        Using titleFont As New Font(Font.FontFamily, Font.Size + 1.0F, FontStyle.Bold)
+            Using titleFormat As StringFormat = CreateTitleFormat()
+                titleSize = g.MeasureString(GetNodeTitle(node), titleFont, New SizeF(textWidth, 100000.0F), titleFormat)
+            End Using
+        End Using
 
-        Dim bodySize As SizeF = g.MeasureString(bodyText, bodyFont, CInt(bodyWidth))
-        Return titleHeight + bodySize.Height + padding * 2
+        node.TitleHeight = Math.Max(NodeMinimumTitleHeight, CSng(Math.Ceiling(titleSize.Height)))
+
+        ' Measure the subtitle, if the node has one.
+        Dim subtitle As String = GetNodeSubtitle(node)
+        node.SubtitleHeight = 0.0F
+
+        If subtitle.Length > 0 Then
+            Using subtitleFont As New Font(Font.FontFamily, Font.Size + 0.5F, FontStyle.Regular)
+                Using subtitleFormat As StringFormat = CreateTitleFormat()
+                    Dim subtitleSize As SizeF = g.MeasureString(subtitle, subtitleFont, New SizeF(textWidth, 100000.0F), subtitleFormat)
+                    node.SubtitleHeight = CSng(Math.Ceiling(subtitleSize.Height))
+                End Using
+            End Using
+        End If
+
+        ' Measure the body.
+        Dim description As String = If(String.IsNullOrWhiteSpace(node.Service.Description), "No description", node.Service.Description)
+        Dim bodyText As String = String.Format("{1}{0}Start mode: {2}{0}Type: {3}", Environment.NewLine, description, node.Service.StartTypeToString(), node.Service.TypeToString())
+
+        Dim bodySize As SizeF
+
+        Using bodyFont As New Font(Font.FontFamily, Font.Size, FontStyle.Regular)
+            Using bodyFormat As StringFormat = CreateBodyFormat()
+                bodySize = g.MeasureString(bodyText, bodyFont, New SizeF(textWidth, 100000.0F), bodyFormat)
+            End Using
+        End Using
+
+        ' Title block + body + bottom padding, plus one pixel to absorb rounding.
+        Return GetBodyTop(node) + bodySize.Height + NodeBottomPadding + 1.0F
     End Function
 
     ''' <summary>
@@ -556,7 +657,7 @@ Public Class ServiceDependencyDiagram
             For Each node As DiagramNode In columnNodes
                 node.X = columnX
                 node.Y = currentY
-                currentY += NodeHeight + VerticalSpacing
+                currentY += node.Height + VerticalSpacing
             Next
         Next
     End Sub
@@ -668,10 +769,14 @@ Public Class ServiceDependencyDiagram
     End Function
 
     Private Sub DrawNode(g As Graphics, node As DiagramNode)
+        ' Keep the border 1.5 px wide on screen regardless of zoom.
+        DrawNodeCore(g, node, 1.5F / _zoom)
+    End Sub
+
+    Private Sub DrawNodeCore(g As Graphics, node As DiagramNode, borderWidth As Single)
         Dim bounds As RectangleF = node.Bounds
 
         Dim fillColor As Color = If(node.IsMain, _mainNodeBackColor, _nodeBackColor)
-
         Dim borderColor As Color = If(node.IsMain, _mainNodeBorderColor, _nodeBorderColor)
 
         Using path As GraphicsPath = CreateRectangle(bounds, ClampRadius(NodeCornerRadius, bounds))
@@ -679,43 +784,46 @@ Public Class ServiceDependencyDiagram
                 g.FillPath(fillBrush, path)
             End Using
 
-            Using borderPen As New Pen(borderColor, 1.5F / _zoom)
+            Using borderPen As New Pen(borderColor, borderWidth)
                 g.DrawPath(borderPen, path)
             End Using
         End Using
 
-        Dim padding As Single = 10.0F
+        Dim textWidth As Single = bounds.Width - NodePadding * 2.0F
 
-        Dim titleRectangle As New RectangleF(bounds.X + padding, bounds.Y + 8.0F, bounds.Width - padding * 2.0F, 24.0F)
+        ' The title rectangle uses the measured height, so the whole title fits.
+        Dim titleRectangle As New RectangleF(bounds.X + NodePadding, bounds.Y + NodeTitleTop, textWidth, node.TitleHeight)
 
-        Dim bodyRectangle As New RectangleF(bounds.X + padding, bounds.Y + 36.0F, bounds.Width - padding * 2.0F, bounds.Height - 44.0F)
+        Dim bodyTop As Single = bounds.Y + GetBodyTop(node)
+        Dim bodyRectangle As New RectangleF(bounds.X + NodePadding, bodyTop, textWidth, bounds.Bottom - NodeBottomPadding - bodyTop)
 
-        Using titleFormat As New StringFormat With {
-            .Alignment = StringAlignment.Center,
-            .LineAlignment = StringAlignment.Center,
-            .Trimming = StringTrimming.EllipsisCharacter,
-            .FormatFlags = StringFormatFlags.NoWrap
-        }
+        Using titleFormat As StringFormat = CreateTitleFormat()
             Using titleBrush As New SolidBrush(_nodeTextColor)
                 Using titleFont As New Font(Font.FontFamily, Font.Size + 1.0F, FontStyle.Bold)
-                    ' DisplayName (Name)
-                    Dim title As String = node.Service.Name
-                    g.DrawString(title, titleFont, titleBrush, titleRectangle, titleFormat)
+                    g.DrawString(GetNodeTitle(node), titleFont, titleBrush, titleRectangle, titleFormat)
                 End Using
             End Using
         End Using
 
-        Using bodyFormat As New StringFormat With {
-            .Alignment = StringAlignment.Near,
-            .LineAlignment = StringAlignment.Near,
-            .Trimming = StringTrimming.EllipsisCharacter
-        }
+        Dim subtitle As String = GetNodeSubtitle(node)
+
+        If subtitle.Length > 0 Then
+            Dim subtitleTop As Single = bounds.Y + NodeTitleTop + node.TitleHeight + NodeTitleSubtitleGap
+            Dim subtitleRectangle As New RectangleF(bounds.X + NodePadding, subtitleTop, textWidth, node.SubtitleHeight)
+
+            Using subtitleFormat As StringFormat = CreateTitleFormat()
+                Using subtitleBrush As New SolidBrush(_descriptionTextColor)
+                    Using subtitleFont As New Font(Font.FontFamily, Font.Size + 0.5F, FontStyle.Regular)
+                        g.DrawString(subtitle, subtitleFont, subtitleBrush, subtitleRectangle, subtitleFormat)
+                    End Using
+                End Using
+            End Using
+        End If
+
+        Using bodyFormat As StringFormat = CreateBodyFormat()
             Using bodyBrush As New SolidBrush(_descriptionTextColor)
                 Using bodyFont As New Font(Font.FontFamily, Font.Size, FontStyle.Regular)
                     Dim description As String = If(String.IsNullOrWhiteSpace(node.Service.Description), "No description", node.Service.Description)
-                    Dim startMode As String = node.Service.StartTypeToString()
-                    Dim serviceType As String = node.Service.TypeToString()
-
                     Dim bodyText As String = String.Format("{1}{0}Start mode: {2}{0}Type: {3}", Environment.NewLine, description, node.Service.StartTypeToString(), node.Service.TypeToString())
 
                     g.DrawString(bodyText, bodyFont, bodyBrush, bodyRectangle, bodyFormat)
@@ -1135,55 +1243,9 @@ Public Class ServiceDependencyDiagram
     End Sub
 
     Private Sub DrawNodeAtScale(g As Graphics, node As DiagramNode)
-        Dim bounds As RectangleF = node.Bounds
-
-        Dim fillColor As Color = If(node.IsMain, _mainNodeBackColor, _nodeBackColor)
-        Dim borderColor As Color = If(node.IsMain, _mainNodeBorderColor, _nodeBorderColor)
-
-        Using path As GraphicsPath = CreateRectangle(bounds, ClampRadius(NodeCornerRadius, bounds))
-            Using fillBrush As New SolidBrush(fillColor)
-                g.FillPath(fillBrush, path)
-            End Using
-
-            Using borderPen As New Pen(borderColor, 1.5F)
-                g.DrawPath(borderPen, path)
-            End Using
-        End Using
-
-        Dim padding As Single = 10.0F
-
-        Dim titleRectangle As New RectangleF(bounds.X + padding, bounds.Y + 8.0F, bounds.Width - padding * 2.0F, 24.0F),
-            bodyRectangle As New RectangleF(bounds.X + padding, bounds.Y + 36.0F, bounds.Width - padding * 2.0F, bounds.Height - 44.0F)
-
-        Using titleFormat As New StringFormat With {
-            .Alignment = StringAlignment.Center,
-            .LineAlignment = StringAlignment.Center,
-            .Trimming = StringTrimming.EllipsisCharacter,
-            .FormatFlags = StringFormatFlags.NoWrap
-        }
-            Using titleBrush As New SolidBrush(_nodeTextColor)
-                Using titleFont As New Font(Font.FontFamily, Font.Size + 1.0F, FontStyle.Bold)
-                    g.DrawString(node.Service.Name, titleFont, titleBrush, titleRectangle, titleFormat)
-                End Using
-            End Using
-        End Using
-
-        Using bodyFormat As New StringFormat With {
-            .Alignment = StringAlignment.Near,
-            .LineAlignment = StringAlignment.Near,
-            .Trimming = StringTrimming.EllipsisCharacter
-        }
-            Using bodyBrush As New SolidBrush(_descriptionTextColor)
-                Using bodyFont As New Font(Font.FontFamily, Font.Size, FontStyle.Regular)
-                    Dim description As String = If(String.IsNullOrWhiteSpace(node.Service.Description), "No description", node.Service.Description)
-                    Dim bodyText As String = String.Format("{1}{0}Start mode: {2}{0}Type: {3}", Environment.NewLine, description, node.Service.StartTypeToString(), node.Service.TypeToString())
-                    g.DrawString(bodyText, bodyFont, bodyBrush, bodyRectangle, bodyFormat)
-                End Using
-            End Using
-        End Using
+        ' The export always renders at logical zoom 1.0.
+        DrawNodeCore(g, node, 1.5F)
     End Sub
-
-
 
 #End Region
 

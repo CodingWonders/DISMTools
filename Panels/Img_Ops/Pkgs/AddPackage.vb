@@ -111,10 +111,14 @@ Public Class AddPackageDlg
         DynaLog.LogMessage("Scanning folder for possible packages...")
         DynaLog.LogMessage("- Folder to scan: " & Quote & FolderToScan & Quote)
         DynaLog.LogMessage("Clearing existing items...")
-        CheckedListBox1.Items.Clear()
-        Cursor = Cursors.WaitCursor
-                Label4.Text = LocalizationService.ForSection("AddPackage.GatherPackages")("Scanning.Dir.Label")
-        Refresh()
+        ' This runs in the background. Scan the folder here, but only update controls on the UI thread
+        UiThread.RunOnUi(Me, Sub()
+                                 CheckedListBox1.Items.Clear()
+                                 Cursor = Cursors.WaitCursor
+                                 Label4.Text = LocalizationService.ForSection("AddPackage.GatherPackages")("Scanning.Dir.Label")
+                                 Refresh()
+                             End Sub)
+        Dim foundPackages As New List(Of String)
         ' TODO: show CheckedListBox items without full path
         Try
             DynaLog.LogMessage("Getting CAB files in directory (recursive operation)...")
@@ -124,13 +128,14 @@ Public Class AddPackageDlg
                     DynaLog.LogMessage("CAB file " & Quote & Path.GetFileName(CabPkg) & Quote & " is in a directory that is a result of MSU content extraction. Skipping...")
                     Continue For
                 End If
-                CheckedListBox1.Items.Add(CabPkg)
+                foundPackages.Add(CabPkg)
             Next
             DynaLog.LogMessage("Getting MSU files in directory (recursive operation)...")
             For Each MsuPkg In My.Computer.FileSystem.GetFiles(FolderToScan, FileIO.SearchOption.SearchAllSubDirectories, "*.msu")
-                CheckedListBox1.Items.Add(MsuPkg)
+                foundPackages.Add(MsuPkg)
             Next
         Catch ex As Exception
+            foundPackages.Clear()
             DynaLog.LogMessage("Getting CAB files in directory...")
             For Each CabPkg In My.Computer.FileSystem.GetFiles(FolderToScan, FileIO.SearchOption.SearchTopLevelOnly, "*.cab")
                 If CabPkg.Contains("MsuExtract") Then
@@ -138,18 +143,25 @@ Public Class AddPackageDlg
                     DynaLog.LogMessage("CAB file " & Quote & Path.GetFileName(CabPkg) & Quote & " is in a directory that is a result of MSU content extraction. Skipping...")
                     Continue For
                 End If
-                CheckedListBox1.Items.Add(CabPkg)
+                foundPackages.Add(CabPkg)
             Next
             DynaLog.LogMessage("Getting MSU files in directory...")
             For Each MsuPkg In My.Computer.FileSystem.GetFiles(FolderToScan, FileIO.SearchOption.SearchTopLevelOnly, "*.msu")
-                CheckedListBox1.Items.Add(MsuPkg)
+                foundPackages.Add(MsuPkg)
             Next
         End Try
-        CountItems()
-        Cursor = Cursors.Arrow
+        UiThread.RunOnUi(Me, Sub()
+                                 CheckedListBox1.Items.AddRange(foundPackages.ToArray())
+                                 CountItems()
+                                 Cursor = Cursors.Arrow
+                             End Sub)
     End Sub
 
     Sub CountItems()
+        If InvokeRequired Then
+            UiThread.RunOnUi(Me, Sub() CountItems())
+            Exit Sub
+        End If
         DynaLog.LogMessage("Counting items in list...")
         DynaLog.LogMessage("Balancing count of checked items if necessary...")
         If CheckedCount > CheckedListBox1.CheckedItems.Count Then
@@ -203,7 +215,6 @@ Public Class AddPackageDlg
         CheckedListBox1.BackColor = CurrentTheme.SectionBackgroundColor
         CheckedListBox1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
-        Control.CheckForIllegalCrossThreadCalls = False
         If CheckedListBox1.Items.Count = 0 Then
             Label4.Text = LocalizationService.ForSection("AddPackage")("Dir.CAB.Required.Label")
         End If
@@ -251,7 +262,7 @@ Public Class AddPackageDlg
 
     Private Sub ScanBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ScanBW.DoWork
         DynaLog.LogMessage("Getting items in specified folder")
-        GatherPackages(TextBox1.Text)
+        GatherPackages(UiThread.RunOnUi(Of String)(Me, Function() TextBox1.Text))
     End Sub
 
     Private Sub CheckedListBox1_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CheckedListBox1.ItemCheck

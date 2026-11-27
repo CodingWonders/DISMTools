@@ -20,7 +20,6 @@ Public Class MountedImgMgr
         Button4.Text = LocalizationService.ForSection("MountedImgMgr")("Open.Mount.Dir.Button")
         Button5.Text = LocalizationService.ForSection("MountedImgMgr")("Remove.VolumeImages.Button")
         Button6.Text = LocalizationService.ForSection("MountedImgMgr")("LoadProject.Button")
-        CheckForIllegalCrossThreadCalls = False
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = BackColor
@@ -30,8 +29,7 @@ Public Class MountedImgMgr
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ThemeHelper.UpdateLinkLabelColors(Me, Color.DodgerBlue, CurrentTheme.AccentColors(0))
 
-        ' If the mounted image detector is not running, run it
-        If Not MainForm.MountedImageDetectorBW.IsBusy Then MainForm.StartMountedImageDetector()
+        MainForm.StartMountedImageDetector()
 
         ' Subscribe to MainForm event to get updates
         AddHandler MainForm.MountedImagesUpdated, AddressOf OnMountedImagesUpdated

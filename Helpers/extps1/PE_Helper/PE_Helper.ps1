@@ -1032,13 +1032,23 @@ function Get-LocalizedUsers
     param (
         [Parameter(Mandatory = $true, Position = 0)] [bool]$admins
     )
-    if ($admins)
-    {
-        return (Get-LocalGroup | Where-Object { $_.SID.Value -like "S-1-5-32-544" }).Name
+
+    $domainRole = Get-CimInstance -Query "SELECT DomainRole FROM Win32_ComputerSystem" | Select-Object -ExpandProperty DomainRole
+    $targetSid = ""
+
+    if ($admins) {
+        $targetSid = "S-1-5-32-544"
+    } else {
+        $targetSid = "S-1-5-32-545"
     }
-    else
-    {
-        return (Get-LocalGroup | Where-Object { $_.SID.Value -like "S-1-5-32-545" }).Name
+
+    # DomainRole 4 -- Backup Domain Controller
+    # DomainRole 5 -- Primary Domain Controller
+    if (@(4, 5).Contains([int]$domainRole)) {
+        # The built-in groups are not present in a DC setting and we have to query ADDS.
+        return (Get-ADGroup -Filter "objectSid -eq '$($targetSid)'").Name
+    } else {
+        return (Get-LocalGroup | Where-Object { $_.SID.Value -like "$targetSid" }).Name
     }
 }
 
@@ -1195,7 +1205,8 @@ function Start-OSApplication
         return
     }
     . "$env:SYSTEMDRIVE\DTPE.PolicyHelper.ps1"
-    if ((Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim").Count -lt 1)
+    $installImageFiles = Get-ChildItem -Path "$((Get-Location).Path)sources" -Exclude "boot.wim" | Where-Object { @(".wim", ".esd") -contains $_.Extension }
+    if ($installImageFiles.Count -lt 1)
     {
         Write-Host "No Windows image has been found on this drive. An installation image is required. Exiting..."
         exit 1

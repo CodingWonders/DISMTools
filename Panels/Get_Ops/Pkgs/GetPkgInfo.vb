@@ -374,46 +374,47 @@ Public Class GetPkgInfoDlg
             End While
         End If
 
+        ' Prepare the UI and stop the mounted image detector on the UI thread. Only the DISM work runs in the background
+        PackageControlsTLP.Enabled = False
+        WindowHelper.DisableCloseCapability(Handle)
+        DynaLog.LogMessage("Clearing information lists...")
+        PackageInfoList.Clear()
+        PackageInfoExList.Clear()
+        MainForm.StopMountedImageDetector()
+        Dim packageFiles As List(Of String) = ListBox1.Items.Cast(Of Object)().Select(Function(PackageFile) CStr(PackageFile)).ToList()
+
         Await Task.Run(Sub()
-                           PackageControlsTLP.Enabled = False
-                           WindowHelper.DisableCloseCapability(Handle)
-                           DynaLog.LogMessage("Clearing information lists...")
-                           PackageInfoList.Clear()
-                           PackageInfoExList.Clear()
                            Try
-                               MainForm.StopMountedImageDetector()
                                Select Case displayLanguage
                                    Case 0
                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                            Case "ENU", "ENG"
-                                               Label5.Text = "Preparing package information processes..."
+                                               SetStatusText("Preparing package information processes...")
                                            Case "ESN"
-                                               Label5.Text = "Preparando procesos de información de paquetes..."
+                                               SetStatusText("Preparando procesos de información de paquetes...")
                                            Case "FRA"
-                                               Label5.Text = "Préparation des processus d'information des paquets en cours..."
+                                               SetStatusText("Préparation des processus d'information des paquets en cours...")
                                            Case "PTB", "PTG"
-                                               Label5.Text = "Preparar os processos de informação dos pacotes..."
+                                               SetStatusText("Preparar os processos de informação dos pacotes...")
                                            Case "ITA"
-                                               Label5.Text = "Preparazione per ottenere le informazioni sul pacchetto..."
+                                               SetStatusText("Preparazione per ottenere le informazioni sul pacchetto...")
                                        End Select
                                    Case 1
-                                       Label5.Text = "Preparing package information processes..."
+                                       SetStatusText("Preparing package information processes...")
                                    Case 2
-                                       Label5.Text = "Preparando procesos de información de paquetes..."
+                                       SetStatusText("Preparando procesos de información de paquetes...")
                                    Case 3
-                                       Label5.Text = "Préparation des processus d'information des paquets en cours..."
+                                       SetStatusText("Préparation des processus d'information des paquets en cours...")
                                    Case 4
-                                       Label5.Text = "Preparar os processos de informação dos pacotes..."
+                                       SetStatusText("Preparar os processos de informação dos pacotes...")
                                    Case 5
-                                       Label5.Text = "Preparazione per ottenere le informazioni sul pacchetto..."
+                                       SetStatusText("Preparazione per ottenere le informazioni sul pacchetto...")
                                End Select
-                               Application.DoEvents()
                                Try
                                    DynaLog.LogMessage("Initializing API...")
                                    DismApi.Initialize(DismLogLevel.LogErrors)
                                    DynaLog.LogMessage("Creating session...")
                                    Using imgSession As DismSession = If(onlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mountDirectory))
-                                       Dim packageFiles As ListBox.ObjectCollection = ListBox1.Items
                                        For x = 0 To packageFiles.Count - 1
                                            Try
                                                DynaLog.LogMessage("Package file to get information about: " & Quote & Path.GetFileName(packageFiles(x)) & Quote)
@@ -423,28 +424,27 @@ Public Class GetPkgInfoDlg
                                                        Case 0
                                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                                                Case "ENU", "ENG"
-                                                                   Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "..."
+                                                                   SetStatusText("Getting information from package file " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "...")
                                                                Case "ESN"
-                                                                   Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "..."
+                                                                   SetStatusText("Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "...")
                                                                Case "FRA"
-                                                                   Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(packageFiles(x)) & Quote & " en cours..."
+                                                                   SetStatusText("Obtention des informations du fichier paquet " & Quote & Path.GetFileName(packageFiles(x)) & Quote & " en cours...")
                                                                Case "PTB", "PTG"
-                                                                   Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "..."
+                                                                   SetStatusText("Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "...")
                                                                Case "ITA"
-                                                                   Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "..."
+                                                                   SetStatusText("Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "...")
                                                            End Select
                                                        Case 1
-                                                           Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "..."
+                                                           SetStatusText("Getting information from package file " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "...")
                                                        Case 2
-                                                           Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "..."
+                                                           SetStatusText("Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "...")
                                                        Case 3
-                                                           Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(packageFiles(x)) & Quote & " en cours..."
+                                                           SetStatusText("Obtention des informations du fichier paquet " & Quote & Path.GetFileName(packageFiles(x)) & Quote & " en cours...")
                                                        Case 4
-                                                           Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "..."
+                                                           SetStatusText("Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "...")
                                                        Case 5
-                                                           Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "..."
+                                                           SetStatusText("Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(packageFiles(x)) & Quote & "...")
                                                    End Select
-                                                   Application.DoEvents()
                                                    Dim pkgInfoEx As DismPackageInfoEx = Nothing
                                                    Dim pkgInfo As DismPackageInfo = Nothing
                                                    DynaLog.LogMessage("Detecting conditions imposed by host system...")
@@ -467,7 +467,7 @@ Public Class GetPkgInfoDlg
                                    End Using
                                Catch DISMEx As DismException
                                    DynaLog.LogMessage("Could not get package file information. Error message: " & DISMEx.Message)
-                                   MsgBox(DISMEx.Message & " (HRESULT " & Hex(DISMEx.HResult) & ")", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+                                   UiThread.MsgBoxOnUi(Me, DISMEx.Message & " (HRESULT " & Hex(DISMEx.HResult) & ")", vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
                                Catch ex As Exception
                                    DynaLog.LogMessage("Could not get package file information. Error message: " & ex.Message)
                                Finally
@@ -485,32 +485,41 @@ Public Class GetPkgInfoDlg
                                Case 0
                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                        Case "ENU", "ENG"
-                                           Label5.Text = "Ready"
+                                           SetStatusText("Ready")
                                        Case "ESN"
-                                           Label5.Text = "Listo"
+                                           SetStatusText("Listo")
                                        Case "FRA"
-                                           Label5.Text = "Prêt"
+                                           SetStatusText("Prêt")
                                        Case "PTB", "PTG"
-                                           Label5.Text = "Pronto"
+                                           SetStatusText("Pronto")
                                        Case "ITA"
-                                           Label5.Text = "Pronto"
+                                           SetStatusText("Pronto")
                                    End Select
                                Case 1
-                                   Label5.Text = "Ready"
+                                   SetStatusText("Ready")
                                Case 2
-                                   Label5.Text = "Listo"
+                                   SetStatusText("Listo")
                                Case 3
-                                   Label5.Text = "Prêt"
+                                   SetStatusText("Prêt")
                                Case 4
-                                   Label5.Text = "Pronto"
+                                   SetStatusText("Pronto")
                                Case 5
-                                   Label5.Text = "Pronto"
+                                   SetStatusText("Pronto")
                            End Select
-                           WindowHelper.EnableCloseCapability(Handle)
-                           PackageControlsTLP.Enabled = True
                        End Sub)
 
+        ' Back on the UI thread
+        WindowHelper.EnableCloseCapability(Handle)
+        PackageControlsTLP.Enabled = True
+
         IsScanningPackageFiles = False
+    End Sub
+
+    ''' <summary>
+    ''' Updates the status label from any thread
+    ''' </summary>
+    Private Sub SetStatusText(statusText As String)
+        UiThread.PostToUi(Me, Sub() Label5.Text = statusText)
     End Sub
 
     Sub DisplayPackageFileInformation(PkgFile As Integer)

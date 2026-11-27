@@ -187,6 +187,9 @@ Public Class ADDSJoinDialog
         TextBox2.Enabled = RadioButton2.Checked
     End Sub
 
+    ''' <summary>
+    ''' Initializes the wizard. This runs in the background, so controls are only updated on the UI thread
+    ''' </summary>
     Private Sub InitializeWizard()
         ProgressReporter.SetMessage("Checking if device is part of a domain...")
         ADDSInitBW.ReportProgress(5)
@@ -206,23 +209,27 @@ Public Class ADDSJoinDialog
         ADDSInitBW.ReportProgress(80)
         NtLogonPathStart = DomainServicesModule.DSGetDomainControllerNetBIOSName()
         If dsIsInDomain Then
-            ComboBox4.SelectedIndex = 1
+            UiThread.RunOnUi(Me, Sub() ComboBox4.SelectedIndex = 1)
             ProgressReporter.SetMessage("Mapping organizational units and users...")
             ADDSInitBW.ReportProgress(90)
             userMappings = DomainServicesModule.DSMapOrganizationalUnitsAndUsers(dsDomainName, NtLogonPathStart)
             If userMappings IsNot Nothing Then
-                ComboBox2.Items.AddRange(userMappings.Keys.OrderBy(Function(ou) ou).ToArray())
-                ComboBox2.SelectedIndex = 0
+                UiThread.RunOnUi(Me, Sub()
+                                         ComboBox2.Items.AddRange(userMappings.Keys.OrderBy(Function(ou) ou).ToArray())
+                                         ComboBox2.SelectedIndex = 0
+                                     End Sub)
             End If
         Else
-            ComboBox4.SelectedIndex = 0
-            If ComboBox4.Items.Count > 1 Then
-                ' We do this twice to get rid of both items
-                ComboBox4.Items.RemoveAt(1)
-                ComboBox4.Items.RemoveAt(1)
-            End If
+            UiThread.RunOnUi(Me, Sub()
+                                     ComboBox4.SelectedIndex = 0
+                                     If ComboBox4.Items.Count > 1 Then
+                                         ' We do this twice to get rid of both items
+                                         ComboBox4.Items.RemoveAt(1)
+                                         ComboBox4.Items.RemoveAt(1)
+                                     End If
+                                 End Sub)
         End If
-        DsAccountObjectPickerBtn.Enabled = dsIsInDomain
+        UiThread.RunOnUi(Me, Sub() DsAccountObjectPickerBtn.Enabled = dsIsInDomain)
         ProgressReporter.SetMessage("Initialization complete.")
         ADDSInitBW.ReportProgress(100)
     End Sub

@@ -2405,18 +2405,9 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Overall changes:
+        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
         '''
-        '''--- Bugfixes
-        '''
-        '''- Fixed an exception when launching the AppX package information dialog on Windows 8 systems
-        '''- Fixed an issue where component store repair tasks would fail if no sources were specified
-        '''- Fixed an issue where some service dependencies and dependents would not be displayed in the Service Manager
-        '''
-        '''--- New features
-        '''
-        '''- HotInstall and the Sysprep Preparation Tool now create rollback environments to undo boot configuration changes and environment deployments
-        '''- The Sysprep [resto de la cadena truncado]&quot;;.
+        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.8.2_upd1.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

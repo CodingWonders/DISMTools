@@ -394,7 +394,7 @@ Public Class ImgMount
     End Sub
 
     Private Sub IsoExtractorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles IsoExtractorBW.DoWork
-        ExtractIsoFileContents(projPath, TextBox1.Text)
+        ExtractIsoFileContents(projPath, UiThread.RunOnUi(Of String)(Me, Function() TextBox1.Text))
     End Sub
 
     Private Sub IsoExtractorBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles IsoExtractorBW.ProgressChanged

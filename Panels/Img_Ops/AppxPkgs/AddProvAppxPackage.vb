@@ -438,9 +438,9 @@ Public Class AddProvAppxPackage
                             AppxVersion = AppxVersionList.ToArray()
                             ' Add the package right away
                             If IsFolder Then
-                                ListView1.Items.Add(New ListViewItem(New String() {Package, LocalizationService.ForSection("AppxProvision.Scan")("Unpacked.Encrypted.Label"), EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                UiThread.RunOnUi(Me, Sub() ListView1.Items.Add(New ListViewItem(New String() {Package, LocalizationService.ForSection("AppxProvision.Scan")("Unpacked.Encrypted.Label"), EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion})))
                             Else
-                                ListView1.Items.Add(New ListViewItem(New String() {Package, LocalizationService.ForSection("AppxProvision.Scan")("PackedEncrypted.Label"), EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                UiThread.RunOnUi(Me, Sub() ListView1.Items.Add(New ListViewItem(New String() {Package, LocalizationService.ForSection("AppxProvision.Scan")("PackedEncrypted.Label"), EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion})))
                             End If
                             Exit For
                         End If
@@ -453,7 +453,7 @@ Public Class AddProvAppxPackage
                     extPackage.PackageArchitecture = EcurrentAppxArchitecture
                     extPackage.StubPackageOption = StubPreference.NoPreference
                     If Not Packages.Contains(extPackage) Then Packages.Add(extPackage)
-                    Button3.Enabled = True
+                    UiThread.RunOnUi(Me, Sub() Button3.Enabled = True)
                     DynaLog.LogMessage("Getting Store logo asset...")
                     GetApplicationStoreLogoAssets("", False, False, Package, EcurrentAppxName)
                     Exit Sub
@@ -462,9 +462,9 @@ Public Class AddProvAppxPackage
             DynaLog.LogMessage("Specified package is an encrypted bundle application.")
             ' Add the package right away
             If IsFolder Then
-                ListView1.Items.Add(New ListViewItem(New String() {Package, LocalizationService.ForSection("AppxProvision.Scan")("Unpacked.Encrypted.Item"), LocalizationService.ForSection("AppxProvision.Scan")("Encrypted.App.Label"), LocalizationService.ForSection("AppxProvision.Scan")("ListItem.Label"), LocalizationService.ForSection("AppxProvision.Scan")("Encrypted.App.Label")}))
+                UiThread.RunOnUi(Me, Sub() ListView1.Items.Add(New ListViewItem(New String() {Package, LocalizationService.ForSection("AppxProvision.Scan")("Unpacked.Encrypted.Item"), LocalizationService.ForSection("AppxProvision.Scan")("Encrypted.App.Label"), LocalizationService.ForSection("AppxProvision.Scan")("ListItem.Label"), LocalizationService.ForSection("AppxProvision.Scan")("Encrypted.App.Label")})))
             Else
-                ListView1.Items.Add(New ListViewItem(New String() {Package, LocalizationService.ForSection("AppxProvision.Scan")("PackedEncrypted.Item"), LocalizationService.ForSection("AppxProvision.Scan")("Encrypted.App.Label"), LocalizationService.ForSection("AppxProvision.Scan")("Encrypted.App.Label"), LocalizationService.ForSection("AppxProvision.Scan")("Encrypted.App.Label")}))
+                UiThread.RunOnUi(Me, Sub() ListView1.Items.Add(New ListViewItem(New String() {Package, LocalizationService.ForSection("AppxProvision.Scan")("PackedEncrypted.Item"), LocalizationService.ForSection("AppxProvision.Scan")("Encrypted.App.Label"), LocalizationService.ForSection("AppxProvision.Scan")("Encrypted.App.Label"), LocalizationService.ForSection("AppxProvision.Scan")("Encrypted.App.Label")})))
             End If
             Dim encPackage As New AppxPackage()
             encPackage.PackageFile = Package
@@ -474,13 +474,13 @@ Public Class AddProvAppxPackage
             encPackage.PackageArchitecture = "<Encrypted>"
             encPackage.StubPackageOption = StubPreference.NoPreference
             If Not Packages.Contains(encPackage) Then Packages.Add(encPackage)
-            Button3.Enabled = True
+            UiThread.RunOnUi(Me, Sub() Button3.Enabled = True)
             Exit Sub
         ElseIf Path.GetExtension(Package).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso Not onlineInstallation Then
             DynaLog.LogMessage("Specified package is encrypted and the active installation is not being managed.")
             Dim msg As String = ""
             msg = LocalizationService.ForSection("AppxProvision.Scan").Format("Package.Encrypted.Message", Package)
-            MsgBox(msg, vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
+            UiThread.MsgBoxOnUi(Me, msg, vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
             Exit Sub
         End If
         Dim Stepper As Integer = 2
@@ -619,7 +619,7 @@ Public Class AddProvAppxPackage
             Else
                 DynaLog.LogMessage("Either no manifest or an unknown manifest has been detected. This is unknown.")
                 ' Unrecognized type
-                MsgBox(LocalizationService.ForSection("AppxProvision.Scan")("Folder.Message"), vbOKOnly + vbExclamation, LocalizationService.ForSection("AppxProvision.Scan")("Add.Title"))
+                UiThread.MsgBoxOnUi(Me, LocalizationService.ForSection("AppxProvision.Scan")("Folder.Message"), vbOKOnly + vbExclamation, LocalizationService.ForSection("AppxProvision.Scan")("Add.Title"))
                 Exit Sub
             End If
             DynaLog.LogMessage("Getting Store logo asset...")
@@ -767,90 +767,98 @@ Public Class AddProvAppxPackage
 
             End If
         End If
-        DynaLog.LogMessage("Detecting items in list...")
-        ' Detect ListView items
-        If ListView1.Items.Count > 0 Then
-            DynaLog.LogMessage("Getting similar items...")
-            ' Iterate through the ListView items until we can find an entry with properties similar to those currently obtained
-            For Each Item As ListViewItem In ListView1.Items
-                If Item.SubItems(2).Text = currentAppxName And Item.SubItems(3).Text = currentAppxPublisher And Item.SubItems(4).Text = currentAppxVersion And Packages(Item.Index).PackageArchitecture = currentAppxArchitecture Then
-                    DynaLog.LogMessage("The package has already been added. Cancelling process...")
-                    ' Cancel everything
-                    MsgBox(LocalizationService.ForSection("AppxProvision.Scan")("Package.Add.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
-                    If Directory.Exists(Application.StartupPath & "\appxscan") Then
-                        Directory.Delete(Application.StartupPath & "\appxscan", True)
-                    End If
-                    Exit Sub
-                ElseIf Item.SubItems(2).Text = currentAppxName And Not Item.SubItems(3).Text = currentAppxPublisher Then
-                    DynaLog.LogMessage("The package is already present in the list but comes from a different developer/publisher.")
-                    Dim msg As String = ""
-                    msg = LocalizationService.ForSection("AppxProvision.Scan")("Package.Added.Message")
-                    If MsgBox(msg, vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.Yes Then
-                        DynaLog.LogMessage("Changing packages...")
-                        ' Set properties
-                        Item.SubItems(0).Text = Package
-                        Item.SubItems(1).Text = If(IsFolder, LocalizationService.ForSection("AppxProvision.Scan")("Unpacked.Item"), LocalizationService.ForSection("AppxProvision.Scan")("Packed.Item"))
-                        Item.SubItems(2).Text = currentAppxName
-                        Item.SubItems(3).Text = currentAppxPublisher
-                        Item.SubItems(4).Text = currentAppxVersion
+        ' Everything below works with the package list. Run it on the UI thread, as this method runs in the background
+        Dim exitScan As Boolean = False
+        UiThread.RunOnUi(Me, Sub()
+                                 DynaLog.LogMessage("Detecting items in list...")
+                                 ' Detect ListView items
+                                 If ListView1.Items.Count > 0 Then
+                                     DynaLog.LogMessage("Getting similar items...")
+                                     ' Iterate through the ListView items until we can find an entry with properties similar to those currently obtained
+                                     For Each Item As ListViewItem In ListView1.Items
+                                         If Item.SubItems(2).Text = currentAppxName And Item.SubItems(3).Text = currentAppxPublisher And Item.SubItems(4).Text = currentAppxVersion And Packages(Item.Index).PackageArchitecture = currentAppxArchitecture Then
+                                             DynaLog.LogMessage("The package has already been added. Cancelling process...")
+                                             ' Cancel everything
+                                             MsgBox(LocalizationService.ForSection("AppxProvision.Scan")("Package.Add.Message"), vbOKOnly + vbCritical, ImageTaskHeader1.ItemText)
+                                             If Directory.Exists(Application.StartupPath & "\appxscan") Then
+                                                 Directory.Delete(Application.StartupPath & "\appxscan", True)
+                                             End If
+                                             exitScan = True
+                                             Return
+                                         ElseIf Item.SubItems(2).Text = currentAppxName And Not Item.SubItems(3).Text = currentAppxPublisher Then
+                                             DynaLog.LogMessage("The package is already present in the list but comes from a different developer/publisher.")
+                                             Dim msg As String = ""
+                                             msg = LocalizationService.ForSection("AppxProvision.Scan")("Package.Added.Message")
+                                             If MsgBox(msg, vbYesNo + vbExclamation, ImageTaskHeader1.ItemText) = MsgBoxResult.Yes Then
+                                                 DynaLog.LogMessage("Changing packages...")
+                                                 ' Set properties
+                                                 Item.SubItems(0).Text = Package
+                                                 Item.SubItems(1).Text = If(IsFolder, LocalizationService.ForSection("AppxProvision.Scan")("Unpacked.Item"), LocalizationService.ForSection("AppxProvision.Scan")("Packed.Item"))
+                                                 Item.SubItems(2).Text = currentAppxName
+                                                 Item.SubItems(3).Text = currentAppxPublisher
+                                                 Item.SubItems(4).Text = currentAppxVersion
 
-                        ' Configure Element list
-                        Packages(Item.Index).PackageFile = Package
-                        Packages(Item.Index).PackageName = currentAppxName
-                        Packages(Item.Index).PackagePublisher = currentAppxPublisher
-                        Packages(Item.Index).PackageVersion = currentAppxVersion
-                    Else
-                        If Directory.Exists(Application.StartupPath & "\appxscan") Then
-                            Directory.Delete(Application.StartupPath & "\appxscan", True)
-                        End If
-                    End If
-                    Exit Sub
-                ElseIf Item.SubItems(2).Text = currentAppxName And Not Item.SubItems(4).Text = currentAppxVersion Then
-                    DynaLog.LogMessage("The package is already present in the list but the specified one is newer.")
-                    ' This is a rudimentary check which will run even if specifying an older version. It will be improved, so expect the following enhancements:
-                    ' - Cast the version strings to version objects
-                    ' - Compare the version objects part by part
-                    Dim msg As String = ""
-                    msg = LocalizationService.ForSection("AppxProvision.Scan")("Package.Already.Message")
-                    If MsgBox(msg, vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.Yes Then
-                        DynaLog.LogMessage("Updating package to add...")
-                        ' Set properties
-                        Item.SubItems(0).Text = Package
-                        Item.SubItems(1).Text = If(IsFolder, LocalizationService.ForSection("AppxProvision.Scan")("ItemSub.Item"), LocalizationService.ForSection("AppxProvision.Scan")("Packed.Item"))
-                        Item.SubItems(2).Text = currentAppxName
-                        Item.SubItems(3).Text = currentAppxPublisher
-                        Item.SubItems(4).Text = currentAppxVersion
+                                                 ' Configure Element list
+                                                 Packages(Item.Index).PackageFile = Package
+                                                 Packages(Item.Index).PackageName = currentAppxName
+                                                 Packages(Item.Index).PackagePublisher = currentAppxPublisher
+                                                 Packages(Item.Index).PackageVersion = currentAppxVersion
+                                             Else
+                                                 If Directory.Exists(Application.StartupPath & "\appxscan") Then
+                                                     Directory.Delete(Application.StartupPath & "\appxscan", True)
+                                                 End If
+                                             End If
+                                             exitScan = True
+                                             Return
+                                         ElseIf Item.SubItems(2).Text = currentAppxName And Not Item.SubItems(4).Text = currentAppxVersion Then
+                                             DynaLog.LogMessage("The package is already present in the list but the specified one is newer.")
+                                             ' This is a rudimentary check which will run even if specifying an older version. It will be improved, so expect the following enhancements:
+                                             ' - Cast the version strings to version objects
+                                             ' - Compare the version objects part by part
+                                             Dim msg As String = ""
+                                             msg = LocalizationService.ForSection("AppxProvision.Scan")("Package.Already.Message")
+                                             If MsgBox(msg, vbYesNo + vbQuestion, ImageTaskHeader1.ItemText) = MsgBoxResult.Yes Then
+                                                 DynaLog.LogMessage("Updating package to add...")
+                                                 ' Set properties
+                                                 Item.SubItems(0).Text = Package
+                                                 Item.SubItems(1).Text = If(IsFolder, LocalizationService.ForSection("AppxProvision.Scan")("ItemSub.Item"), LocalizationService.ForSection("AppxProvision.Scan")("Packed.Item"))
+                                                 Item.SubItems(2).Text = currentAppxName
+                                                 Item.SubItems(3).Text = currentAppxPublisher
+                                                 Item.SubItems(4).Text = currentAppxVersion
 
-                        ' Configure Element list
-                        Packages(Item.Index).PackageFile = Package
-                        Packages(Item.Index).PackageName = currentAppxName
-                        Packages(Item.Index).PackagePublisher = currentAppxPublisher
-                        Packages(Item.Index).PackageVersion = currentAppxVersion
-                    Else
-                        If Directory.Exists(Application.StartupPath & "\appxscan") Then
-                            Directory.Delete(Application.StartupPath & "\appxscan", True)
-                        End If
-                    End If
-                    Exit Sub
-                End If
-            Next
-        End If
-        DynaLog.LogMessage("Adding item to list...")
-        If IsFolder Then
-            ListView1.Items.Add(New ListViewItem(New String() {Package, LocalizationService.ForSection("AppxProvision.Scan")("ListItem.Item"), currentAppxName, currentAppxPublisher, currentAppxVersion}))
-        Else
-            ListView1.Items.Add(New ListViewItem(New String() {Package, LocalizationService.ForSection("AppxProvision.Scan")("Packed.Item"), currentAppxName, currentAppxPublisher, currentAppxVersion}))
-        End If
-        Dim currentPackage As New AppxPackage()
-        currentPackage.PackageFile = Package
-        currentPackage.PackageName = currentAppxName
-        currentPackage.PackagePublisher = currentAppxPublisher
-        currentPackage.PackageVersion = currentAppxVersion
-        currentPackage.PackageArchitecture = currentAppxArchitecture
-        currentPackage.SupportsStub = StubSupported
-        currentPackage.StubPackageOption = StubPreference.NoPreference
-        If Not Packages.Contains(currentPackage) Then Packages.Add(currentPackage)
-        Button3.Enabled = True
+                                                 ' Configure Element list
+                                                 Packages(Item.Index).PackageFile = Package
+                                                 Packages(Item.Index).PackageName = currentAppxName
+                                                 Packages(Item.Index).PackagePublisher = currentAppxPublisher
+                                                 Packages(Item.Index).PackageVersion = currentAppxVersion
+                                             Else
+                                                 If Directory.Exists(Application.StartupPath & "\appxscan") Then
+                                                     Directory.Delete(Application.StartupPath & "\appxscan", True)
+                                                 End If
+                                             End If
+                                             exitScan = True
+                                             Return
+                                         End If
+                                     Next
+                                 End If
+                                 DynaLog.LogMessage("Adding item to list...")
+                                 If IsFolder Then
+                                     ListView1.Items.Add(New ListViewItem(New String() {Package, LocalizationService.ForSection("AppxProvision.Scan")("ListItem.Item"), currentAppxName, currentAppxPublisher, currentAppxVersion}))
+                                 Else
+                                     ListView1.Items.Add(New ListViewItem(New String() {Package, LocalizationService.ForSection("AppxProvision.Scan")("Packed.Item"), currentAppxName, currentAppxPublisher, currentAppxVersion}))
+                                 End If
+                                 Dim currentPackage As New AppxPackage()
+                                 currentPackage.PackageFile = Package
+                                 currentPackage.PackageName = currentAppxName
+                                 currentPackage.PackagePublisher = currentAppxPublisher
+                                 currentPackage.PackageVersion = currentAppxVersion
+                                 currentPackage.PackageArchitecture = currentAppxArchitecture
+                                 currentPackage.SupportsStub = StubSupported
+                                 currentPackage.StubPackageOption = StubPreference.NoPreference
+                                 If Not Packages.Contains(currentPackage) Then Packages.Add(currentPackage)
+                                 Button3.Enabled = True
+                             End Sub)
+        If exitScan Then Exit Sub
         If Directory.Exists(Application.StartupPath & "\appxscan") Then
             Directory.Delete(Application.StartupPath & "\appxscan", True)
         End If
@@ -924,7 +932,7 @@ Public Class AddProvAppxPackage
                     End If
                 Else
                     DynaLog.LogMessage("Either no manifest or an unknown manifest has been detected. This is unknown.")
-                    MsgBox(LocalizationService.ForSection("AppxProvision.StoreLogo")("ReadFailed.Message"), vbOKOnly + vbCritical, LocalizationService.ForSection("AppxProvision.StoreLogo")("Add.Title"))
+                    UiThread.MsgBoxOnUi(Me, LocalizationService.ForSection("AppxProvision.StoreLogo")("ReadFailed.Message"), vbOKOnly + vbCritical, LocalizationService.ForSection("AppxProvision.StoreLogo")("Add.Title"))
                 End If
             Else
                 DynaLog.LogMessage("Specified package is not a folder. Beginning to scan package...")
@@ -1450,7 +1458,7 @@ Public Class AddProvAppxPackage
                                AppxReporterBW.ReportProgress(((currentPkgFile - 1) / packageFileCount) * 100)
                                currentPkgFile += 1
                                ' Force the indication of waiting
-                               Cursor = Cursors.WaitCursor
+                               UiThread.PostToUi(Me, Sub() Cursor = Cursors.WaitCursor)
                                If Path.GetExtension(PackageFile).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or
                                    Path.GetExtension(PackageFile).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Or
                                    Path.GetExtension(PackageFile).Equals(".eappx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsix", StringComparison.OrdinalIgnoreCase) Or
@@ -1466,12 +1474,8 @@ Public Class AddProvAppxPackage
                                    End If
                                ElseIf Path.GetExtension(PackageFile).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
                                    DynaLog.LogMessage("The item to add " & Quote & Path.GetFileName(PackageFile) & Quote & " is an App Installer package.")
-                                   If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
-                                   AppInstallerDownloader.AppInstallerFile = PackageFile
                                    If Not File.Exists(PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile))) Then
-                                       AppInstallerDownloader.LanguageCode = language
-                                       AppInstallerDownloader.WarnOnMetered = warnOnMetered
-                                       AppInstallerDownloader.ShowDialog(Me)
+                                       ShowAppInstallerDownloader(PackageFile, language, warnOnMetered)
                                        Dim obtainedExtension As String = GetDownloadedPackageExtensionFromAppInstaller(PackageFile)
                                        If obtainedExtension IsNot Nothing Then ScanAppxPackage(False, PackageFile.Replace(".appinstaller", obtainedExtension).Trim())
                                    Else
@@ -1515,7 +1519,7 @@ Public Class AddProvAppxPackage
                                            Case 5
                                                msg = "La seguente cartella:" & CrLf & Quote & PackageFile & Quote & CrLf & "contiene pacchetti di applicazioni. Si desidera elaborare anche questi?" & CrLf & CrLf & "NOTA: la scansione di questa cartella avverrà in modo ricorsivo, pertanto il completamento dell'operazione potrebbe richiedere più tempo"
                                        End Select
-                                       If MessageBox.Show(Me, msg, ImageTaskHeader1.ItemText, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                                       If UiThread.RunOnUi(Of DialogResult)(Me, Function() MessageBox.Show(Me, msg, ImageTaskHeader1.ItemText, MessageBoxButtons.YesNo, MessageBoxIcon.Question)) = DialogResult.Yes Then
                                            Dim pkgFilesInSubDir As IEnumerable(Of String) = Directory.EnumerateFiles(PackageFile, "*", SearchOption.AllDirectories)
                                            packageFileCount += pkgFilesInSubDir.Count
 
@@ -1530,12 +1534,8 @@ Public Class AddProvAppxPackage
                                                    ScanAppxPackage(False, AppPkg)
                                                ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
                                                    DynaLog.LogMessage("Item " & Quote & Path.GetFileName(AppPkg) & Quote & " is an App Installer package.")
-                                                   If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
-                                                   AppInstallerDownloader.AppInstallerFile = AppPkg
                                                    If Not File.Exists(AppPkg.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(AppPkg))) Then
-                                                       AppInstallerDownloader.LanguageCode = language
-                                                       AppInstallerDownloader.WarnOnMetered = warnOnMetered
-                                                       AppInstallerDownloader.ShowDialog(Me)
+                                                       ShowAppInstallerDownloader(AppPkg, language, warnOnMetered)
                                                    End If
                                                    If File.Exists(AppPkg.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(AppPkg))) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(AppPkg)))
                                                Else
@@ -1565,7 +1565,7 @@ Public Class AddProvAppxPackage
                                        Case 4 : msg = "O ficheiro que foi deixado aqui não é um pacote de aplicações."
                                        Case 5 : msg = "Il file che è stato scaricato qui non è un pacchetto dell'applicazione"
                                    End Select
-                                   MessageBox.Show(Me, msg, ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                   UiThread.RunOnUi(Of DialogResult)(Me, Function() MessageBox.Show(Me, msg, ImageTaskHeader1.ItemText, MessageBoxButtons.OK, MessageBoxIcon.Error))
                                End If
                            Next
                        End Sub)
@@ -1573,6 +1573,20 @@ Public Class AddProvAppxPackage
         AppxReporterBW.CancelAsync()
 
         OK_Button.Enabled = True
+    End Sub
+
+    ''' <summary>
+    ''' Shows the App Installer downloader on the UI thread. It can be called from background threads
+    ''' </summary>
+    Private Sub ShowAppInstallerDownloader(appInstallerFile As String, languageCode As Integer, warnOnMetered As Boolean)
+        UiThread.RunOnUi(Me, Sub()
+                                 ' The default instance is resolved here, on the UI thread
+                                 If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
+                                 AppInstallerDownloader.AppInstallerFile = appInstallerFile
+                                 AppInstallerDownloader.LanguageCode = languageCode
+                                 AppInstallerDownloader.WarnOnMetered = warnOnMetered
+                                 AppInstallerDownloader.ShowDialog(Me)
+                             End Sub)
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click

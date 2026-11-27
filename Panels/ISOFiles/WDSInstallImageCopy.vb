@@ -202,13 +202,16 @@ Public Class WDSInstallImageCopy
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         BackgroundWorker1.ReportProgress(0)
+        ' Read the options on the UI thread
+        Dim wdsImageGroup As String = UiThread.RunOnUi(Of String)(Me, Function() tbDestinationWdsImageGroup.Text)
+        Dim sourceImageFile As String = UiThread.RunOnUi(Of String)(Me, Function() tbSourceImageFile.Text)
         DynaLog.LogMessage("Starting WDS image addition...")
         Dim WDSUploader As New Process()
         WDSUploader.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         WDSUploader.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\extps1\PE_Helper\files"
         If UploadAllImages Then
             WDSUploader.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\files\install_image_to_wds.ps1" & Quote &
-                " -imageGroup " & Quote & tbDestinationWdsImageGroup.Text & Quote & " -installImagePath " & Quote & tbSourceImageFile.Text & Quote
+                " -imageGroup " & Quote & wdsImageGroup & Quote & " -installImagePath " & Quote & sourceImageFile & Quote
             WDSUploader.Start()
             WDSUploader.WaitForExit()
             DynaLog.LogMessage("The process finished with exit code " & Hex(WDSUploader.ExitCode))
@@ -219,7 +222,7 @@ Public Class WDSInstallImageCopy
 
             For i = 0 To SelectedIndexes.Count - 1
                 WDSUploader.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\files\install_image_to_wds.ps1" & Quote &
-                    " -imageGroup " & Quote & tbDestinationWdsImageGroup.Text & Quote & " -installImagePath " & Quote & tbSourceImageFile.Text & Quote & " -installImageIndex " & SelectedIndexes(i) + 1
+                    " -imageGroup " & Quote & wdsImageGroup & Quote & " -installImagePath " & Quote & sourceImageFile & Quote & " -installImageIndex " & SelectedIndexes(i) + 1
                 WDSUploader.Start()
                 WDSUploader.WaitForExit()
                 DynaLog.LogMessage("The process finished with exit code " & Hex(WDSUploader.ExitCode))

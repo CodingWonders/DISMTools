@@ -95,14 +95,17 @@ Public Class NewTestingEnv
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         BackgroundWorker1.ReportProgress(0)
+        ' Read the options on the UI thread
+        Dim testArch As String = UiThread.RunOnUi(Of String)(Me, Function() CStr(ComboBox1.SelectedItem))
+        Dim targetPath As String = UiThread.RunOnUi(Of String)(Me, Function() TextBox3.Text)
         DynaLog.LogMessage("Starting PE Helper...")
         DynaLog.LogMessage("- Task: generate testing environment")
-        DynaLog.LogMessage("- Architecture: " & ComboBox1.SelectedItem)
-        DynaLog.LogMessage("- Destination folder for testing environment: " & Quote & TextBox3.Text & Quote)
+        DynaLog.LogMessage("- Architecture: " & testArch)
+        DynaLog.LogMessage("- Destination folder for testing environment: " & Quote & targetPath & Quote)
         Dim ISOCreator As New Process()
         ISOCreator.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         ISOCreator.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\extps1\PE_Helper"
-        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartDevelopment -testArch " & ComboBox1.SelectedItem & " -targetPath " & Quote & TextBox3.Text & Quote
+        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartDevelopment -testArch " & testArch & " -targetPath " & Quote & targetPath & Quote
         ISOCreator.Start()
         ISOCreator.WaitForExit()
         DynaLog.LogMessage("The PE Helper process finished with exit code " & Hex(ISOCreator.ExitCode))

@@ -197,20 +197,21 @@ Public Class GetDriverInfo
             End While
         End If
 
+        ' Prepare the UI and stop the mounted image detector on the UI thread. Only the DISM work runs in the background
+        DriverControlsTLP.Enabled = False
+        WindowHelper.DisableCloseCapability(Handle)
+        DynaLog.LogMessage("Clearing information lists...")
+        DriverInfoList.Clear()
+        MainForm.StopMountedImageDetector()
+        Label5.Text = LocalizationService.ForSection("DriverInfo.Load")("Preparing.Driver.Item")
+        Dim DriverFiles As List(Of String) = ListBox1.Items.Cast(Of Object)().Select(Function(DriverFile) CStr(DriverFile)).ToList()
+
         Await Task.Run(Sub()
-                           DriverControlsTLP.Enabled = False
-                           WindowHelper.DisableCloseCapability(Handle)
-                           DynaLog.LogMessage("Clearing information lists...")
-                           DriverInfoList.Clear()
                            Try
-                               MainForm.StopMountedImageDetector()
-                               Label5.Text = LocalizationService.ForSection("DriverInfo.Load")("Preparing.Driver.Item")
-                               Application.DoEvents()
                                DynaLog.LogMessage("Initializing API...")
                                DismApi.Initialize(DismLogLevel.LogErrors)
                                DynaLog.LogMessage("Creating session...")
                                Using imgSession As DismSession = If(onlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mountDirectory))
-                                   Dim DriverFiles As ListBox.ObjectCollection = ListBox1.Items
                                    For x = 0 To DriverFiles.Count - 1
                                        DynaLog.LogMessage("Driver file to get information about: " & Quote & Path.GetFileName(DriverFiles(x)) & Quote)
                                        If File.Exists(DriverFiles(x)) Then
@@ -219,28 +220,27 @@ Public Class GetDriverInfo
                                                Case 0
                                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                                        Case "ENU", "ENG"
-                                                           Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                                           SetStatusText("Getting information from driver file " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "...")
                                                        Case "ESN"
-                                                           Label5.Text = "Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                                           SetStatusText("Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "...")
                                                        Case "FRA"
-                                                           Label5.Text = "Obtention des informations du fichier pilote " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & " en cours..."
+                                                           SetStatusText("Obtention des informations du fichier pilote " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & " en cours...")
                                                        Case "PTB", "PTG"
-                                                           Label5.Text = "Obter informações do ficheiro do controlador " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                                           SetStatusText("Obter informações do ficheiro do controlador " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "...")
                                                        Case "ITA"
-                                                           Label5.Text = "Verifica informazioni file driver " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                                           SetStatusText("Verifica informazioni file driver " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "...")
                                                    End Select
                                                Case 1
-                                                   Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                                   SetStatusText("Getting information from driver file " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "...")
                                                Case 2
-                                                   Label5.Text = "Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                                   SetStatusText("Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "...")
                                                Case 3
-                                                   Label5.Text = "Obtention des informations du fichier pilote " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & " en cours..."
+                                                   SetStatusText("Obtention des informations du fichier pilote " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & " en cours...")
                                                Case 4
-                                                   Label5.Text = "Obter informações do ficheiro do controlador " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                                   SetStatusText("Obter informações do ficheiro do controlador " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "...")
                                                Case 5
-                                                   Label5.Text = "Verifica informazioni file driver " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "..."
+                                                   SetStatusText("Verifica informazioni file driver " & Quote & Path.GetFileName(DriverFiles(x)) & Quote & "...")
                                            End Select
-                                           Application.DoEvents()
                                            ' Pesky computer manufacturer companies like HP have INF files that are not drivers. Work around
                                            ' those. HP: horrible products that are "oddly satisfying"
                                            Try
@@ -267,12 +267,21 @@ Public Class GetDriverInfo
                                End Try
                            End Try
                            DynaLog.LogMessage("This process has finished.")
-                           Label5.Text = LocalizationService.ForSection("GetDriverInfo.DriverInfo")("Ready.Item")
-                           WindowHelper.EnableCloseCapability(Handle)
-                           DriverControlsTLP.Enabled = True
                        End Sub)
 
+        ' Back on the UI thread
+        Label5.Text = LocalizationService.ForSection("GetDriverInfo.DriverInfo")("Ready.Item")
+        WindowHelper.EnableCloseCapability(Handle)
+        DriverControlsTLP.Enabled = True
+
         IsScanningDriverFiles = False
+    End Sub
+
+    ''' <summary>
+    ''' Updates the status label from any thread
+    ''' </summary>
+    Private Sub SetStatusText(statusText As String)
+        UiThread.PostToUi(Me, Sub() Label5.Text = statusText)
     End Sub
 
     Sub DisplayDriverInformation(HWTarget As Integer)

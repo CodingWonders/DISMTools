@@ -51,11 +51,12 @@ Public Class DriverManualFilePicker
 
     Private Sub ScanBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ScanBW.DoWork
         DynaLog.LogMessage("Scanning directory " & Quote & DriverDir & Quote & "...")
-        Label2.Text = LocalizationService.ForSection("Driver.Manual.Scan").Format("Scanning.Driver.Dir.Label", InfFiles.Count)
+        Dim infFileCount As Integer = InfFiles.Count
+        UiThread.RunOnUi(Me, Sub() Label2.Text = LocalizationService.ForSection("Driver.Manual.Scan").Format("Scanning.Driver.Dir.Label", infFileCount))
         For Each DrvFile In Directory.GetFiles(DriverDir, "*.inf", SearchOption.AllDirectories)
             InfFiles.Add(DrvFile)
         Next
-        DynaLog.LogMessage("Items detected in directory: " & ListView1.Items.Count)
+        DynaLog.LogMessage("Items detected in directory: " & InfFiles.Count)
     End Sub
 
     Private Sub ScanBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ScanBW.RunWorkerCompleted

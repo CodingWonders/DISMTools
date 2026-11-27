@@ -439,10 +439,9 @@ Partial Class MainForm
         Me.PkgInfoCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.PkgBasicInfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.PkgDetailedInfo = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ImgBW = New System.ComponentModel.BackgroundWorker()
+        Me.ImgBW = New DISMTools.AsyncBackgroundWorker(Me.components)
         Me.ImgProcesses = New System.Diagnostics.Process()
         Me.LocalMountDirFBD = New System.Windows.Forms.FolderBrowserDialog()
-        Me.MountedImageDetectorBW = New System.ComponentModel.BackgroundWorker()
         Me.ImgUMountPopupCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.CommitAndUnmountTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.DiscardAndUnmountTSMI = New System.Windows.Forms.ToolStripMenuItem()
@@ -511,7 +510,6 @@ Partial Class MainForm
         Me.UploadThisImageToMyWDSServerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
-        Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
         Me.ImgApplyModeCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ApplyWimTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ApplyFfuTSMI = New System.Windows.Forms.ToolStripMenuItem()
@@ -1851,7 +1849,7 @@ Partial Class MainForm
         Me.VersionTSMI.Name = "VersionTSMI"
         Me.VersionTSMI.Size = New System.Drawing.Size(66, 20)
         Me.VersionTSMI.Text = "PREVIEW"
-        Me.VersionTSMI.ToolTipText = "This is a beta release. In it, you will encounter lots of bugs and incomplete fea" & _
+        Me.VersionTSMI.ToolTipText = "This is a beta release. In it, you will encounter lots of bugs and incomplete fea" &
     "tures."
         Me.VersionTSMI.Visible = False
         '
@@ -2153,6 +2151,7 @@ Partial Class MainForm
         Me.ListView2.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader4})
         Me.ListView2.FullRowSelect = True
         Me.ListView2.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
+        Me.ListView2.HideSelection = False
         Me.ListView2.Location = New System.Drawing.Point(20, 140)
         Me.ListView2.MultiSelect = False
         Me.ListView2.Name = "ListView2"
@@ -2626,6 +2625,7 @@ Partial Class MainForm
         Me.RecentsLV.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader3})
         Me.RecentsLV.ForeColor = System.Drawing.Color.DodgerBlue
         Me.RecentsLV.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
+        Me.RecentsLV.HideSelection = False
         Me.RecentsLV.Location = New System.Drawing.Point(28, 222)
         Me.RecentsLV.MultiSelect = False
         Me.RecentsLV.Name = "RecentsLV"
@@ -2662,7 +2662,7 @@ Partial Class MainForm
         Me.UpdateLink.Size = New System.Drawing.Size(223, 56)
         Me.UpdateLink.TabIndex = 0
         Me.UpdateLink.TabStop = True
-        Me.UpdateLink.Text = "A new version is available for download and installation. Click here to learn mor" & _
+        Me.UpdateLink.Text = "A new version is available for download and installation. Click here to learn mor" &
     "e"
         Me.UpdateLink.UseCompatibleTextRendering = True
         '
@@ -3381,7 +3381,7 @@ Partial Class MainForm
         Me.BWFailLabel.Name = "BWFailLabel"
         Me.BWFailLabel.Size = New System.Drawing.Size(530, 13)
         Me.BWFailLabel.TabIndex = 0
-        Me.BWFailLabel.Text = "One or more background processes did not finish successfully. Some functionality " & _
+        Me.BWFailLabel.Text = "One or more background processes did not finish successfully. Some functionality " &
     "may not be available."
         '
         'ProjectSidePanel
@@ -3447,9 +3447,9 @@ Partial Class MainForm
         Me.PrjTasks.Location = New System.Drawing.Point(10, 410)
         Me.PrjTasks.Name = "PrjTasks"
         Me.PrjTasks.RowCount = 3
-        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
-        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
-        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.PrjTasks.Size = New System.Drawing.Size(283, 94)
         Me.PrjTasks.TabIndex = 13
         '
@@ -3579,8 +3579,8 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel6.ColumnCount = 2
-        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.4444389!))
-        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.5555611!))
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
         Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 163.0!))
         Me.TableLayoutPanel6.Controls.Add(Me.LinkLabel14, 1, 3)
         Me.TableLayoutPanel6.Controls.Add(Me.Label50, 1, 2)
@@ -3917,8 +3917,8 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel5.ColumnCount = 2
-        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.2000008!))
-        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.7999992!))
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.2!))
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.8!))
         Me.TableLayoutPanel5.Controls.Add(Me.Label39, 0, 0)
         Me.TableLayoutPanel5.Controls.Add(Me.Label40, 0, 4)
         Me.TableLayoutPanel5.Controls.Add(Me.Label41, 1, 0)
@@ -4115,8 +4115,8 @@ Partial Class MainForm
         '
         Me.TableLayoutPanel1.ColumnCount = 3
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.727272!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.2727299!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.72727!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.27273!))
         Me.TableLayoutPanel1.Controls.Add(Me.TimeLabel, 2, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.GreetingLabel, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.MenuToggle, 0, 0)
@@ -4324,7 +4324,7 @@ Partial Class MainForm
         Me.BackgroundProcessesButton.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BackgroundProcessesButton.Name = "BackgroundProcessesButton"
         Me.BackgroundProcessesButton.Size = New System.Drawing.Size(25, 24)
-        Me.BackgroundProcessesButton.ToolTipText = "View background processes"
+        Me.BackgroundProcessesButton.ToolTipText = "Show current background process status"
         '
         'MenuDesc
         '
@@ -4362,8 +4362,7 @@ Partial Class MainForm
         '
         'ImgBW
         '
-        Me.ImgBW.WorkerReportsProgress = True
-        Me.ImgBW.WorkerSupportsCancellation = True
+        Me.ImgBW.Work = Nothing
         '
         'ImgProcesses
         '
@@ -4380,10 +4379,6 @@ Partial Class MainForm
         Me.LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
         Me.LocalMountDirFBD.RootFolder = System.Environment.SpecialFolder.MyComputer
         Me.LocalMountDirFBD.ShowNewFolderButton = False
-        '
-        'MountedImageDetectorBW
-        '
-        Me.MountedImageDetectorBW.WorkerSupportsCancellation = True
         '
         'ImgUMountPopupCMS
         '
@@ -4767,10 +4762,6 @@ Partial Class MainForm
         Me.VideoGetterBW.WorkerReportsProgress = True
         Me.VideoGetterBW.WorkerSupportsCancellation = True
         '
-        'MountedImageDetectorBWRestarterTimer
-        '
-        Me.MountedImageDetectorBWRestarterTimer.Interval = 2000
-        '
         'ImgApplyModeCMS
         '
         Me.ImgApplyModeCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyWimTSMI, Me.ApplyFfuTSMI})
@@ -5105,11 +5096,10 @@ Partial Class MainForm
     Friend WithEvents ToolStripSeparator19 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ISHelp As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BranchTSMI As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ImgBW As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ImgBW As AsyncBackgroundWorker
     Friend WithEvents ImgProcesses As Process
     Friend WithEvents BackgroundProcessesButton As System.Windows.Forms.ToolStripSplitButton
     Friend WithEvents LocalMountDirFBD As System.Windows.Forms.FolderBrowserDialog
-    Friend WithEvents MountedImageDetectorBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents MountedImageManagerTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ImgUMountPopupCMS As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents CommitAndUnmountTSMI As System.Windows.Forms.ToolStripMenuItem
@@ -5323,7 +5313,6 @@ Partial Class MainForm
     Friend WithEvents VideoGetterBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents ToolStripSeparator42 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents RegCplToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents MountedImageDetectorBWRestarterTimer As System.Windows.Forms.Timer
     Friend WithEvents ToolStripSeparator43 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents WebResourcesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LanguagesAndOptionalFeaturesISOToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem

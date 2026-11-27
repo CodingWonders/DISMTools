@@ -15,7 +15,9 @@ Public Class ISOCreator
     Dim ISOMsg As String = ""
     Dim success As Boolean
     Dim architectures() As String = New String(2) {"x86", "amd64", "arm64"}
-    Dim adkDownloadLocations() As String = New String(1) {"https://download.microsoft.com/download/615540bc-be0b-433a-b91b-1f2b0642bb24/adk/adksetup.exe", "https://download.microsoft.com/download/2472e9a0-7c74-4ffd-a3e4-27ed1fa30d30/adkwinpeaddons/adkwinpesetup.exe"}
+    ' ADK Download Locations for ADK 10.1.28000.3481
+    Dim adkDownloadLocations() As String = New String(1) {"https://download.microsoft.com/download/0dfa675f-bff6-4c31-bad9-86bc5b7db5ed/adk/adksetup.exe",
+                                                          "https://download.microsoft.com/download/74e1ba00-69cb-4bdd-a382-eb96ece4a589/adkwinpeaddons/adkwinpesetup.exe"}
     Dim adkDownloadSuccess As Boolean
 
     ' Job manager for concurrent ISO creation tasks
@@ -184,7 +186,7 @@ Public Class ISOCreator
         Try
             If NetworkCostHelper.IsNetworkConnectionMetered() Then
 
-                If MeteredConnectionWarningDialog.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Throw New OperationCanceledException("To avoid additional charges, the download has been canceled")
+                If UiThread.RunOnUi(Of DialogResult)(Me, Function() MeteredConnectionWarningDialog.ShowDialog(Me)) <> Windows.Forms.DialogResult.OK Then Throw New OperationCanceledException("To avoid additional charges, the download has been canceled")
             End If
             ProgressReporter.SetMessage(LocalizationService.ForSection("ISOCreator")("Preparing.ADK.Download.Message"))
             ADKDownloaderBW.ReportProgress(0)
@@ -274,12 +276,7 @@ Public Class ISOCreator
 
     Private Function GetImageInfo(ImageFile As String) As DismImageInfoCollection
         DynaLog.LogMessage("Image file to get information about: " & Quote & ImageFile & Quote)
-        DynaLog.LogMessage("Checking if mounted image detector is busy...")
         Dim obtainedImageInfo As DismImageInfoCollection = Nothing
-        Do Until Not MainForm.MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        Loop
         Do Until Not MainForm.WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
@@ -532,6 +529,12 @@ Public Class ISOCreator
     End Sub
 
     Private Sub JobManager_JobStatusChanged(jobId As Integer, status As JobStatus)
+        ' The job manager raises this event from background tasks. Handle it on the UI thread, as it updates
+        ' controls and may create the notification icon
+        If InvokeRequired Then
+            UiThread.PostToUi(Me, Sub() JobManager_JobStatusChanged(jobId, status))
+            Exit Sub
+        End If
         ' This event is fired when a job status changes
         DynaLog.LogMessage("Job " & jobId & " status changed to: " & status.ToString())
 
@@ -579,6 +582,11 @@ Public Class ISOCreator
     End Sub
 
     Private Sub JobManager_JobProgressChanged(jobId As Integer, isRunning As Boolean)
+        ' The job manager raises this event from background tasks. Handle it on the UI thread
+        If InvokeRequired Then
+            UiThread.PostToUi(Me, Sub() JobManager_JobProgressChanged(jobId, isRunning))
+            Exit Sub
+        End If
         If Not isRunning Then
             ' Job has finished, re-enable buttons only if no other jobs are running
             If _jobManager.GetActiveTaskCount() = 0 Then

@@ -33,14 +33,12 @@
 class ServerAuthentication {
     [string]$serverIP
     [string]$serverPort
-    [string]$serverUser
-    [string]$serverPassword
+    [pscredential]$credential
 
-    ServerAuthentication($ip, $port, $user, $password) {
+    ServerAuthentication($ip, $port, $credential) {
         $this.serverIP = $ip
         $this.serverPort = $port
-        $this.serverUser = $user
-        $this.serverPassword = $password
+        $this.credential = $credential
 
         if ((Test-IPAddressSyntax -ipAddr $this.serverIP) -eq [IPAddress]::IPv6) {
             $this.serverIP = "[$($this.serverIP)]"
@@ -94,7 +92,6 @@ function Invoke-ServerAuthentication {
     
     $ip = ""
     $port = 0
-    $user = ""
     
     $ipMessage = "Please enter the IP address of the server"
     
@@ -134,17 +131,43 @@ function Invoke-ServerAuthentication {
             $validPort = $false
         }
     } until ($validPort -eq $true)
+
+    $credential = $null
     
     do {
-        $user = Read-Host -Prompt "Please enter the user name for server authentication"
-        
-        if ($user -eq "") {
-            Write-Host "Please enter a user."
-        }
-    } until ($user -ne "")
-    
-    $password = Read-Host -Prompt "Please enter the password for server authentication (WILL BE SHOWN!)"
-    return [ServerAuthentication]::new($ip, $port, $user, $password)
+        $credential = Get-Credential -Message "Enter the credentials to log on to this system. The account you specify here must be an administrator."
+    } until ($null -ne $credential)
+
+    $auth = [ServerAuthentication]::new($ip, $port, $credential)
+
+    # Offer a screen for credential validation
+    $confirmed = Confirm-ServerConnectionCredentials -auth $auth
+    if (-not $confirmed) {
+        $auth = Invoke-ServerAuthentication
+    }
+
+    return $auth
+}
+
+function Confirm-ServerConnectionCredentials {
+    param (
+        [Parameter(Mandatory, Position = 0)] [ServerAuthentication] $auth
+    )
+
+    if ($null -eq $auth) {
+        return $false
+    }
+
+    Show-SectionMessage -sectionTitle "Confirm authentication settings" -sectionDescription "Are the following authentication settings correct?"
+    Write-Host "These are the provided credentials that will be used for this session:"
+    Write-Host "- Server IP  : $($auth.serverIP)"
+    Write-Host "- Server Port: $($auth.serverPort)"
+    Write-Host "- Server User: $($auth.credential.UserName)"
+    $option = Read-Host -Prompt "Confirm the settings by pressing Y. Otherwise, press N. [Y]"
+    if ($option -eq "") {
+        $option = "Y"
+    }
+    return $option -eq "Y"
 }
 
 function Get-SystemArchitecture
@@ -860,6 +883,7 @@ function Start-OSApplication {
     }
 
     Show-SectionMessage -sectionTitle "Collecting information and copying files needed for Setup" -sectionDescription "Please wait while Setup applies the Windows image. This can take some time, depending on the speed of your computer's disks."
+    Write-Host "`n`n"
     if ((Start-DismCommand -Verb Apply -ImagePath "$($driveLetter):\" -WimFile "$($wimFile.wimPath)" -WimIndex $wimFile.index) -eq $true)
     {
         Write-Host "The Windows image has been applied successfully."
@@ -1031,6 +1055,96 @@ function Start-OSApplication {
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partNumber -eq 0) -espLetter $bootLetter -bootEx $usebootex -override $global:override
 }
 
+function Invoke-DismWithProgressBar
+{
+    <#
+        .SYNOPSIS
+            Runs DISM and shows its progress using the setup-style progress bar instead of the DISM console output
+        .PARAMETER Arguments
+            The command-line arguments to pass to dism.exe
+        .OUTPUTS
+            $true if DISM exited with code 0, $false otherwise
+        .NOTES
+            DISM draws its own progress bar ("[=====   25.0%   ]") and updates it by rewriting the same console line with
+            carriage returns. We redirect its output so that it never reaches the screen, and read it one "line" at a time:
+            StreamReader.ReadLine() treats a lone carriage return as a line terminator, so every progress update arrives as
+            its own line, and we only have to extract the percentage from it. Any other output (errors, for example) is kept
+            and printed after the progress screen is closed, so that failures are still visible.
+        .EXAMPLE
+            Invoke-DismWithProgressBar -Arguments "/apply-image /imagefile=`"X:\install.wim`" /index=1 /applydir=C:\"
+    #>
+    param (
+        [Parameter(Mandatory = $true, Position = 0)] $Arguments
+    )
+
+    $startInfo = New-Object System.Diagnostics.ProcessStartInfo
+    $startInfo.FileName = "$env:SYSTEMROOT\system32\dism.exe"
+    $startInfo.Arguments = $Arguments
+    $startInfo.UseShellExecute = $false
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    $startInfo.CreateNoWindow = $true
+
+    $outputLines = New-Object 'System.Collections.Generic.List[string]'
+    $errorText = ""
+    $exitCode = -1
+
+    try
+    {
+        # Draw the whole screen at 0% before DISM has had time to print anything
+        Show-SetupProgressBar -Percent 0 -Redraw -Activity "Setup is applying the Windows image..."
+
+        $process = [System.Diagnostics.Process]::Start($startInfo)
+
+        while ($null -ne ($line = $process.StandardOutput.ReadLine()))
+        {
+            # Matches "25.0%" as well as "25,0%" (some locales use a comma as the decimal separator)
+            $match = [regex]::Match($line, '(\d{1,3}(?:[.,]\d+)?)\s*%')
+            if ($match.Success)
+            {
+                $value = [double]::Parse($match.Groups[1].Value.Replace(",", "."), [System.Globalization.CultureInfo]::InvariantCulture)
+                Show-SetupProgressBar -Percent $value -Activity "Setup is applying the Windows image..."
+            }
+            elseif ($line.Trim() -ne "")
+            {
+                $outputLines.Add($line.Trim())
+            }
+        }
+
+        $process.WaitForExit()
+        $errorText = $process.StandardError.ReadToEnd()
+        $exitCode = $process.ExitCode
+
+        if ($exitCode -eq 0)
+        {
+            # DISM sometimes ends without printing the final 100.0%, so make sure the bar ends full
+            Show-SetupProgressBar -Percent 100
+            Start-Sleep -Milliseconds 400
+        }
+    }
+    finally
+    {
+        # Always restore the console, even if DISM could not be started
+        Hide-SetupProgressBar
+    }
+
+    if ($exitCode -ne 0)
+    {
+        Write-Host "DISM exited with code $exitCode."
+        foreach ($outputLine in ($outputLines | Select-Object -Last 10))
+        {
+            Write-Host "  $outputLine"
+        }
+        if ($errorText.Trim() -ne "")
+        {
+            Write-Host "  $($errorText.Trim())"
+        }
+        Write-Host "More information may be available in `"$env:SYSTEMROOT\Logs\DISM\dism.log`".`n"
+    }
+
+    return ($exitCode -eq 0)
+}
+
 function Start-DismCommand
 {
     <#
@@ -1144,8 +1258,8 @@ function Start-DismCommand
                 }
             }
             "Apply" {
-                $dismProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\dism.exe" -ArgumentList "/apply-image /imagefile=`"$WimFile`" /index=$WimIndex /applydir=$ImagePath" -Wait -PassThru -NoNewWindow
-                return ($($dismProc.ExitCode) -eq 0)
+                # DISM output is redirected to the setup-style progress bar instead of being shown in the console
+                return (Invoke-DismWithProgressBar -Arguments "/apply-image /imagefile=`"$WimFile`" /index=$WimIndex /applydir=$ImagePath")
             }
             "Add-Package" {
                 Add-WindowsPackage -Path "$ImagePath" -PackagePath "$PackagePath" -NoRestart | Out-Null
@@ -1864,25 +1978,12 @@ if (($installationImageToDeploy -ne "") -and ($installationImageGroup -ne "")) {
     $shareResults = Invoke-RestMethod -Method Post -Body $shareBody -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/deploy"
     if ($shareResults.success) {
         Show-CenteredTextBox -Text "Mounting network share to this system . . ." -MaxWidth 100 -CenterOfAll
-        net use * $($shareResults.output.mountPath) $($authInfo.serverPassword) /user:$($shareResults.output.username) /P:Yes
-        # Start querying mapped network share information to get the drive letter, otherwise
-        # default to Z:
-        try {
-            $shareSet = $false
-            Get-ChildItem -Path "HKCU:\Network" | Foreach-Object {
-                $shareProps = Get-ItemProperty -Path $_.PSPath
-                if (($shareSet -eq $false) -and ($shareProps.RemotePath -eq "$($shareResults.output.mountPath)")) {
-                    # Get actual drive letter and not the full path, like HKEY_CURRENT_USER\Network\
-                    $global:destShareLetter = "$($_.Name.Replace('HKEY_CURRENT_USER\Network\', '')):"
-                    $shareSet = $true
-                }
-            }
-            if (-not $shareSet) {
-                $global:destShareLetter = "Z:"
-            }
-        } catch {
-            $global:destShareLetter = "Z:"
-        }
+        # Get the first free drive letter for the network share
+        $usedDriveLetters = (Get-PSDrive -PSProvider FileSystem).Name
+        $driveLetter = 'ZYXWVUTSRQPONMLKJHGFED'.ToCharArray() | Where-Object { $usedDriveLetters -notcontains $_.ToString() } | Select-Object -First 1
+
+        New-PSDrive -Name "$driveLetter" -PSProvider FileSystem -Root "$($shareResults.output.mountPath)" -Persist -Credential $($authInfo.credential) -Scope Global -ErrorAction Stop
+        $global:destShareLetter = "$($driveLetter):"
     } else {
         Show-CenteredTextBox -Text "Could not prepare the deployment of this image file. The server may have imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 100 -CenterOfAll -ForegroundColor DarkRed
         Start-Sleep -Seconds 5
