@@ -10128,11 +10128,15 @@ Public Class MainForm
             If ofdSdsWimChooser.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Exit Sub
             wimPath = ofdSdsWimChooser.FileName
 
+            Dim selfSignedCertResponse As DialogResult = MessageBox.Show("In order to allow password-based authentication from other devices, you must configure a HTTPS endpoint. We can set it up for you. Do you want to set it up?",
+                                                                         "System Deployment Services", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            Dim createSSLCert As Boolean = selfSignedCertResponse = Windows.Forms.DialogResult.Yes
+
             ' Batch is stupid.
             Dim sdsPreparerProc As New Process() With {
                 .StartInfo = New ProcessStartInfo() With {
                     .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cmd.exe"),
-                    .Arguments = String.Format("/c {0}{0}{1}{0} {0}{2}{0}{0}", Quote, Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "pxehelpers", "sds", "sdsserver", "unpack_server.bat"), wimPath)
+                    .Arguments = String.Format("/c {0}{0}{1}{0} {0}{2}{0} {3}{0}", Quote, Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "pxehelpers", "sds", "sdsserver", "unpack_server.bat"), wimPath, If(createSSLCert, 1, 0))
                 }
             }
             sdsPreparerProc.Start()

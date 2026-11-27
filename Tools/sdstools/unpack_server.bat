@@ -5,7 +5,13 @@ SET ARGCOUNT=0
 FOR %%X IN (%*) DO SET /A ARGCOUNT+=1
 
 SET "BOOTWIM="
-IF %ARGCOUNT% EQU 1 SET "BOOTWIM=%1"
+SET SELFSIGNEDCERT=0
+
+IF %ARGCOUNT% GEQ 1 SET "BOOTWIM=%1"
+IF %ARGCOUNT% GEQ 2 SET SELFSIGNEDCERT=%2
+
+IF %SELFSIGNEDCERT% LSS 0 SET SELFSIGNEDCERT=0
+IF %SELFSIGNEDCERT% GTR 1 SET SELFSIGNEDCERT=1
 
 REM check admin privs
 NET SESSION >NUL 2>&1
@@ -27,6 +33,9 @@ IF NOT EXIST %WEBDIR% MD "%WEBDIR%"
 
 powershell -command Expand-Archive -Path '%CD%\SdsServer-1.0.0-win-x64.zip' -Destination "%SERVERDIR%" -Force
 powershell -command Expand-Archive -Path '%CD%\SdsWeb-1.0.0-win-x64.zip' -Destination "%WEBDIR%" -Force
+
+REM create the self-signed cert if we have to
+IF %SELFSIGNEDCERT% EQU 1 IF EXIST "%CD%\New-SdsCertificate.ps1" powershell -ExecutionPolicy Bypass -noprofile -file "%CD%\New-SdsCertificate.ps1"
 
 START "SDS" /MIN /D "%SERVERDIR%" "%SERVERDIR%\SdsServer.exe"
 START "SDS" /MIN /D "%WEBDIR%" "%WEBDIR%\SdsWeb.exe"
