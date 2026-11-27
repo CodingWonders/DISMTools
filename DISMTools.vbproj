@@ -4872,8 +4872,8 @@ IF NOT EXIST bin (
 		ECHO Copying UNDI/BIOS PXE NBP files...
 		FOR %25%25A IN (undionly.kpxe ipxe.pxe) DO IF EXIST "$(SolutionDir)Tools\sdstools\ipxeout\%25%25A" COPY /Y "$(SolutionDir)Tools\sdstools\ipxeout\%25%25A" "bin\extps1\PE_Helper\pxehelpers\sds\ipxe\%25%25~nxA"
 	)
-	IF EXIST "$(SolutionDir)Tools\sdstools\sdsserver\artifacts\" (
-		XCOPY "$(SolutionDir)Tools\sdstools\sdsserver\artifacts\*.*" "bin\extps1\PE_Helper\pxehelpers\sds\sdsserver" /CEHYI
+	IF EXIST "$(SolutionDir)Tools\sdstools\srvout\" (
+		XCOPY "$(SolutionDir)Tools\sdstools\srvout\*.*" "bin\extps1\PE_Helper\pxehelpers\sds\sdsserver" /CEHYI
 	)
 	IF EXIST "$(SolutionDir)Tools\sdstools\unpack_server.bat" COPY /y "$(SolutionDir)Tools\sdstools\unpack_server.bat" "bin\extps1\PE_Helper\pxehelpers\sds\sdsserver\unpack_server.bat"
 	IF EXIST "$(SolutionDir)helpers\extps1\PE_Helper\Compile.ps1" (

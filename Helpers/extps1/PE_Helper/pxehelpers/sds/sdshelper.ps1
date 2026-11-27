@@ -2015,7 +2015,7 @@ Write-Host "Preparing to connect to the SDS server..."
 # Detect if we booted to WinPE using PXE
 if ((Test-PxeBoot) -eq $false) {
     Clear-Host
-    Show-CenteredTextBox -Text "We have detected that you started the WDS Helper without booting the Preinstallation Environment via the Preboot Execution Environment (PXE). You may experience issues if you continue." -MaxWidth 100 -CenterOfAll -ForegroundColor DarkYellow
+    Show-CenteredTextBox -Text "We have detected that you started the SDS Helper without booting the Preinstallation Environment via the Preboot Execution Environment (PXE). You may experience issues if you continue." -MaxWidth 100 -CenterOfAll -ForegroundColor DarkYellow
     Write-Host "`n"
     Write-Host "    Press Y to continue with operating system installation (not recommended)"
     Write-Host "    Press N to restart your computer. You can restart the installation process once you boot via PXE`n"
