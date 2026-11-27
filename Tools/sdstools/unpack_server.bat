@@ -25,8 +25,8 @@ IF NOT EXIST %DESTDIR% MD "%DESTDIR%"
 IF NOT EXIST %SERVERDIR% MD "%SERVERDIR%"
 IF NOT EXIST %WEBDIR% MD "%WEBDIR%"
 
-powershell -command Expand-Archive -Path "%CD%\SdsServer-1.0.0-win-x64.zip" -Destination "%SERVERDIR%" -Force
-powershell -command Expand-Archive -Path "%CD%\SdsWeb-1.0.0-win-x64.zip" -Destination "%WEBDIR%" -Force
+powershell -command Expand-Archive -Path '%CD%\SdsServer-1.0.0-win-x64.zip' -Destination "%SERVERDIR%" -Force
+powershell -command Expand-Archive -Path '%CD%\SdsWeb-1.0.0-win-x64.zip' -Destination "%WEBDIR%" -Force
 
 START "SDS" /MIN /D "%SERVERDIR%" "%SERVERDIR%\SdsServer.exe"
 START "SDS" /MIN /D "%WEBDIR%" "%WEBDIR%\SdsWeb.exe"
@@ -39,9 +39,26 @@ RD "%SERVERDIR%\SharpPXE" /s /q
 REM begin copying the ipxe valueadd
 
 IF EXIST "%CD%\..\ipxe" XCOPY "%CD%\..\ipxe\*.*" "%SYSTEMDRIVE%\SDSREMINST\PXECORE\files" /cehyi
+IF EXIST "%CD%\..\pxeconfig\SharpPXE.ini" COPY /Y "%CD%\..\pxeconfig\SharpPXE.ini" "%SYSTEMDRIVE%\SDSREMINST\PXECORE\SharpPXE.ini"
+
+REM Pick the address of the interface PXE clients can reach. Looking only at the route
+REM metric is not enough: VPN clients add their own default route (often with a lower
+REM metric) on a virtual adapter. Candidates are the up adapters with a default route
+REM and a non-APIPA IPv4 address, ranked by:
+REM   1. physical adapters first (VPN, TAP/Wintun and tunnel adapters are not hardware)
+REM   2. routes with a real gateway first (VPN default routes are usually on-link)
+REM   3. lowest effective metric (route metric + interface metric, as Windows does)
+SET "PSIP=$c = foreach ($r in Get-NetRoute -AddressFamily IPv4 -DestinationPrefix '0.0.0.0/0' -ErrorAction SilentlyContinue) {"
+SET "PSIP=%PSIP% $a = Get-NetAdapter -InterfaceIndex $r.ifIndex -ErrorAction SilentlyContinue;"
+SET "PSIP=%PSIP% if (-not $a -or $a.Status -ne 'Up') { continue };"
+SET "PSIP=%PSIP% $ip = Get-NetIPAddress -InterfaceIndex $r.ifIndex -AddressFamily IPv4 -ErrorAction SilentlyContinue | Where-Object { $_.IPAddress -notlike '169.254.*' } | Select-Object -First 1;"
+SET "PSIP=%PSIP% if (-not $ip) { continue };"
+SET "PSIP=%PSIP% $if = Get-NetIPInterface -InterfaceIndex $r.ifIndex -AddressFamily IPv4 -ErrorAction SilentlyContinue;"
+SET "PSIP=%PSIP% [pscustomobject]@{ IP = $ip.IPAddress; Virt = [int](-not $a.HardwareInterface); OnLink = [int]($r.NextHop -eq '0.0.0.0'); Metric = $r.RouteMetric + $if.InterfaceMetric } };"
+SET "PSIP=%PSIP% ($c | Sort-Object Virt, OnLink, Metric | Select-Object -First 1).IP"
 
 SET "IPADDR="
-FOR /F "delims=" %%a IN ('powershell -NoProfile -Command "$r = Get-CimInstance Win32_IP4RouteTable -Filter 'Destination=''0.0.0.0''' | Sort-Object Metric1 | Select-Object -First 1; (Get-CimInstance Win32_NetworkAdapterConfiguration -Filter ('InterfaceIndex=' + $r.InterfaceIndex)).IPAddress[0]"') do SET "IPADDR=%%a"
+FOR /F "delims=" %%a IN ('powershell -NoProfile -Command "%PSIP%"') DO SET "IPADDR=%%a"
 
 IF NOT DEFINED IPADDR (
     ECHO We could not find a network adapter. iPXE will be configured to point to the loopback.
@@ -109,6 +126,7 @@ IF EXIST "%BOOTWIM%" (
 )
 
 START "SHARPPXE" /MIN /D "%SYSTEMDRIVE%\SDSREMINST\PXECORE" "%SYSTEMDRIVE%\SDSREMINST\PXECORE\SharpPXE.exe"
+ECHO SDS > "%SYSTEMDRIVE%\SDSREMINST\__SDS__"
 
 ENDLOCAL
 EXIT /B

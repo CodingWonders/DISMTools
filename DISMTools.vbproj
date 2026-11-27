@@ -1755,6 +1755,9 @@
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\sds\ipxe\winpe.ipxe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\sds\pxeconfig\SharpPXE.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\sds\sdshelper.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1794,6 +1797,9 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Helpers\extps1\PE_Helper\pxehelpers\sds\ipxe\theme\bg.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Helpers\extps1\PE_Helper\pxehelpers\sds\README.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="language\de-DE.ini" />

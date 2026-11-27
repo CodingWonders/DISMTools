@@ -196,6 +196,7 @@ Partial Class MainForm
         Me.ToolStripSeparator46 = New System.Windows.Forms.ToolStripSeparator()
         Me.UnixFogInstructionTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyImageToWdsServerTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.StartSdsHelperTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator41 = New System.Windows.Forms.ToolStripSeparator()
         Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator47 = New System.Windows.Forms.ToolStripSeparator()
@@ -209,6 +210,7 @@ Partial Class MainForm
         Me.ToolStripSeparator49 = New System.Windows.Forms.ToolStripSeparator()
         Me.SSE_TSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ThemeDesigner_TSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DrvPakCreator_TSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -519,7 +521,7 @@ Partial Class MainForm
         Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
         Me.ThemeDesignerTimer = New System.Windows.Forms.Timer(Me.components)
         Me.UnattendSFD = New System.Windows.Forms.SaveFileDialog()
-        Me.DrvPakCreator_TSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ofdSdsWimChooser = New System.Windows.Forms.OpenFileDialog()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1522,7 +1524,7 @@ Partial Class MainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator45, Me.PxeHelperServersTSMI, Me.ToolStripSeparator41, Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem, Me.ToolStripSeparator47, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator49, Me.SSE_TSMI, Me.ThemeDesigner_TSMI, Me.DrvPakCreator_TSMI, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator45, Me.PxeHelperServersTSMI, Me.StartSdsHelperTSMI, Me.ToolStripSeparator41, Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem, Me.ToolStripSeparator47, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator49, Me.SSE_TSMI, Me.ThemeDesigner_TSMI, Me.DrvPakCreator_TSMI, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
@@ -1679,6 +1681,12 @@ Partial Class MainForm
         Me.CopyImageToWdsServerTSMI.Size = New System.Drawing.Size(377, 22)
         Me.CopyImageToWdsServerTSMI.Text = "Copy my Windows image to a WDS server..."
         '
+        'StartSdsHelperTSMI
+        '
+        Me.StartSdsHelperTSMI.Name = "StartSdsHelperTSMI"
+        Me.StartSdsHelperTSMI.Size = New System.Drawing.Size(373, 22)
+        Me.StartSdsHelperTSMI.Text = "Try the DISMTools System Deployment Services"
+        '
         'ToolStripSeparator41
         '
         Me.ToolStripSeparator41.Name = "ToolStripSeparator41"
@@ -1751,6 +1759,12 @@ Partial Class MainForm
         Me.ThemeDesigner_TSMI.Name = "ThemeDesigner_TSMI"
         Me.ThemeDesigner_TSMI.Size = New System.Drawing.Size(373, 22)
         Me.ThemeDesigner_TSMI.Text = "Design a theme"
+        '
+        'DrvPakCreator_TSMI
+        '
+        Me.DrvPakCreator_TSMI.Name = "DrvPakCreator_TSMI"
+        Me.DrvPakCreator_TSMI.Size = New System.Drawing.Size(373, 22)
+        Me.DrvPakCreator_TSMI.Text = "Create a Driver Pack"
         '
         'ToolStripSeparator9
         '
@@ -4811,11 +4825,9 @@ Partial Class MainForm
         '
         Me.UnattendSFD.Filter = "Unattended answer files|*.xml"
         '
-        'DrvPakCreator_TSMI
+        'ofdSdsWimChooser
         '
-        Me.DrvPakCreator_TSMI.Name = "DrvPakCreator_TSMI"
-        Me.DrvPakCreator_TSMI.Size = New System.Drawing.Size(373, 22)
-        Me.DrvPakCreator_TSMI.Text = "Create a Driver Pack"
+        Me.ofdSdsWimChooser.Filter = "Boot images|boot*.wim"
         '
         'MainForm
         '
@@ -5422,4 +5434,6 @@ Partial Class MainForm
     Friend WithEvents CWSSiteTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents VisitNewsItemSiteBtn As System.Windows.Forms.Button
     Friend WithEvents DrvPakCreator_TSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents StartSdsHelperTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ofdSdsWimChooser As System.Windows.Forms.OpenFileDialog
 End Class
