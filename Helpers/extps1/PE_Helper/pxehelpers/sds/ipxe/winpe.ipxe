@@ -1,0 +1,40 @@
+#!ipxe
+#dhcp net0
+clear net0.dhcp/gateway:ipv4
+set gateway 0.0.0.0
+set initiator-iqn iqn.2006-11.1
+set keep-san 1
+#if pxesrv is running on the isci target, use ${next-server} instead of harcoded ip
+set iscsi-target ${next-server} 
+#uncomment the below if you want to attach an iscsi disk
+sanhook iscsi:${iscsi-target}:tcp:3260:0:iqn.1991-05.com.microsoft:master ||
+set boot-url http://${next-server}
+echo ${platform}_${buildarch}
+
+kernel ${boot-url}/wimboot
+#uncomment the below if you want you want to launch a custom script after wpeinit
+#initrd ${boot-url}/install.bat      install.bat
+#uncomment the below if you want you want to launch a custom script after wpeinit
+#initrd ${boot-url}/extra.bat      extra.bat
+#some extra files
+#initrd ${boot-url}/createlnk.vbscript      createlnk.vbs
+#initrd ${boot-url}/penetwork.exe      penetwork.exe
+#uncomment the below if you want a custom winpeshl.ini
+#initrd ${boot-url}/winpeshl.ini      winpeshl.ini
+#uncomment the below if you want a custom shell
+#initrd ${boot-url}/WinXShell.exe      WinXShell.exe
+#initrd ${boot-url}/WinXShell.jcfg      WinXShell.jcfg
+#uncomment the below if you want a customer explorer
+#initrd ${boot-url}/explorer++.exe      explorer++.exe
+initrd ${boot-url}/BOOTMGR	BOOTMGR
+initrd ${boot-url}/BOOT/BCD	BCD
+initrd ${boot-url}/BOOT/BOOT.SDI	BOOT.SDI
+initrd ${boot-url}/SOURCES/x64/BOOT.WIM	BOOT.WIM
+boot
+
+#at this stage, mount a windows iso and install over iscsi
+#windows iso can be downloaded here : https://tb.rg-adguard.net/public.php
+#i recommend Win10_1903_V1_English_x64
+#map the network drive, 
+#cd to it,
+#and then vmount attachvhd Win10_1903_V1_English_x64.iso

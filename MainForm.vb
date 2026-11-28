@@ -10104,6 +10104,44 @@ Public Class MainForm
     Private Sub VisitNewsItemSiteBtn_Click(sender As Object, e As EventArgs) Handles VisitNewsItemSiteBtn.Click
         Process.Start(SelectedNewsItemSite)
     End Sub
+
+    Private Sub StartSdsHelperTSMI_Click(sender As Object, e As EventArgs) Handles StartSdsHelperTSMI.Click
+        Dim sdsMarker As String = String.Format("{0}\SDSREMINST\__SDS__", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
+        If File.Exists(sdsMarker) Then
+            ' just start the SDS services; SDS/PXE server/SDS sample client
+            Dim sdsPxeServerPath As String = String.Format("{0}\SDSREMINST\PXECORE\SharpPXE.exe", Environment.GetEnvironmentVariable("SYSTEMDRIVE")),
+                sdsCoreServerPath As String = String.Format("{0}\SDSSERVER\SERVER\SdsServer.exe", Environment.GetEnvironmentVariable("SYSTEMDRIVE")),
+                sdsWebServerPath As String = String.Format("{0}\SDSSERVER\WEBCLIENT\SdsWeb.exe", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
+            If File.Exists(sdsPxeServerPath) Then Process.Start(New ProcessStartInfo() With {.FileName = sdsPxeServerPath, .WindowStyle = ProcessWindowStyle.Minimized})
+            If File.Exists(sdsCoreServerPath) Then Process.Start(New ProcessStartInfo() With {.FileName = sdsCoreServerPath, .WindowStyle = ProcessWindowStyle.Minimized})
+            If File.Exists(sdsWebServerPath) Then Process.Start(New ProcessStartInfo() With {.FileName = sdsWebServerPath, .WindowStyle = ProcessWindowStyle.Minimized})
+        Else
+            ' prepare then start
+            MessageBox.Show("We invite you to try the first preview of the DISMTools System Deployment Services as our ultimate network-based deployment solution." & CrLf & CrLf &
+                            "The DISMTools System Deployment Services are designed so they are easy to get started with and don't incur a higher learning curve than WDS. We will first prepare your system to run the System Deployment Services, for which you will need to provide a DISMTools PE boot image. After preparation, you need to log off and back on." & CrLf & CrLf &
+                            "We would like your feedback to make SDS better. We certainly have plans to do so, but this can only be done with your help." & CrLf & CrLf &
+                            "Thanks!", "System Deployment Services", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            Process.Start(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "pxehelpers", "sds", "README.txt"))
+
+            Dim wimPath As String = ""
+            If ofdSdsWimChooser.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then Exit Sub
+            wimPath = ofdSdsWimChooser.FileName
+
+            Dim selfSignedCertResponse As DialogResult = MessageBox.Show("In order to allow password-based authentication from other devices, you must configure a HTTPS endpoint. We can set it up for you. Do you want to set it up?",
+                                                                         "System Deployment Services", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            Dim createSSLCert As Boolean = selfSignedCertResponse = Windows.Forms.DialogResult.Yes
+
+            ' Batch is stupid.
+            Dim sdsPreparerProc As New Process() With {
+                .StartInfo = New ProcessStartInfo() With {
+                    .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cmd.exe"),
+                    .Arguments = String.Format("/c {0}{0}{1}{0} {0}{2}{0} {3}{0}", Quote, Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "pxehelpers", "sds", "sdsserver", "unpack_server.bat"), wimPath, If(createSSLCert, 1, 0))
+                }
+            }
+            sdsPreparerProc.Start()
+        End If
+    End Sub
 End Class
 
 Public Class AsyncBackgroundWorker

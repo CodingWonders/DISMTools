@@ -47,14 +47,6 @@ enum installationStatus : int8_t {
 
 float dpiMultiplier = 0.f;
 
-/// <summary>
-/// Scales a size or coordinate, in 96 DPI units, by the current DPI multiplier. The result is truncated to
-/// an integer, which is what the window and control functions expect.
-/// </summary>
-static int ScaleByDpi(float value) {
-    return static_cast<int>(value * dpiMultiplier);
-}
-
 std::wstring GetRegistryValue(HWND hwnd, HKEY key, const wchar_t* subKey, const wchar_t* valueName) {
     HKEY hKey;
     if (RegOpenKeyEx(key, subKey, 0, KEY_READ, &hKey) != ERROR_SUCCESS) {
@@ -112,11 +104,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR lpCmdLin
 
     UINT dpiX = 0;
 
-#if (_MSC_VER >= 1950)
     dpiX = GetDpiForWindow(hwnd);
-#else
-    dpiX = 0;
-#endif
     dpiMultiplier = (dpiX / 96.f);
     if (dpiMultiplier <= 0) {
         // If we couldn't grab the DPI multiplier we set it to 1
@@ -130,10 +118,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR lpCmdLin
         return 0;
     }
 
-    RECT rc = { 0, 0, ScaleByDpi(640.f), ScaleByDpi(400.f) };
+    RECT rc = { 0, 0, 640.f * dpiMultiplier, 400.f * dpiMultiplier };
     AdjustWindowRectEx(&rc, GetWindowLong(hwnd, GWL_STYLE), FALSE, GetWindowLong(hwnd, GWL_EXSTYLE));
-    WndX = monInfo.rcMonitor.left + ((monInfo.rcMonitor.right - monInfo.rcMonitor.left) - ScaleByDpi(640.f)) / 2;
-    WndY = monInfo.rcMonitor.top + ((monInfo.rcMonitor.bottom - monInfo.rcMonitor.top) - ScaleByDpi(400.f)) / 2;
+    WndX = monInfo.rcMonitor.left + ((monInfo.rcMonitor.right - monInfo.rcMonitor.left) - (640.f * dpiMultiplier)) / 2;
+    WndY = monInfo.rcMonitor.top + ((monInfo.rcMonitor.bottom - monInfo.rcMonitor.top) - (400.f * dpiMultiplier)) / 2;
 
     SetWindowPos(hwnd, nullptr, WndX, WndY, 
                  rc.right - abs(rc.left), 
@@ -155,11 +143,8 @@ static float GetDpiMultiplier(HWND window) {
     float dpiMult = 0.f;
 
     UINT dpiX = 0;
-#if (_MSC_VER >= 1950)
+
     dpiX = GetDpiForWindow(window);
-#else
-    dpiX = 0;
-#endif
     dpiMult = (dpiX / 96.f);
     if (dpiMult <= 0) {
         // If we couldn't grab the DPI multiplier we set it to 1
@@ -182,7 +167,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
             hwndList = CreateWindow(WC_LISTVIEW, L"",
                                     WS_CHILD | WS_VISIBLE | LVS_REPORT,
-                                    10, 10, ScaleByDpi(600.f), ScaleByDpi(274.f), hwnd, reinterpret_cast<HMENU>(IDC_DRIVER_LIST), nullptr, nullptr);
+                                    10, 10, 600.f * dpiMultiplier, 274.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_DRIVER_LIST), nullptr, nullptr);
 
             // Set some more styles
             DWORD lvStyles = ListView_GetExtendedListViewStyle(hwndList);
@@ -190,37 +175,36 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             ListView_SetExtendedListViewStyle(hwndList, lvStyles);
 
             LVCOLUMN lvColumn;
-            ZeroMemory(&lvColumn, sizeof(lvColumn));
             lvColumn.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM;
-            lvColumn.cx = ScaleByDpi(384.f);
+            lvColumn.cx = 384.f * dpiMultiplier;
             lvColumn.pszText = L"Path";
             ListView_InsertColumn(hwndList, 0, &lvColumn);
 
-            lvColumn.cx = ScaleByDpi(150.f);
+            lvColumn.cx = 150.f * dpiMultiplier;
             lvColumn.pszText = L"Status";
             ListView_InsertColumn(hwndList, 1, &lvColumn);
 
             hAddButton = CreateWindow(L"BUTTON", L"Add...", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                      10, ScaleByDpi(320.f), ScaleByDpi(100.f), ScaleByDpi(30.f), hwnd, reinterpret_cast<HMENU>(IDC_ADD_BUTTON), nullptr, nullptr);
+                                      10, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_ADD_BUTTON), nullptr, nullptr);
 
             hEditButton = CreateWindow(L"BUTTON", L"Change...", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                       ScaleByDpi(120.f), ScaleByDpi(320.f), ScaleByDpi(100.f), ScaleByDpi(30.f), hwnd, reinterpret_cast<HMENU>(IDC_EDIT_BUTTON), nullptr, nullptr);
+                                       120.f * dpiMultiplier, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_EDIT_BUTTON), nullptr, nullptr);
 
             hRemoveButton = CreateWindow(L"BUTTON", L"Remove", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                         ScaleByDpi(230.f), ScaleByDpi(320.f), ScaleByDpi(100.f), ScaleByDpi(30.f), hwnd, reinterpret_cast<HMENU>(IDC_REMOVE_BUTTON), nullptr, nullptr);
+                                         230.f * dpiMultiplier, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_REMOVE_BUTTON), nullptr, nullptr);
 
             hInstallButton = CreateWindow(L"BUTTON", L"Install", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                          ScaleByDpi(340.f), ScaleByDpi(320.f), ScaleByDpi(100.f), ScaleByDpi(30.f), hwnd, reinterpret_cast<HMENU>(IDC_INSTALL_BUTTON), nullptr, nullptr);
+                                          340.f * dpiMultiplier, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_INSTALL_BUTTON), nullptr, nullptr);
 
             hExitButton = CreateWindow(L"BUTTON", L"Exit", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                       ScaleByDpi(450.f), ScaleByDpi(320.f), ScaleByDpi(100.f), ScaleByDpi(30.f), hwnd, reinterpret_cast<HMENU>(IDC_EXIT_BUTTON), nullptr, nullptr);
+                                       450.f * dpiMultiplier, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_EXIT_BUTTON), nullptr, nullptr);
 
             hAboutButton = CreateWindow(L"BUTTON", L"i", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 
-                                        ScaleByDpi(560.f), ScaleByDpi(320.f), ScaleByDpi(48.f), ScaleByDpi(30.f), hwnd, reinterpret_cast<HMENU>(IDC_ABOUT_BUTTON), nullptr, nullptr);
+                                        560.f * dpiMultiplier, 320.f * dpiMultiplier, 48.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_ABOUT_BUTTON), nullptr, nullptr);
 
             hInstructionLabel = CreateWindowEx(WS_EX_TRANSPARENT, L"static", L"ST_U", 
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP,
-                10, ScaleByDpi(298.f), ScaleByDpi(600.f), ScaleByDpi(16.f), hwnd, reinterpret_cast<HMENU>(501), reinterpret_cast<HINSTANCE>(GetWindowLong(hwnd, GWLP_HINSTANCE)), nullptr);
+                10, 298.f * dpiMultiplier, 600.f * dpiMultiplier, 16.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(501), reinterpret_cast<HINSTANCE>(GetWindowLong(hwnd, GWLP_HINSTANCE)), nullptr);
 
             UpdateInstructionLabel(hInstructionLabel, INSTR_DRIVER_BEGIN);
 
@@ -362,7 +346,6 @@ static std::wstring GetStatusFromEnumeration(installationStatus status) {
 
 void AddDriver(HWND hwndList, const std::wstring& driverPath, HWND hEditButton, HWND hRemoveButton, HWND hInstallButton) {
     LVITEM lvItem;
-    ZeroMemory(&lvItem, sizeof(lvItem));
     lvItem.mask = LVIF_TEXT;
     lvItem.iItem = ListView_GetItemCount(hwndList);
     lvItem.iSubItem = 0;
@@ -453,194 +436,6 @@ static installationStatus GetStatusFromLVI(HWND hwndList, int itemIndex) {
     return StatusUnknown;
 }
 
-// --- SetupAPI driver installation ---
-//
-// This replaces the old drvload.exe invocation. The process mirrors what drvload does on Windows PE:
-//   1. Stage the driver package in the driver store and publish it to %WINDIR%\INF (SetupCopyOEMInf)
-//   2. Find the present devices the package has a compatible driver for (DI_ENUMSINGLEINF)
-//   3. For each of those devices, let PnP rank every available driver (DIF_SELECTBESTCOMPATDRV) and,
-//      if the best one comes from our package, install it through the class installer chain.
-// Only setupapi.dll is used, which is part of every Windows PE image (newdev.dll is not guaranteed to be).
-
-/// <summary>
-/// Calls the class installer for a DIF code. ERROR_DI_DO_DEFAULT is treated as success, as it means that
-/// no installer needed to override the default behavior.
-/// </summary>
-static BOOL CallClassInstaller(DI_FUNCTION installFunction, HDEVINFO deviceInfoSet, PSP_DEVINFO_DATA deviceInfoData) {
-    if (SetupDiCallClassInstaller(installFunction, deviceInfoSet, deviceInfoData)) {
-        return TRUE;
-    }
-    return (GetLastError() == ERROR_DI_DO_DEFAULT);
-}
-
-/// <summary>
-/// Configures where the compatible driver list of a device is built from. When infPath is not empty,
-/// only that INF file is searched; otherwise, every INF file in the INF directory is searched.
-/// </summary>
-static BOOL SetDriverSearchPath(HDEVINFO deviceInfoSet, PSP_DEVINFO_DATA deviceInfoData, const std::wstring& infPath) {
-    SP_DEVINSTALL_PARAMS_W installParams;
-    ZeroMemory(&installParams, sizeof(installParams));
-    installParams.cbSize = sizeof(installParams);
-    if (!SetupDiGetDeviceInstallParamsW(deviceInfoSet, deviceInfoData, &installParams)) {
-        return FALSE;
-    }
-
-    if (infPath.empty()) {
-        installParams.Flags &= ~DI_ENUMSINGLEINF;
-        installParams.DriverPath[0] = L'\0';
-    } else {
-        if (infPath.length() >= MAX_PATH) {
-            SetLastError(ERROR_FILENAME_EXCED_RANGE);
-            return FALSE;
-        }
-        installParams.Flags |= DI_ENUMSINGLEINF;
-        wcsncpy_s(installParams.DriverPath, MAX_PATH, infPath.c_str(), _TRUNCATE);
-    }
-    return SetupDiSetDeviceInstallParamsW(deviceInfoSet, deviceInfoData, &installParams);
-}
-
-/// <summary>
-/// Determines whether an INF file contains a driver that is compatible with a device.
-/// </summary>
-static bool InfHasCompatibleDriver(HDEVINFO deviceInfoSet, PSP_DEVINFO_DATA deviceInfoData, const std::wstring& infPath) {
-    if (!SetDriverSearchPath(deviceInfoSet, deviceInfoData, infPath)) {
-        return false;
-    }
-
-    bool isCompatible = false;
-    if (SetupDiBuildDriverInfoList(deviceInfoSet, deviceInfoData, SPDIT_COMPATDRIVER)) {
-        SP_DRVINFO_DATA_W driverInfo;
-        ZeroMemory(&driverInfo, sizeof(driverInfo));
-        driverInfo.cbSize = sizeof(driverInfo);
-        isCompatible = (SetupDiEnumDriverInfoW(deviceInfoSet, deviceInfoData, SPDIT_COMPATDRIVER, 0, &driverInfo) != FALSE);
-        SetupDiDestroyDriverInfoList(deviceInfoSet, deviceInfoData, SPDIT_COMPATDRIVER);
-    }
-
-    SetDriverSearchPath(deviceInfoSet, deviceInfoData, L"");
-    return isCompatible;
-}
-
-/// <summary>
-/// Gets the path of the INF file that provides the selected driver of a device.
-/// </summary>
-static std::wstring GetSelectedDriverInfPath(HDEVINFO deviceInfoSet, PSP_DEVINFO_DATA deviceInfoData) {
-    SP_DRVINFO_DATA_W driverInfo;
-    ZeroMemory(&driverInfo, sizeof(driverInfo));
-    driverInfo.cbSize = sizeof(driverInfo);
-    if (!SetupDiGetSelectedDriverW(deviceInfoSet, deviceInfoData, &driverInfo)) {
-        return L"";
-    }
-
-    // The detail structure has a variable-length hardware ID list at the end, so ask for the required size first
-    DWORD requiredSize = 0;
-    SetupDiGetDriverInfoDetailW(deviceInfoSet, deviceInfoData, &driverInfo, nullptr, 0, &requiredSize);
-    if (requiredSize < sizeof(SP_DRVINFO_DETAIL_DATA_W)) {
-        requiredSize = sizeof(SP_DRVINFO_DETAIL_DATA_W);
-    }
-
-    std::vector<BYTE> detailBuffer(requiredSize, 0);
-    PSP_DRVINFO_DETAIL_DATA_W driverDetail = reinterpret_cast<PSP_DRVINFO_DETAIL_DATA_W>(detailBuffer.data());
-    driverDetail->cbSize = sizeof(SP_DRVINFO_DETAIL_DATA_W);
-    if (!SetupDiGetDriverInfoDetailW(deviceInfoSet, deviceInfoData, &driverInfo, driverDetail, requiredSize, nullptr)) {
-        return L"";
-    }
-    return std::wstring(driverDetail->InfFileName);
-}
-
-/// <summary>
-/// Installs the selected driver of a device by running the class installer chain in the documented order.
-/// </summary>
-static DWORD InstallSelectedDriver(HDEVINFO deviceInfoSet, PSP_DEVINFO_DATA deviceInfoData) {
-#if (_MSC_VER < 1950)
-    static const DI_FUNCTION installSteps[] = {
-#else
-    static constexpr DI_FUNCTION installSteps[] = {
-#endif
-        DIF_ALLOW_INSTALL,
-        DIF_INSTALLDEVICEFILES,
-        DIF_REGISTER_COINSTALLERS,
-        DIF_INSTALLINTERFACES,
-        DIF_INSTALLDEVICE
-    };
-#if (_MSC_VER < 1950)
-    const size_t installStepCount = sizeof(installSteps) / sizeof(installSteps[0]);
-#else
-    constexpr size_t installStepCount = std::size(installSteps);
-#endif
-
-    for (size_t step = 0; step < installStepCount; ++step) {
-        if (!CallClassInstaller(installSteps[step], deviceInfoSet, deviceInfoData)) {
-            DWORD errorCode = GetLastError();
-            return (errorCode != ERROR_SUCCESS) ? errorCode : ERROR_GEN_FAILURE;
-        }
-    }
-
-    // Windows PE cannot be restarted without losing the driver, so a driver that needs a restart did not load
-    SP_DEVINSTALL_PARAMS_W installParams;
-    ZeroMemory(&installParams, sizeof(installParams));
-    installParams.cbSize = sizeof(installParams);
-    if (SetupDiGetDeviceInstallParamsW(deviceInfoSet, deviceInfoData, &installParams) &&
-        (installParams.Flags & (DI_NEEDREBOOT | DI_NEEDRESTART))) {
-        return ERROR_SUCCESS_REBOOT_REQUIRED;
-    }
-    return ERROR_SUCCESS;
-}
-
-DWORD InstallDriverPackage(HWND ownerHwnd, const std::wstring& infPath, std::wstring& publishedInfPath, int& devicesUpdated) {
-    devicesUpdated = 0;
-    publishedInfPath.clear();
-
-    // 1. Stage the package in the driver store. If it is already there, the existing published INF is returned
-#if (_MSC_VER < 1950)
-    WCHAR destinationInf[MAX_PATH];
-    destinationInf[0] = L'\0';
-#else
-    WCHAR destinationInf[MAX_PATH]{};
-#endif
-    if (!SetupCopyOEMInfW(infPath.c_str(), nullptr, SPOST_PATH, 0, destinationInf, MAX_PATH, nullptr, nullptr)) {
-        return GetLastError();
-    }
-    publishedInfPath = destinationInf;
-
-    // 2. Look for present devices that the package supports
-    HDEVINFO deviceInfoSet = SetupDiGetClassDevsW(nullptr, nullptr, ownerHwnd, DIGCF_ALLCLASSES | DIGCF_PRESENT);
-    if (deviceInfoSet == INVALID_HANDLE_VALUE) {
-        return GetLastError();
-    }
-
-    DWORD result = ERROR_SUCCESS;
-    SP_DEVINFO_DATA deviceInfoData;
-    ZeroMemory(&deviceInfoData, sizeof(deviceInfoData));
-    deviceInfoData.cbSize = sizeof(deviceInfoData);
-
-    for (DWORD deviceIndex = 0; SetupDiEnumDeviceInfo(deviceInfoSet, deviceIndex, &deviceInfoData); ++deviceIndex) {
-        if (!InfHasCompatibleDriver(deviceInfoSet, &deviceInfoData, publishedInfPath)) {
-            continue;
-        }
-
-        // 3. Rank all drivers available for this device. We only replace the current driver if ours is the best one,
-        //    which is the same behavior as drvload and the PnP manager
-        if (!SetupDiBuildDriverInfoList(deviceInfoSet, &deviceInfoData, SPDIT_COMPATDRIVER)) {
-            result = GetLastError();
-            continue;
-        }
-
-        if (CallClassInstaller(DIF_SELECTBESTCOMPATDRV, deviceInfoSet, &deviceInfoData) &&
-            (_wcsicmp(GetSelectedDriverInfPath(deviceInfoSet, &deviceInfoData).c_str(), publishedInfPath.c_str()) == 0)) {
-            DWORD deviceResult = InstallSelectedDriver(deviceInfoSet, &deviceInfoData);
-            if (deviceResult == ERROR_SUCCESS) {
-                devicesUpdated += 1;
-            } else {
-                result = deviceResult;
-            }
-        }
-
-        SetupDiDestroyDriverInfoList(deviceInfoSet, &deviceInfoData, SPDIT_COMPATDRIVER);
-    }
-
-    SetupDiDestroyDeviceInfoList(deviceInfoSet);
-    return result;
-}
 
 void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
 
@@ -679,64 +474,77 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
 
             state = GetStatusFromEnumeration(Installing);
             ListView_SetItemText(hwndList, i, 1, const_cast<LPWSTR>(state.c_str()));
+            // Initiate command
+            STARTUPINFO startInfo = { sizeof(startInfo) };
+            PROCESS_INFORMATION procInfo;
+            TCHAR systemDir[MAX_PATH];
+            if (GetSystemDirectory(systemDir, MAX_PATH)) {
+                std::wstring appPath = std::wstring(systemDir) + L"\\drvload.exe";
 #if (_MSC_VER < 1950)
-            WCHAR buffer[MAX_PATH];
-            buffer[0] = L'\0';
+                WCHAR buffer[256];
 #else
-            WCHAR buffer[MAX_PATH]{};
+                WCHAR buffer[256]{};
 #endif
-            LVITEM lvItem = {0};
-            lvItem.mask = LVIF_TEXT;
-            lvItem.iSubItem = 0;
-#if (_MSC_VER < 1950)
-            lvItem.cchTextMax = sizeof(buffer) / sizeof(buffer[0]);
-#else
-            lvItem.cchTextMax = static_cast<int>(std::size(buffer));
-#endif
-            lvItem.pszText = buffer;
-            lvItem.iItem = i;
+                LVITEM lvItem = {0};
+                lvItem.mask = LVIF_TEXT;
+                lvItem.iSubItem = 0;
+                lvItem.cchTextMax = 256;
+                lvItem.pszText = buffer;
+                lvItem.iItem = i;
 
-            if (!ListView_GetItem(hwndList, &lvItem)) {
-                unknownStatuses += 1;
-                state = GetStatusFromEnumeration(StatusUnknown);
-                ListView_SetItemText(hwndList, i, 1, const_cast<LPWSTR>(state.c_str()));
-                continue;
-            }
+                if (ListView_GetItem(hwndList, &lvItem)) {
+                    // Assuming buffer is being populated elsewhere correctly
+                    std::wstring cmdArgs(buffer);
+                    std::wstring cmdLine = appPath + L" \"" + cmdArgs + L"\"";
 
-            std::wstring infPath(buffer);
-            std::wstring publishedInfPath;
-            int devicesUpdated = 0;
-            DWORD errorCode = InstallDriverPackage(mainHwnd, infPath, publishedInfPath, devicesUpdated);
+                    // Convert cmdLine to a writable array of WCHAR
+                    std::vector<WCHAR> cmdLineVec(cmdLine.begin(), cmdLine.end());
+                    cmdLineVec.push_back(0); // Ensure nullptr-termination
 
-            if (errorCode == ERROR_SUCCESS) {
-                state = GetStatusFromEnumeration(Installed);
-                ListView_SetItemText(hwndList, i, 1, const_cast<LPWSTR>(state.c_str()));
-                successfulInstallations += 1;
+                    if (CreateProcess(nullptr, cmdLineVec.data(), nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, nullptr, &startInfo, &procInfo)) {
+                        WaitForSingleObject(procInfo.hProcess, INFINITE);
+                        DWORD exitCode;
+                        if (GetExitCodeProcess(procInfo.hProcess, &exitCode)) {
+                            if (exitCode == ERROR_SUCCESS) {
+                                state = GetStatusFromEnumeration(Installed);
+                                ListView_SetItemText(hwndList, i, 1, const_cast<LPWSTR>(state.c_str()));
+                                successfulInstallations += 1;
 
-                // Append to file
-                AppendToFile(logPath, infPath);
-            } else {
-                failedInstallations += 1;
-                std::wstring errorMsg = L"The driver: \n\n";
-                errorMsg += infPath;
-                errorMsg += L"\n\ncould not be installed. Reason: ";
-                // Map error code to system error message. SetupAPI error codes are also covered by the system message table
-                LPWSTR errorText = nullptr;
-                FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                               nullptr, errorCode, 0, reinterpret_cast<LPWSTR>(&errorText), 0, nullptr);
-                if (errorText) {
-                    errorMsg += std::wstring(errorText) + L" ";
-                    LocalFree(errorText);
-                } else {
-                    errorMsg += L"unknown error. ";
+                                // Append to file
+                                AppendToFile(logPath, cmdArgs);
+                            } else {
+                                failedInstallations += 1;
+                                std::wstring errorMsg = L"The driver: \n\n";
+                                errorMsg += cmdArgs;
+                                errorMsg += L"\n\ncould not be installed. Reason: ";
+                                // Map exit code to system error message
+                                LPWSTR errorText = nullptr;
+                                FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+                                               nullptr, exitCode, 0, reinterpret_cast<LPWSTR>(&errorText), 0, nullptr);
+                                if (errorText) {
+                                    errorMsg += std::wstring(errorText) + L" ";
+                                    LocalFree(errorText);
+                                }
+                                errorMsg += L"\n\nExit code: " + std::to_wstring(exitCode);
+                                MessageBox(mainHwnd, errorMsg.c_str(), L"Driver Installation Module", MB_OK | MB_ICONERROR);
+                                state = GetStatusFromEnumeration(Failed);
+                                ListView_SetItemText(hwndList, i, 1, const_cast<LPWSTR>(state.c_str()));
+                            }
+                        } else {
+                            unknownStatuses += 1;
+                            // Could not get exit code
+                            state = GetStatusFromEnumeration(StatusUnknown);
+                            ListView_SetItemText(hwndList, i, 1, const_cast<LPWSTR>(state.c_str()));
+                        }
+
+                        CloseHandle(procInfo.hProcess);
+                        CloseHandle(procInfo.hThread);
+                    } else {
+                        DWORD hResult = GetLastError();
+                        _tprintf(_T("CreateProcess failed (%d).\n"), hResult);
+                        state = GetStatusFromEnumeration(Failed);
+                    }
                 }
-                wchar_t errorCodeBuffer[16];
-                (void)swprintf(errorCodeBuffer, 16, L"0x%08X", errorCode);
-                errorMsg += L"\n\nError code: ";
-                errorMsg += errorCodeBuffer;
-                MessageBox(mainHwnd, errorMsg.c_str(), L"Driver Installation Module", MB_OK | MB_ICONERROR);
-                state = GetStatusFromEnumeration(Failed);
-                ListView_SetItemText(hwndList, i, 1, const_cast<LPWSTR>(state.c_str()));
             }
         }
         std::wstring resultMsg = L"Driver installation summary:\n\n";
